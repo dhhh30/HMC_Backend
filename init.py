@@ -1,17 +1,20 @@
 import sqlite3
 import os
+import apsw
 def init():
     if os.path.exists('database.db'):
-        conn = sqlite3.connect('database.db')
-        mem_db = sqlite3.connect("file::memory:?cache=shared", uri=True)
-        conn.backup(mem_db)
-        return ('database exists, skipping initialization, created memry_db')
+        conn = apsw.Connection('database.db')
+        memcon=apsw.Connection(":memory:")
+        with memcon.backup("main", conn, "main") as backup:
+            backup.step()
+        return(memcon)
+        
     else:
         #initialize/create connection to db
-        conn = sqlite3.connect('database.db')
+        conn = apsw.Connection('database.db')
         #initialize MainHMC table
         conn.execute('''CREATE TABLE MainHMC (hostID INTEGER PRIMARY KEY AUTOINCREMENT,
-        h_name TEXT NOT NULL, desc TEXT, path TEXT,
+        h_name TEXT NOT NULL, desc TEXT, path TEXT, v_status BOOLEAN NOT NULL,
         creation_time DATETIME DEFAULT CURRENT_TIMESTAMP);''')
         #initialize RawData table           
         conn.execute('''CREATE TABLE RawData (dataID INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -25,9 +28,11 @@ def init():
         conn.execute('''CREATE TABLE assets (ID INTEGER PRIMARY KEY AUTOINCREMENT, 
         assetPath TEXT NOT NULL, type TEXT NOT NULL, 
         hID INTEGER, FOREIGN KEY(hID) REFERENCES MainHMC (HostID));''')
-        mem_db = sqlite3.connect("file::memory:?cache=shared", uri=True)
-        conn.backup(mem_db)
+        memcon=apsw.Connection(":memory:")
+        with memcon.backup("main", conn, "main") as backup:
+            backup.step() 
+        
         conn.commit()
         conn.close()
-        return ('database initialized')
+        return (memcon)
     

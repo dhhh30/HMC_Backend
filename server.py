@@ -5,7 +5,9 @@ from parser import parse_all
 from os import environ, path
 import signal
 import init
-
+#returned mem_con object from init
+memcon = init.init()
+        
 #main handler of request
 async def handler(websocket):
     print("Got request")
@@ -13,14 +15,14 @@ async def handler(websocket):
     print("Client Disconnected with IP:", remote_ip)    
     try:
         message = await websocket.recv()
-        response = parse_all(message)
+        response = parse_all(message, memcon)
         print(response)
         await websocket.send(str(response))
     except websockets.ConnectionClosedOK:
         print("Client Disconnected with IP:", remote_ip)
 
 #main function
-async def main():
+async def main(memcon):
 
     #Serves WS behind NGINX via UNIX Socket
     # loop = asyncio.get_running_loop()
@@ -34,5 +36,5 @@ async def main():
         await asyncio.Future()
 #ping client
 #run main function
-print(init.init())
-asyncio.run(main())
+
+asyncio.run(main(memcon))
