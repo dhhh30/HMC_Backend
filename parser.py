@@ -54,6 +54,8 @@ def parse_all(data, conn_mem):
         f_name = methods.gen_file_name(parsed_json, 1)
         c_name = methods.gen_file_name(parsed_json, 3)
         host_path = os.path.join(path, h_path)
+        #create host path
+        os.mkdir(host_path)
         #concatenate sql for db operation
         sql_doc = methods.concatenate_sql.insert_doc(parsed_json)
         sql_hmc = methods.concatenate_sql.insert_HMC(parsed_json)
