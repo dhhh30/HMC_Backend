@@ -85,7 +85,7 @@ class gen_file_name:
             final_file = (parsed_json["file_name"],"-"+str(ms)+str(rand_num))
             return final_file
         if op_num == 2:
-            final_file = (parsed_json["host_name"],"-"+str(ms)+str(rand_num))
+            final_file = (str(ms)+str(rand_num))
             return final_file
         if op_num ==3:
             final_file = (parsed_json["cover_name"],"-"+str(ms)+str(rand_num))
