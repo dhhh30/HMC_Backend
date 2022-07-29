@@ -3,6 +3,8 @@ import methods
 import os
 import base64
 import json
+#root path for all assets and data
+path = "/Users/yurunchen/Documents/GitHub/HMC_Backend/"    
 #dictionary for site
 
 #Hash table
@@ -47,13 +49,20 @@ def parse_all(data, conn_mem):
         return (data)
     #handle uploading request
     elif parsed_json['request'] == "uploading":
-        #generate file names
-        f_name = methods.gen_file_name(parsed_json)
-        c_name = methods.gen_file_name(parsed_json)
-        path_host = 
+        #generate file names and path
+        h_path = methods.gen_file_name(parsed_json, 2)
+        f_name = methods.gen_file_name(parsed_json, 1)
+        c_name = methods.gen_file_name(parsed_json, 3)
+        host_path = os.path.join(path, h_path)
+        #concatenate sql for db operation
         sql_doc = methods.concatenate_sql.insert_doc(parsed_json)
         sql_hmc = methods.concatenate_sql.insert_HMC(parsed_json)
         sql_tulpa = methods.concatenate_sql.insert_tulpa(parsed_json)
+        #decode base64 and write to folder
+        with open(os.path.join(host_path, parsed_json["cover_name"]), "wb") as fh:
+            fh.write(base64.decodebytes(parsed_json["cover"]))
+        with open(os.path.join(host_path, parsed_json["cover_name"]), "wb") as fh:
+            fh.write(base64.decodebytes(parsed_json["cover"]))
     #pushNewDoc method
     elif parsed_json['request'] == "pushNewDoc":
         return_to_serialize = {"flag": True}

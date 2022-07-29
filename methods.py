@@ -78,7 +78,15 @@ class concatenate_sql:
         pass
 #generate file name
 class gen_file_name:
-    def __init__(self, parsed_json):
+    def __init__(self, parsed_json, op_num):
         ms = int(round(time.time() * 1000))
         rand_num = randrange(10)
-        final_file = (parsed_json[f_name],"-"+str(ms)+str(rand_num))
+        if op_num == 1:
+            final_file = (parsed_json["file_name"],"-"+str(ms)+str(rand_num))
+            return final_file
+        if op_num == 2:
+            final_file = (parsed_json["host_name"],"-"+str(ms)+str(rand_num))
+            return final_file
+        if op_num ==3:
+            final_file = (parsed_json["cover_name"],"-"+str(ms)+str(rand_num))
+            return final_file
