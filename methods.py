@@ -3,6 +3,8 @@ import sqlite3
 from os import path
 from unittest import result
 import apsw
+import time
+from random import randrange
 
 
 #Abstract Database Object
@@ -72,5 +74,11 @@ class concatenate_sql:
     def query_tulpa(self, hID):
         sql = ("""SELECT * FROM Tulpas WHERE hID={}""".format(hID))
         return(sql) 
-    def insert_doc(self, dict, path):
+    def insert_doc(self, parsed_json):
         pass
+#generate file name
+class gen_file_name:
+    def __init__(self, parsed_json):
+        ms = int(round(time.time() * 1000))
+        rand_num = randrange(10)
+        final_file = (parsed_json[f_name],"-"+str(ms)+str(rand_num))

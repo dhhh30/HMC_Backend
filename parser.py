@@ -47,9 +47,13 @@ def parse_all(data, conn_mem):
         return (data)
     #handle uploading request
     elif parsed_json['request'] == "uploading":
-        sql_doc = methods.concatenate_sql.insert_doc()
-        sql_hmc = methods.concatenate_sql.insert_HMC
-        sql_tulpa = methods.concatenate_sql.insert_tulpa
+        #generate file names
+        f_name = methods.gen_file_name(parsed_json)
+        c_name = methods.gen_file_name(parsed_json)
+        path_host = 
+        sql_doc = methods.concatenate_sql.insert_doc(parsed_json)
+        sql_hmc = methods.concatenate_sql.insert_HMC(parsed_json)
+        sql_tulpa = methods.concatenate_sql.insert_tulpa(parsed_json)
     #pushNewDoc method
     elif parsed_json['request'] == "pushNewDoc":
         return_to_serialize = {"flag": True}
