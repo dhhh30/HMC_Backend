@@ -1,3 +1,4 @@
+from fcntl import F_GETPATH
 import json
 import methods
 import os
@@ -57,14 +58,21 @@ def parse_all(data, conn_mem):
         #create host path
         os.mkdir(host_path)
         #concatenate sql for db operation
-        sql_doc = methods.concatenate_sql.insert_doc(parsed_json)
-        sql_hmc = methods.concatenate_sql.insert_HMC(parsed_json)
+        sql_hmc_cover = methods.concatenate_sql.insert_HMC(parsed_json, f_name)
+        sql_hmc_file = methods.concatenate_sql.insert_doc(parsed_json, c_name)
         sql_tulpa = methods.concatenate_sql.insert_tulpa(parsed_json)
-        #decode base64 and write to folder
+        #decode base64 and write to folders
         with open(os.path.join(host_path, parsed_json["cover_name"]), "wb") as fh:
             fh.write(base64.decodebytes(parsed_json["cover"]))
         with open(os.path.join(host_path, parsed_json["cover_name"]), "wb") as fh:
             fh.write(base64.decodebytes(parsed_json["cover"]))
+        #commit sql statements
+        query_file_cover = methods.MemDatabase(sql_hmc_cover)
+        query_hmc_file = methods.MemDatabase(sql_hmc_file)
+        query_tulpa = methods.MemDatabase(sql_tulpa)
+        return (query_file_cover+query_hmc_file+query_tulpa)
+        
+        
     #pushNewDoc method
     elif parsed_json['request'] == "pushNewDoc":
         return_to_serialize = {"flag": True}

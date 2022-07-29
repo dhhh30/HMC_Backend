@@ -74,7 +74,7 @@ class concatenate_sql:
     def query_tulpa(self, hID):
         sql = ("""SELECT * FROM Tulpas WHERE hID={}""".format(hID))
         return(sql) 
-    def insert_doc(self, parsed_json):
+    def insert_doc(self, parsed_json, path):
         pass
 #generate file name
 class gen_file_name:
