@@ -3,6 +3,8 @@ import methods
 import os
 import base64
 import json
+#dictionary for site
+
 #Hash table
 
 #Search Method hash table
@@ -12,9 +14,42 @@ def parse_all(data, conn_mem):
     parsed_json = json.loads(data)
     #mainList method
     if parsed_json['request'] ==  "mainList":
-        query_sql = methods.concatenate_sql().query_HMC(int(parsed_json['page']))
-        data = methods.MemDatabase(query_sql, 1)
+        #site dictionary
+        site_dict = {}
+        #concatenate sql for query hmc
+        query_sql_hmc = methods.concatenate_sql().query_HMC(int(parsed_json['page']))
+        #concatenate sql for query tulpa
+        query_tulpa = methods.concatenate_sql().query_tulpa()
+        #query hmc
+        dat_hmc = methods.MemDatabase(query_sql_hmc, 1)
+        #query tulpa
+        
+        list_of_site = []
+        #sort the datas and insert into the list_of_site list
+        for details in dat_hmc:
+            site_dict["host"] = details[1]
+            site_dict["createdDate"] = details[7]
+            hID = details[0]
+            dat_tulpa = methods.MemDatabase(query_tulpa, 1, hID)
+            for tulpa in dat_tulpa:
+                t_list = []
+                t_single = dat_tulpa[1]
+                t_list.append(str(t_single))
+            site_dict["tulpas"] = str(t_list)
+            list_of_site.append(site_dict)
+        #construct_return dict to be returned and serialized
+        return_dict = {
+            "pagesQuantity": len(list_of_site),
+            "sites": site_dict
+        }
+        #serialize return_dict to json
+        data = json.dumps(site_dict, indent=4)
         return (data)
+    #handle uploading request
+    elif parsed_json['request'] == "uploading":
+        sql_doc = methods.concatenate_sql.insert_doc()
+        sql_hmc = methods.concatenate_sql.insert_HMC
+        sql_tulpa = methods.concatenate_sql.insert_tulpa
     #pushNewDoc method
     elif parsed_json['request'] == "pushNewDoc":
         return_to_serialize = {"flag": True}

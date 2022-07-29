@@ -4,6 +4,7 @@ from os import path
 from unittest import result
 import apsw
 
+
 #Abstract Database Object
 class AbstractDatabase:
     def __init__(self):
@@ -48,10 +49,12 @@ class concatenate_sql:
     def __init__(self):
         pass
         # self.parsed_dict = parsed_dict
+    #concatenate sql for inserting into HMC
     def insert_HMC(self, parsed_dict):
         sql = ("""INSERT INTO MainHMC (h_name, desc, path, v_status) VALUES ({},{},{},{})
         """.format(parsed_dict['h_name'], parsed_dict['description'], parsed_dict['path'], parsed_dict['v_status']))
         return (sql)
+    #concatenate sql for querying main HMC
     def query_HMC(self, pg_num):
         if pg_num == 0:
             strt_num = pg_num+1
@@ -61,12 +64,13 @@ class concatenate_sql:
             end_num = strt_num+10
         sql = ("""SELECT * FROM MainHMC WHERE hostID BETWEEN {} AND {}""".format(strt_num, end_num))
         return (sql)
-        
-    def insert_tulpa():
-        
-        pass
-    def query_tulpa(self, tID):
-        sql = select
-        pass
+    #concatenate sql for inserting into tulpa
+    def insert_tulpa(self, t_name, hID):
+        sql = ("""INSERT INTO Tulpas (tulpaName, hID) VALUES ({},{})""".format(t_name, hID))
+        return (sql)
+    #concatenate sql for querying tulpa
+    def query_tulpa(self, hID):
+        sql = ("""SELECT * FROM Tulpas WHERE hID={}""".format(hID))
+        return(sql) 
     def insert_doc(self, dict, path):
         pass
