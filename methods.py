@@ -14,36 +14,6 @@ class AbstractDatabase:
 
 
 #class for operating with HDDB
-class HDDatabase():
-    def __init__(self,sql, op_type):
-        self.sql = sql
-        self.op_type = op_type
-        pass
-    def connect(self, conn_obj):   
-        #Sql Statement
-        sql = self.sql
-        #Operation Type
-        op_type = self.op_type
-        #Connection object for both memDB and HDDB
-        conn = conn_obj
-        #Cursor for above apsw connection object
-        cursor = conn.cursor()
-        #op_type 1 = select
-        #op_type 2 = insert
-        if op_type == 1:
-            data = cursor.fetchall()
-            #returns fetched data in list
-            return data
-        elif op_type ==2:
-            conn.execute(sql)
-            conn.commit()
-            #returns last row id on insert
-            return cursor.lastrowid
-    def operate(self):
-        conn = sqlite3.connect("database.db")
-        result = self.connect(conn)
-        
-        return (result)
 #class for operating with MEMDB
 class MemDatabase():
     def __init__(self, sql, conn_obj, op_type):
