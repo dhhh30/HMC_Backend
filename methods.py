@@ -11,41 +11,69 @@ from random import randrange
 class AbstractDatabase:
     def __init__(self):
         pass
-    def connect(self, sql, conn_obj, op_type):   
-        #Sql Statement
+
+
+#class for operating with HDDB
+class HDDatabase():
+    def __init__(self,sql, op_type):
         self.sql = sql
-        #Operation Type
         self.op_type = op_type
+        pass
+    def connect(self, conn_obj):   
+        #Sql Statement
+        sql = self.sql
+        #Operation Type
+        op_type = self.op_type
         #Connection object for both memDB and HDDB
-        self.conn = conn_obj
+        conn = conn_obj
         #Cursor for above apsw connection object
-        cursor = self.conn.cursor()
+        cursor = conn.cursor()
         #op_type 1 = select
         #op_type 2 = insert
-        if self.op_type == 1:
+        if op_type == 1:
             data = cursor.fetchall()
             #returns fetched data in list
             return data
-        elif self.op_type ==2:
-            self.conn.commit()
+        elif op_type ==2:
+            conn.execute(sql)
+            conn.commit()
             #returns last row id on insert
             return cursor.lastrowid
-
-#class for operating with HDDB
-class HDDatabase(AbstractDatabase):
-    def operate(self, sql, op_type):
+    def operate(self):
         conn = sqlite3.connect("database.db")
-        result = super().connect(sql, conn, op_type)
+        result = self.connect(conn)
+        
         return (result)
 #class for operating with MEMDB
-class MemDatabase(AbstractDatabase):
-    def __init__(self, sql, memcon, op_type):
-        result = super().connect(":memory:", sql, op_type)
-        HD_result = HDDatabase().operate(sql, op_type)
-        if result != None:
-            return (result)
-        else:
-            return(False)
+class MemDatabase():
+    def __init__(self, sql, conn_obj, op_type):
+        self.sql = sql
+        self.conn_obj = conn_obj
+        self.op_type = op_type
+    def connect(self):   
+        #Sql Statement
+        sql = self.sql
+        #Operation Type
+        op_type = self.op_type
+        #Connection object for both memDB and HDDB
+        conn = self.conn_obj
+        #Cursor for above apsw connection object
+        cursor = conn.cursor()
+        #op_type 1 = select
+        #op_type 2 = insert
+        if op_type == 1:
+            data = cursor.fetchall()
+            #returns fetched data in list
+            return data
+        elif op_type ==2:
+            conn.execute(sql)
+            conn.commit()
+            #returns last row id on insert
+            return cursor.lastrowid
+    def conn(self):
+        result = self.connect()
+        HD_result = HDDatabase(self.sql, self.op_type).operate()
+        return HD_result
 #concatenate sql statement
 class concatenate_sql:
     def __init__(self):

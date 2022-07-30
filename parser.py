@@ -1,4 +1,4 @@
-from fcntl import F_GETPATH
+
 import json
 import methods
 import os
@@ -22,9 +22,9 @@ def parse_all(data, conn_mem):
         #concatenate sql for query hmc
         query_sql_hmc = methods.concatenate_sql().query_HMC(int(parsed_json['page']))
         #concatenate sql for query tulpa
-        query_tulpa = methods.concatenate_sql().query_tulpa()
+        
         #query hmc
-        dat_hmc = methods.MemDatabase(query_sql_hmc, 1)
+        dat_hmc = methods.MemDatabase(query_sql_hmc, conn_mem,1).conn()
         #query tulpa
         
         list_of_site = []
@@ -33,18 +33,22 @@ def parse_all(data, conn_mem):
             site_dict["host"] = details[1]
             site_dict["createdDate"] = details[7]
             hID = details[0]
-            dat_tulpa = methods.MemDatabase(query_tulpa, 1, hID)
+            query_tulpa = methods.concatenate_sql().query_tulpa(hID)
+            dat_tulpa = methods.MemDatabase.connect(query_tulpa, conn_mem, 1)
             for tulpa in dat_tulpa:
                 t_list = []
                 t_single = dat_tulpa[1]
                 t_list.append(str(t_single))
             site_dict["tulpas"] = str(t_list)
             list_of_site.append(site_dict)
-        #construct_return dict to be returned and serialized
+        #construct_return dict to be returned and serializedd
         return_dict = {
             "pagesQuantity": len(list_of_site),
-            "sites": site_dict
+            "sites": list_of_site
         }
+        print (site_dict)
+        print (list_of_site)
+        print (return_dict)
         #serialize return_dict to json
         data = json.dumps(site_dict, indent=4)
         return (data)

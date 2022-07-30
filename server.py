@@ -22,7 +22,7 @@ async def handler(websocket):
         print("Client Disconnected with IP:", remote_ip)
 
 #main function
-async def main(memcon):
+async def main():
 
     #Serves WS behind NGINX via UNIX Socket
     # loop = asyncio.get_running_loop()
@@ -37,4 +37,4 @@ async def main(memcon):
 #ping client
 #run main function
 
-asyncio.run(main(memcon))
+asyncio.run(main())
