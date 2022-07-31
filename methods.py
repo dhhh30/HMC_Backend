@@ -20,12 +20,8 @@ class Database_operation():
         self.conn_obj = conn_obj
         self.op_type = op_type
     def connect(self):   
-        database_obj = connector.connect(
-  host="english-poetry.com",
-  user="tulpa",
-  password="c0912c8d3a270ada868bc56862354c8211086af917523e07b60bba30403c6417"
-)
-        #Sql Statement
+
+        11#Sql Statement
         sql = self.sql
         #Operation Type
         op_type = self.op_type

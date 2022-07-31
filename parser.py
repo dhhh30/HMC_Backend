@@ -1,4 +1,4 @@
-
+import hashlib
 import json
 import methods
 import os
@@ -24,7 +24,7 @@ def parse_all(data, conn_mem):
         #concatenate sql for query tulpa
         
         #query hmc
-        dat_hmc = methods.MemDatabase(query_sql_hmc, conn_mem,1).conn()
+        dat_hmc = methods.Database(query_sql_hmc, conn_mem,1).conn()
         #query tulpa
         
         list_of_site = []
