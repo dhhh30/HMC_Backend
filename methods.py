@@ -20,8 +20,7 @@ class Database_operation():
         self.conn_obj = conn_obj
         self.op_type = op_type
     def connect(self):   
-
-        11#Sql Statement
+        #Sql Statement
         sql = self.sql
         #Operation Type
         op_type = self.op_type
@@ -42,8 +41,7 @@ class Database_operation():
             return cursor.lastrowid
     def conn(self):
         result = self.connect()
-        HD_result = HDDatabase(self.sql, self.op_type).operate()
-        return HD_result
+        return result
 #concatenate sql statement
 class concatenate_sql:
     def __init__(self):

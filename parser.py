@@ -24,7 +24,7 @@ def parse_all(data, conn_mem):
         #concatenate sql for query tulpa
         
         #query hmc
-        dat_hmc = methods.Database(query_sql_hmc, conn_mem,1).conn()
+        dat_hmc = methods.Database_operation(query_sql_hmc, conn_mem,1).conn()
         #query tulpa
         
         list_of_site = []
@@ -34,7 +34,7 @@ def parse_all(data, conn_mem):
             site_dict["createdDate"] = details[7]
             hID = details[0]
             query_tulpa = methods.concatenate_sql().query_tulpa(hID)
-            dat_tulpa = methods.MemDatabase.connect(query_tulpa, conn_mem, 1)
+            dat_tulpa = methods.Database_operation.connect(query_tulpa, conn_mem, 1)
             for tulpa in dat_tulpa:
                 t_list = []
                 t_single = dat_tulpa[1]
@@ -71,9 +71,9 @@ def parse_all(data, conn_mem):
         with open(os.path.join(host_path, parsed_json["cover_name"]), "wb") as fh:
             fh.write(base64.decodebytes(parsed_json["cover"]))
         #commit sql statements
-        query_file_cover = methods.MemDatabase(sql_hmc_cover)
-        query_hmc_file = methods.MemDatabase(sql_hmc_file)
-        query_tulpa = methods.MemDatabase(sql_tulpa)
+        query_file_cover = methods.Database_operation(sql_hmc_cover,conn_mem, 2)
+        query_hmc_file = methods.Database_operation(sql_hmc_file,conn_mem, 2)
+        query_tulpa = methods.Database_operation(sql_tulpa,conn_mem, 2)
         return (query_file_cover+query_hmc_file+query_tulpa)
         
         
