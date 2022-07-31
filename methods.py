@@ -1,8 +1,7 @@
 from select import select
-import sqlite3
 from os import path
 from unittest import result
-import apsw
+
 import time
 from random import randrange
 
