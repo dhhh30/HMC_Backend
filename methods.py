@@ -1,7 +1,7 @@
 from select import select
 from os import path
 from unittest import result
-
+from mysql import connector
 import time
 from random import randrange
 
@@ -14,12 +14,17 @@ class AbstractDatabase:
 
 #class for operating with HDDB
 #class for operating with MEMDB
-class MemDatabase():
+class Database_operation():
     def __init__(self, sql, conn_obj, op_type):
         self.sql = sql
         self.conn_obj = conn_obj
         self.op_type = op_type
     def connect(self):   
+        database_obj = connector.connect(
+  host="english-poetry.com",
+  user="tulpa",
+  password="c0912c8d3a270ada868bc56862354c8211086af917523e07b60bba30403c6417"
+)
         #Sql Statement
         sql = self.sql
         #Operation Type
