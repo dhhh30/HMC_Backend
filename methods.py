@@ -28,6 +28,7 @@ class Database_operation():
         conn = self.conn_obj
         #Cursor for above apsw connection object
         cursor = conn.cursor()
+        cursor.execute(sql)
         #op_type 1 = select
         #op_type 2 = insert
         if op_type == 1:
@@ -49,7 +50,7 @@ class concatenate_sql:
         # self.parsed_dict = parsed_dict
     #concatenate sql for inserting into HMC
     def insert_HMC(self, parsed_dict):
-        sql = ("""INSERT INTO MainHMC (h_name, desc, path, v_status) VALUES ({},{},{},{})
+        sql = ("""INSERT INTO main_HMC (h_name, desc, path, v_status) VALUES ({},{},{},{})
         """.format(parsed_dict['h_name'], parsed_dict['description'], parsed_dict['path'], parsed_dict['v_status']))
         return (sql)
     #concatenate sql for querying main HMC
@@ -60,18 +61,20 @@ class concatenate_sql:
         else: 
             strt_num = pg_num*10
             end_num = strt_num+10
-        sql = ("""SELECT * FROM MainHMC WHERE hostID BETWEEN {} AND {}""".format(strt_num, end_num))
+        sql = ("""SELECT * FROM main_HMC WHERE id BETWEEN {} AND {}""".format(strt_num, end_num))
         return (sql)
     #concatenate sql for inserting into tulpa
     def insert_tulpa(self, t_name, hID):
-        sql = ("""INSERT INTO Tulpas (tulpaName, hID) VALUES ({},{})""".format(t_name, hID))
+        sql = ("""INSERT INTO tulpas (tulpaName, hID) VALUES ({},{})""".format(t_name, hID))
         return (sql)
     #concatenate sql for querying tulpa
     def query_tulpa(self, hID):
-        sql = ("""SELECT * FROM Tulpas WHERE hID={}""".format(hID))
+        sql = ("""SELECT * FROM tulpas WHERE hID={}""".format(hID))
         return(sql) 
     def insert_doc(self, parsed_json, path):
         pass
+
+   # def get_row_num:
 #generate file name
 class gen_file_name:
     def __init__(self, parsed_json, op_num):

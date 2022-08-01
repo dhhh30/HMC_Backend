@@ -1,5 +1,6 @@
 import hashlib
 import json
+import site
 import methods
 import os
 import base64
@@ -26,31 +27,39 @@ def parse_all(data, conn_mem):
         #query hmc
         dat_hmc = methods.Database_operation(query_sql_hmc, conn_mem,1).conn()
         #query tulpa
-        
+        print(dat_hmc)
         list_of_site = []
-        #sort the datas and insert into the list_of_site list
         for details in dat_hmc:
-            site_dict["host"] = details[1]
-            site_dict["createdDate"] = details[7]
-            hID = details[0]
-            query_tulpa = methods.concatenate_sql().query_tulpa(hID)
-            dat_tulpa = methods.Database_operation.connect(query_tulpa, conn_mem, 1)
-            for tulpa in dat_tulpa:
-                t_list = []
-                t_single = dat_tulpa[1]
-                t_list.append(str(t_single))
-            site_dict["tulpas"] = str(t_list)
+            site_dict["h_name"] = details[1]
+            site_dict["createdDate"] = str(details[6])
             list_of_site.append(site_dict)
+            site_dict = {}
+        #sort the datas and insert into the list_of_site list
+        # print(dat_hmc)
+        # for details in dat_hmc:
+        #     site_dict["host"] = details[1]
+        #     site_dict["createdDate"] = str(details[6])
+        #     hID = details[0]
+        #     query_tulpa = methods.concatenate_sql().query_tulpa(hID)
+        #     dat_tulpa = methods.Database_operation(query_tulpa, conn_mem, 1).connect()
+        #     # t_list = []
+        #     # for tulpa in dat_tulpa:
+                
+        #     #     t_single = dat_tulpa[1]
+        #     #     t_list.append(str(t_single))
+        #     #     break
+        #     # site_dict["tulpas"] = str(t_list)
+        #     list_of_site.append(site_dict)
         #construct_return dict to be returned and serializedd
         return_dict = {
-            "pagesQuantity": len(list_of_site),
+            "pagesQuantity": len(dat_hmc),
             "sites": list_of_site
         }
-        print (site_dict)
+        # print (site_dict)
         print (list_of_site)
-        print (return_dict)
+        # print (return_dict)
         #serialize return_dict to json
-        data = json.dumps(site_dict, indent=4)
+        data = json.dumps(return_dict, indent=4)
         return (data)
     #handle uploading request
     elif parsed_json['request'] == "uploading":
