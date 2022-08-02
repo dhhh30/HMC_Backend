@@ -6,7 +6,7 @@ import base64
 import json
 import math
 #root path for all assets and data
-path = "/Users/yurunchen/Documents/GitHub/HMC_Backend/"    
+path = "G:\HMC_Backend"    
 #dictionary for site
 
 #Hash table
@@ -21,40 +21,32 @@ def parse_all(data, conn_mem):
         #site dictionary
         site_dict = {}
         #concatenate sql for query hmc
-        query_sql_hmc = methods.concatenate_sql().query_HMC(int(parsed_json['page']))
+        query_sql_hmc = methods.concatenate_sql().query_main_List(int(parsed_json['page']))
         #concatenate sql for query main_hmc total row for pagination
         query_sql_hmc_trow = methods.concatenate_sql().get_total_row("main_HMC")
         total_row = methods.Database_operation(query_sql_hmc_trow, conn_mem,1).conn()
         #concatenate sql for query tulpa
         #query hmc
         dat_hmc = methods.Database_operation(query_sql_hmc, conn_mem,1).conn()
+
         page_num = (total_row[0][0]/10)
         page_num = math.ceil(page_num)
-        print (total_row)
-        #query tulpa
-        #print(dat_hmc)
+       #print (total_row)
         list_of_site = []
+        
+        #print (dat_hmc)
         for details in dat_hmc:
-            site_dict["h_name"] = details[1]
-            site_dict["createdDate"] = str(details[6])
+            site_dict["url"]= details[0]
+            site_dict["h_name"] = details[2]
+            site_dict["createdDate"] = str(details[1])
+            query_tulpa = methods.concatenate_sql().query_tulpa_main_List(details[3])
+            dat_tulpa = methods.Database_operation(query_tulpa, conn_mem, 1).conn()
+            list_tulpa = []
+            for tulpas in dat_tulpa:
+                list_tulpa.append(tulpas[0])
+            site_dict["tulpas"] = list_tulpa
             list_of_site.append(site_dict)
             site_dict = {}
-        #sort the datas and insert into the list_of_site list
-        # print(dat_hmc)
-        # for details in dat_hmc:
-        #     site_dict["host"] = details[1]
-        #     site_dict["createdDate"] = str(details[6])
-        #     hID = details[0]
-        #     query_tulpa = methods.concatenate_sql().query_tulpa(hID)
-        #     dat_tulpa = methods.Database_operation(query_tulpa, conn_mem, 1).connect()
-        #     # t_list = []
-        #     # for tulpa in dat_tulpa:
-                
-        #     #     t_single = dat_tulpa[1]
-        #     #     t_list.append(str(t_single))
-        #     #     break
-        #     # site_dict["tulpas"] = str(t_list)
-        #     list_of_site.append(site_dict)
         #construct_return dict to be returned and serializedd
         return_dict = {
             "pagesQuantity": page_num,
@@ -67,16 +59,16 @@ def parse_all(data, conn_mem):
     #handle uploading request
     elif parsed_json['request'] == "uploading":
         #generate file names and path
-        h_path = methods.gen_file_name(parsed_json, 2)
-        f_name = methods.gen_file_name(parsed_json, 1)
-        c_name = methods.gen_file_name(parsed_json, 3)
+        h_path = methods.gen_file_name(parsed_json, 2).fname()
+        f_name = methods.gen_file_name(parsed_json, 1).fname()
+        c_name = methods.gen_file_name(parsed_json, 3).fname()
         host_path = os.path.join(path, h_path)
         #create host path
         os.mkdir(host_path)
         #concatenate sql for db operation
-        sql_hmc_cover = methods.concatenate_sql.insert_HMC(parsed_json, f_name)
-        sql_hmc_file = methods.concatenate_sql.insert_doc(parsed_json, c_name)
-        sql_tulpa = methods.concatenate_sql.insert_tulpa(parsed_json)
+        sql_hmc_cover = methods.concatenate_sql().insert_HMC(parsed_json)
+        sql_hmc_file = methods.concatenate_sql().insert_doc(parsed_json, c_name)
+        sql_tulpa = methods.concatenate_sql().insert_tulpa(parsed_json)
         #decode base64 and write to folders
         with open(os.path.join(host_path, parsed_json["cover_name"]), "wb") as fh:
             fh.write(base64.decodebytes(parsed_json["cover"]))

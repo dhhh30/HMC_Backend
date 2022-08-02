@@ -9,10 +9,21 @@ import websockets
 # print(ws.recv())
 # ws.close()
 
-input_int = input("input page number:")
+#input_int = input("input page number:")
 json = ("""{
-    "request":"mainList", "page":""" + str(input_int) +"""
-        }""")
+    "request":"uploading",
+    "host_name":"Dylan",
+    "tulpas_name" : ["veronica", "example"],
+    "host_age": "15",
+    "email": "chendylan680@gmail.com",
+    "file_name": "dchen4",
+    "cover_name": "cover",
+    "introduce": "Hello guys",
+    "webinput": "",
+    "cover": "PGgxPuWXqOWXqOWXqDwvaDE+",
+    "file": "PGgxPuWXqOWXqOWXqDwvaDE+"
+
+}""")
 async def test():
     async with websockets.connect("ws://localhost:2186") as websocket:
         await websocket.send(json)

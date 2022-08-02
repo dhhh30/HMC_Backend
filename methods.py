@@ -54,18 +54,18 @@ class concatenate_sql:
         """.format(parsed_dict['h_name'], parsed_dict['description'], parsed_dict['path'], parsed_dict['v_status']))
         return (sql)
     #concatenate sql for querying main HMC
-    def query_HMC(self, pg_num):
+    def query_main_List(self, pg_num):
         if pg_num != 0: 
             pg_num = pg_num*10
-        sql = ("""SELECT * FROM main_HMC LIMIT {}, 10""".format(pg_num))
+        sql = ("""SELECT path, creation_time, h_name, id FROM main_HMC LIMIT {}, 10""".format(pg_num))
         return (sql)
     #concatenate sql for inserting into tulpa
     def insert_tulpa(self, t_name, hID):
         sql = ("""INSERT INTO tulpas (tulpaName, hID) VALUES ({},{})""".format(t_name, hID))
         return (sql)
     #concatenate sql for querying tulpa
-    def query_tulpa(self, hID):
-        sql = ("""SELECT * FROM tulpas WHERE hID={}""".format(hID))
+    def query_tulpa_main_List(self, hID):
+        sql = ("""SELECT tulpaName FROM tulpas WHERE hID={}""".format(hID))
         return(sql) 
     def insert_doc(self, parsed_json, path):
         pass
@@ -76,14 +76,17 @@ class concatenate_sql:
 #generate file name
 class gen_file_name:
     def __init__(self, parsed_json, op_num):
+        self.parsed_json = parsed_json
+        self.op_num = op_num
+    def fname(self):
         ms = int(round(time.time() * 1000))
         rand_num = randrange(10)
-        if op_num == 1:
-            final_file = (parsed_json["file_name"],"-"+str(ms)+str(rand_num))
+        if self.op_num == 1:
+            final_file = (self.parsed_json["file_name"],"-"+str(ms)+str(rand_num))
             return final_file
-        if op_num == 2:
+        if self.op_num == 2:
             final_file = (str(ms)+str(rand_num))
             return final_file
-        if op_num ==3:
-            final_file = (parsed_json["cover_name"],"-"+str(ms)+str(rand_num))
+        if self.op_num ==3:
+            final_file = (self.parsed_json["cover_name"],"-"+str(ms)+str(rand_num))
             return final_file
