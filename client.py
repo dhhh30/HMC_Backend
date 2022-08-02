@@ -8,11 +8,14 @@ import websockets
 # }""")
 # print(ws.recv())
 # ws.close()
+
+input_int = input("input page number:")
+json = ("""{
+    "request":"mainList", "page":""" + str(input_int) +"""
+        }""")
 async def test():
     async with websockets.connect("ws://localhost:2186") as websocket:
-        await websocket.send("""{
-    "request":"mainList", "page": 0
-        }""")
+        await websocket.send(json)
         retur_msg = await websocket.recv()
         return retur_msg
 print(asyncio.run(test()))

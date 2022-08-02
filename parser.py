@@ -1,10 +1,10 @@
 import hashlib
 import json
-import site
 import methods
 import os
 import base64
 import json
+import math
 #root path for all assets and data
 path = "/Users/yurunchen/Documents/GitHub/HMC_Backend/"    
 #dictionary for site
@@ -22,12 +22,17 @@ def parse_all(data, conn_mem):
         site_dict = {}
         #concatenate sql for query hmc
         query_sql_hmc = methods.concatenate_sql().query_HMC(int(parsed_json['page']))
+        #concatenate sql for query main_hmc total row for pagination
+        query_sql_hmc_trow = methods.concatenate_sql().get_total_row("main_HMC")
+        total_row = methods.Database_operation(query_sql_hmc_trow, conn_mem,1).conn()
         #concatenate sql for query tulpa
-        
         #query hmc
         dat_hmc = methods.Database_operation(query_sql_hmc, conn_mem,1).conn()
+        page_num = (total_row[0][0]/10)
+        page_num = math.ceil(page_num)
+        print (total_row)
         #query tulpa
-        print(dat_hmc)
+        #print(dat_hmc)
         list_of_site = []
         for details in dat_hmc:
             site_dict["h_name"] = details[1]
@@ -52,12 +57,10 @@ def parse_all(data, conn_mem):
         #     list_of_site.append(site_dict)
         #construct_return dict to be returned and serializedd
         return_dict = {
-            "pagesQuantity": len(dat_hmc),
+            "pagesQuantity": page_num,
             "sites": list_of_site
         }
-        # print (site_dict)
-        print (list_of_site)
-        # print (return_dict)
+
         #serialize return_dict to json
         data = json.dumps(return_dict, indent=4)
         return (data)

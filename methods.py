@@ -55,13 +55,9 @@ class concatenate_sql:
         return (sql)
     #concatenate sql for querying main HMC
     def query_HMC(self, pg_num):
-        if pg_num == 0:
-            strt_num = pg_num+1
-            end_num = pg_num+10
-        else: 
-            strt_num = pg_num*10
-            end_num = strt_num+10
-        sql = ("""SELECT * FROM main_HMC WHERE id BETWEEN {} AND {}""".format(strt_num, end_num))
+        if pg_num != 0: 
+            pg_num = pg_num*10
+        sql = ("""SELECT * FROM main_HMC LIMIT {}, 10""".format(pg_num))
         return (sql)
     #concatenate sql for inserting into tulpa
     def insert_tulpa(self, t_name, hID):
@@ -73,7 +69,9 @@ class concatenate_sql:
         return(sql) 
     def insert_doc(self, parsed_json, path):
         pass
-
+    def get_total_row(self, table):
+        sql = ("""SELECT COUNT(*) FROM {}""".format(table))
+        return (sql)
    # def get_row_num:
 #generate file name
 class gen_file_name:
