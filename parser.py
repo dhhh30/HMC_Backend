@@ -6,7 +6,8 @@ import base64
 import json
 import math
 #root path for all assets and data
-path = "G:\HMC_Backend"    
+#path = "G:\HMC_Backend" 
+path = "/Users/yurunchen/Documents/GitHub"   
 #dictionary for site
 
 #Hash table

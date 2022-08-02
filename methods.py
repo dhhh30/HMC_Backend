@@ -82,7 +82,7 @@ class gen_file_name:
         ms = int(round(time.time() * 1000))
         rand_num = randrange(10)
         if self.op_num == 1:
-            final_file = (self.parsed_json["file_name"],"-"+str(ms)+str(rand_num))
+            final_file = ("-"+str(ms)+str(rand_num)+self.parsed_json["file_name"],)
             return final_file
         if self.op_num == 2:
             final_file = (str(ms)+str(rand_num))
