@@ -15,10 +15,11 @@ class AbstractDatabase:
 #class for operating with HDDB
 #class for operating with MEMDB
 class Database_operation():
-    def __init__(self, sql, conn_obj, op_type):
+    def __init__(self, sql, conn_obj, op_type, table):
         self.sql = sql
         self.conn_obj = conn_obj
         self.op_type = op_type
+        self.table = table
     def connect(self):   
         #Sql Statement
         sql = self.sql
@@ -37,9 +38,9 @@ class Database_operation():
             return data
         elif op_type == 2:
             conn.commit()
-            cursor.execute('SELECT last_insert_id();')
+            cursor.execute(' SELECT MAX(id) FROM {};'.format(self.table))
             #returns last row id on insert
-            return str(cursor.fetchone())
+            return cursor.fetchone()
     def conn(self):
         result = self.connect()
         return result
@@ -62,14 +63,14 @@ class concatenate_sql:
         return (sql)
     #concatenate sql for inserting into tulpa
     def insert_tulpa(self,i,  t_name, hID):
-        sql = ("""INSERT INTO tulpas (tulpaName, hID) VALUES ("{}",{})""".format(t_name['tulpas_name'][i], hID[1]))
+        sql = ("""INSERT INTO tulpas (id, tulpaName, hID) VALUES (NULL, "{}",{})""".format(t_name['tulpas_name'][i], hID[0]))
         return (sql)
     #concatenate sql for querying tulpa
     def query_tulpa_main_List(self, hID):
         sql = ("""SELECT tulpaName FROM tulpas WHERE hID={}""".format(hID))
         return(sql) 
     def insert_doc(self, type , path, hID):
-        sql = ("""INSERT INTO assets (ID, assetPath, type, hID) VALUES (NULL,"{}","{}",{})""".format(path, type, hID[1]))
+        sql = ("""INSERT INTO assets (id, assetPath, type, hID) VALUES (NULL,"{}","{}",{})""".format(path, type, hID[0]))
         return sql
     def get_total_row(self, table):
         sql = ("""SELECT COUNT(*) FROM {}""".format(table))
@@ -87,7 +88,7 @@ class gen_file_name:
             final_file = (self.parsed_json["file_name"]+"-"+str(ms)+str(rand_num))
             return final_file
         if self.op_num == 2:
-            final_file = (str(ms)+str(rand_num))
+            final_file = (self.parsed_json["host_name"]+"-"+str(ms)+str(rand_num))
             return final_file
         if self.op_num ==3:
             final_file = (self.parsed_json["cover_name"]+"-"+str(ms)+str(rand_num))
