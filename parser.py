@@ -6,6 +6,7 @@ import base64
 import json
 import math
 #root path for all assets and data
+#should be in htdocs for production deployment
 path = "/Users/yurunchen/Documents/GitHub/HMC_backend/" 
 
 #dictionary for site
