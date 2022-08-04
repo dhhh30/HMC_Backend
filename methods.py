@@ -35,11 +35,11 @@ class Database_operation():
             data = cursor.fetchall()
             #returns fetched data in list
             return data
-        elif op_type ==2:
-            conn.execute(sql)
+        elif op_type == 2:
             conn.commit()
+            cursor.execute('SELECT last_insert_id();')
             #returns last row id on insert
-            return cursor.lastrowid
+            return str(cursor.fetchone())
     def conn(self):
         result = self.connect()
         return result
@@ -49,9 +49,10 @@ class concatenate_sql:
         pass
         # self.parsed_dict = parsed_dict
     #concatenate sql for inserting into HMC
-    def insert_HMC(self, parsed_dict):
-        sql = ("""INSERT INTO main_HMC (h_name, desc, path, v_status) VALUES ({},{},{},{})
-        """.format(parsed_dict['h_name'], parsed_dict['description'], parsed_dict['path'], parsed_dict['v_status']))
+    def insert_HMC(self, parsed_dict, host_path):
+        sql = ("""INSERT INTO main_HMC (id, h_name, h_age, email, description, path, v_status, creation_time)
+         VALUES (NULL, "{}","{}","{}","{}","{}","0",NULL);
+         """.format(parsed_dict['host_name'], parsed_dict['host_age'], parsed_dict['email'], parsed_dict['introduce'], host_path , 0))
         return (sql)
     #concatenate sql for querying main HMC
     def query_main_List(self, pg_num):
@@ -60,15 +61,16 @@ class concatenate_sql:
         sql = ("""SELECT path, creation_time, h_name, id FROM main_HMC LIMIT {}, 10""".format(pg_num))
         return (sql)
     #concatenate sql for inserting into tulpa
-    def insert_tulpa(self, t_name, hID):
-        sql = ("""INSERT INTO tulpas (tulpaName, hID) VALUES ({},{})""".format(t_name, hID))
+    def insert_tulpa(self,i,  t_name, hID):
+        sql = ("""INSERT INTO tulpas (tulpaName, hID) VALUES ("{}",{})""".format(t_name['tulpas_name'][i], hID[1]))
         return (sql)
     #concatenate sql for querying tulpa
     def query_tulpa_main_List(self, hID):
         sql = ("""SELECT tulpaName FROM tulpas WHERE hID={}""".format(hID))
         return(sql) 
-    def insert_doc(self, parsed_json, path):
-        pass
+    def insert_doc(self, type , path, hID):
+        sql = ("""INSERT INTO assets (ID, assetPath, type, hID) VALUES (NULL,"{}","{}",{})""".format(path, type, hID[1]))
+        return sql
     def get_total_row(self, table):
         sql = ("""SELECT COUNT(*) FROM {}""".format(table))
         return (sql)
@@ -82,11 +84,11 @@ class gen_file_name:
         ms = int(round(time.time() * 1000))
         rand_num = randrange(10)
         if self.op_num == 1:
-            final_file = ("-"+str(ms)+str(rand_num)+self.parsed_json["file_name"],)
+            final_file = (self.parsed_json["file_name"]+"-"+str(ms)+str(rand_num))
             return final_file
         if self.op_num == 2:
             final_file = (str(ms)+str(rand_num))
             return final_file
         if self.op_num ==3:
-            final_file = (self.parsed_json["cover_name"],"-"+str(ms)+str(rand_num))
+            final_file = (self.parsed_json["cover_name"]+"-"+str(ms)+str(rand_num))
             return final_file

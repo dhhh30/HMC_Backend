@@ -6,8 +6,8 @@ import base64
 import json
 import math
 #root path for all assets and data
-#path = "G:\HMC_Backend" 
-path = "/Users/yurunchen/Documents/GitHub"   
+path = "G:\HMC_Backend" 
+
 #dictionary for site
 
 #Hash table
@@ -64,33 +64,50 @@ def parse_all(data, conn_mem):
         f_name = methods.gen_file_name(parsed_json, 1).fname()
         c_name = methods.gen_file_name(parsed_json, 3).fname()
         host_path = os.path.join(path, h_path)
-        #create host path
-        os.mkdir(host_path)
-        #concatenate sql for db operation
-        sql_hmc_cover = methods.concatenate_sql().insert_HMC(parsed_json)
-        sql_hmc_file = methods.concatenate_sql().insert_doc(parsed_json, c_name)
-        sql_tulpa = methods.concatenate_sql().insert_tulpa(parsed_json)
-        #decode base64 and write to folders
-        with open(os.path.join(host_path, parsed_json["cover_name"]), "wb") as fh:
-            fh.write(base64.decodebytes(parsed_json["cover"]))
-        with open(os.path.join(host_path, parsed_json["cover_name"]), "wb") as fh:
-            fh.write(base64.decodebytes(parsed_json["cover"]))
-        #commit sql statements
-        query_file_cover = methods.Database_operation(sql_hmc_cover,conn_mem, 2)
-        query_hmc_file = methods.Database_operation(sql_hmc_file,conn_mem, 2)
-        query_tulpa = methods.Database_operation(sql_tulpa,conn_mem, 2)
-        return (query_file_cover+query_hmc_file+query_tulpa)
+        try:
+            #create host path
+            os.mkdir(host_path)
+            #concatenate sql for db operation
+            sql_hmc = methods.concatenate_sql().insert_HMC(parsed_json, host_path)
+            query_hmc = methods.Database_operation(sql_hmc, conn_mem, 2).conn()
+            sql_hmc_file = methods.concatenate_sql().insert_doc("file", f_name, query_hmc)
+            sql_hmc_cover = methods.concatenate_sql().insert_doc("cover", c_name, query_hmc)
+            query_hmc_file = methods.Database_operation(sql_hmc_file,conn_mem, 2).conn()
+            query_file_cover = methods.Database_operation(sql_hmc_cover,conn_mem, 2).conn()
+            for i in range(len(parsed_json['tulpas_name'])):
+                sql_tulpa = methods.concatenate_sql().insert_tulpa(i, parsed_json, query_hmc_file)
+                print(sql_tulpa)
+                query_tulpa = methods.Database_operation(sql_tulpa, conn_mem, 2).conn()
+            print (sql_hmc_file, sql_hmc_cover)
+            
+            #decode base64 and write to folders
+            cover_file = open(os.path.join(host_path, parsed_json["cover_name"]), 'wb')
+            cover_file.write(base64.b64decode(parsed_json["cover"]))
+            cover_file.close()
+
+            file_file = open(os.path.join(host_path, parsed_json["file_name"]), 'wb')
+            file_file.write((base64.b64decode(parsed_json["file"])))
+            file_file.close()
+            return_dict = {
+                "success" : "True"
+            }
+        except:
+            return_dict = {
+                "success" : "False"
+            }
+        return_json = json.dumps(return_dict, indent=4)
+        return (return_json)
         
         
-    #pushNewDoc method
-    elif parsed_json['request'] == "pushNewDoc":
-        return_to_serialize = {"flag": True}
-        #serialize dict into json
-        json_ = json.dumps(return_to_serialize, indent=4)
-        return(str(json_))
-    #delDoc method
-    elif parsed_json['request'] == "delDoc":
-        return("deldoc")
-        pass
-    else:
-        pass
+    # #pushNewDoc method
+    # elif parsed_json['request'] == "pushNewDoc":
+    #     return_to_serialize = {"flag": True}
+    #     #serialize dict into json
+    #     json_ = json.dumps(return_to_serialize, indent=4)
+    #     return(str(json_))
+    # #delDoc method
+    # elif parsed_json['request'] == "delDoc":
+    #     return("deldoc")
+    #     pass
+    # else:
+    #     pass
