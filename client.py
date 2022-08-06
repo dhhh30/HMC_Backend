@@ -9,7 +9,7 @@ import websockets
 # print(ws.recv())
 # ws.close()
 
-#input_int = input("input page number:")
+input_int = input("input page number:")
 json = ("""{
     "request":"uploading",
     "host_name":"Dylan",
@@ -24,6 +24,10 @@ json = ("""{
     "file": "PGgxPuWXqOWXqOWXqDwvaDE+"
 
 }""")
+# json = ("""
+# {"request":"mainList",
+# "page": 100 
+# }""")
 async def test():
     async with websockets.connect("ws://localhost:2186") as websocket:
         await websocket.send(json)

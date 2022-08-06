@@ -75,6 +75,9 @@ class concatenate_sql:
     def get_total_row(self, table):
         sql = ("""SELECT COUNT(*) FROM {}""".format(table))
         return (sql)
+    def query_file(self, hID, type):
+        sql = ("""SELECT assetPath FROM assets WHERE hID='{}' AND type='{}'""".format(hID[0],type))
+        return sql
    # def get_row_num:
 #generate file name
 class gen_file_name:

@@ -12,9 +12,11 @@ for i in range (100):
     string = ("test"+str(i))
     tuple_String = [string,string,string,string,string,string]
     sql = ("""INSERT INTO main_HMC (id, h_name, h_age, email, description, v_status, creation_time) VALUES (NULL, '{}', '{}', '{}','{}', '0', NULL)""".format(string, '12' ,string,string))
-    sql1 = ("""INSERT INTO Tulpas VALUES (NULL,?, NULL, ?);""")
+    sql1 = ("""INSERT INTO tulpas VALUES (NULL,'{}', '{}', NULL);""".format(string, i+1))
     conn = database_obj.cursor()
     print(sql)
     conn.execute(sql)
+    database_obj.commit()
+    conn.execute(sql1)
     #conn.execute(sql1, [string,i])
     database_obj.commit()
