@@ -8,7 +8,7 @@ import json
 import math
 #root path for all assets and data
 #should be htdocs  root for production deployment
-path = "G:/HMC_backend" 
+path = "/root/HMC_Backend" 
 
 #dictionary for site
 
