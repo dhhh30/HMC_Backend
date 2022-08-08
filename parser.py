@@ -44,6 +44,7 @@ def parse_all(data, conn_mem):
         else:
             pass
         #print (dat_hmc)
+        #Create Site list by looping through hmc query and tulpas query
         for details in dat_hmc:
             site_dict["h_name"] = details[2]
             site_dict["createdDate"] = str(details[1])
