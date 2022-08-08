@@ -6,6 +6,7 @@ import os
 import base64
 import json
 import math
+from multiprocessing import Process
 #root path for all assets and data
 #should be htdocs  root for production deployment
 path = "/root/HMC_Backend" 
@@ -78,44 +79,43 @@ def parse_all(data, conn_mem):
         f_name = methods.gen_file_name(parsed_json, 1).fname()
         c_name = methods.gen_file_name(parsed_json, 3).fname()
         host_path = os.path.join(path, h_path)
-        # try:
         #create host path
         os.mkdir(host_path)
         #concatenate sql for db operation
         sql_hmc = methods.concatenate_sql().insert_HMC(parsed_json, host_path)
         query_hmc = methods.Database_operation(sql_hmc, conn_mem, 2, "main_HMC").conn()
         #print(type(query_hmc))
-
-        sql_hmc_cover = methods.concatenate_sql().insert_doc("cover", c_name, query_hmc)
-        #querying files for HMC
-        # query_hmc_file = methods.Database_operation(sql_hmc_file,conn_mem, 2, "assets").conn()
-        query_file_cover = methods.Database_operation(sql_hmc_cover,conn_mem, 2, "assets").conn()
+        #spawn child process for querying cover
+        query_hmc_cover = Process(target=methods.cover_database, args=(c_name,query_hmc,conn_mem))
+        query_hmc_cover.start()
+        #loop through tulpa list from json and perform Database INSERTs, spawning child process to speed up
         for i in range(len(parsed_json['tulpas_name'])):
-            sql_tulpa = methods.concatenate_sql().insert_tulpa(i, parsed_json, query_hmc)
-            # print(sql_tulpa)
-            query_tulpa = methods.Database_operation(sql_tulpa, conn_mem, 2, "tulpas").conn()
+            query_tulpas = Process(target=methods.uploading_tulpa, args=(i, parsed_json, query_hmc, conn_mem))
+            query_tulpas.start()
         # print (sql_hmc_file, sql_hmc_cover)
-        #Writing webinput to file
+        #Writing webinput to fi_tle
         sql_hmc_webinput = methods.concatenate_sql().insert_doc("webinput", f_name+".html", query_hmc)
         query_webinput = methods.Database_operation(sql_hmc_webinput, conn_mem, 2, "assets").conn()
         # print(query_webinput)
         webinput_file = open(os.path.join(host_path, f_name)+".html", 'w' )
         webinput_file.write(parsed_json['webinput'])
         #write image to file
-        if len(parsed_json["image"]) >= 10000000:
-            return ("""{
-                "error" : "Image File too large"
-            }""")
-        else:
-            for i in range(len(parsed_json["imgs"])):
-                image_file = open(host_path+parsed_json["img_names"][i])
-                image_file.write(base64.b64decode(parsed_json["imgs"][i]))
-                image_file.close
+        #if the image is more than 10MB then return error
+        for ind_img in parsed_json["imgs"]:
+            if len(ind_img) >= 10000000:
+                return ("""{
+                    "error" : "Image File too large"
+                }""")
 
+        for i in range(len(parsed_json["imgs"])):
+            image_file = open(host_path+parsed_json["img_names"][i])
+            image_file.write(base64.b64decode(parsed_json["imgs"][i]))
+            image_file.close()
         #decode base64 and write to folders
         cover_file = open(os.path.join(host_path, parsed_json["cover_name"]), 'wb')
         cover_file.write(base64.b64decode(parsed_json["cover"]))
         cover_file.close()
+        
         print("Record for host {} have been created with a host id of {}".format(parsed_json["host_name"],query_hmc[0]))
 
         return_dict = {

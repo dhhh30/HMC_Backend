@@ -96,3 +96,14 @@ class gen_file_name:
         if self.op_num ==3:
             final_file = (self.parsed_json["cover_name"]+"-"+str(ms)+str(rand_num))
             return final_file
+
+def cover_database(c_name, query_hmc, conn_mem):
+    #sql for INSERTING into assets for HMC cover
+    sql_hmc_cover = concatenate_sql().insert_doc("cover", c_name, query_hmc)
+    #query for executing code for hmc cover
+    Database_operation(sql_hmc_cover,conn_mem, 2, "assets").conn()
+    
+def uploading_tulpa(i, parsed_json, query_hmc, conn_mem):
+    sql_tulpa = concatenate_sql().insert_tulpa(i, parsed_json, query_hmc)
+    # print(sql_tulpa)
+    Database_operation(sql_tulpa, conn_mem, 2, "tulpas").conn()
