@@ -1,3 +1,4 @@
+from ast import parse
 import hashlib
 import json
 import methods
@@ -103,10 +104,15 @@ def parse_all(data, conn_mem):
         webinput_file = open(os.path.join(host_path, f_name)+".html", 'w' )
         webinput_file.write(parsed_json['webinput'])
         #write image to file
-        for image in parsed_json["image"]:
-            for name in parsed_json["image_name"]:
-                image_file = open(os.path.join(host_path, name))
-                image_file.write(base64.b64decode(image))
+        if len(parsed_json["image"]) >= 10000000:
+            return ("""{
+                "error" : "Image File too large"
+            }""")
+        else:
+            for image in parsed_json["image"]:
+                for name in parsed_json["image_name"]:
+                    image_file = open(os.path.join(host_path, name))
+                    image_file.write(base64.b64decode(image))
 
         #decode base64 and write to folders
         cover_file = open(os.path.join(host_path, parsed_json["cover_name"]), 'wb')
