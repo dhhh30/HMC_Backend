@@ -84,11 +84,8 @@ def parse_all(data, conn_mem):
         sql_hmc = methods.concatenate_sql().insert_HMC(parsed_json, host_path)
         query_hmc = methods.Database_operation(sql_hmc, conn_mem, 2, "main_HMC").conn()
         #print(type(query_hmc))
-        if parsed_json['file'] == None:
-            pass   
-        else:
-            sql_hmc_file = methods.concatenate_sql().insert_doc("file", f_name, query_hmc)
-            sql_hmc_cover = methods.concatenate_sql().insert_doc("cover", c_name, query_hmc)
+
+        sql_hmc_cover = methods.concatenate_sql().insert_doc("cover", c_name, query_hmc)
         #querying files for HMC
         # query_hmc_file = methods.Database_operation(sql_hmc_file,conn_mem, 2, "assets").conn()
         query_file_cover = methods.Database_operation(sql_hmc_cover,conn_mem, 2, "assets").conn()
@@ -109,10 +106,10 @@ def parse_all(data, conn_mem):
                 "error" : "Image File too large"
             }""")
         else:
-            for image in parsed_json["image"]:
-                for name in parsed_json["image_name"]:
-                    image_file = open(os.path.join(host_path, name))
-                    image_file.write(base64.b64decode(image))
+            for i in range(len(parsed_json["imgs"])):
+                image_file = open(host_path+parsed_json["img_names"][i])
+                image_file.write(base64.b64decode(parsed_json["imgs"][i]))
+                image_file.close
 
         #decode base64 and write to folders
         cover_file = open(os.path.join(host_path, parsed_json["cover_name"]), 'wb')
