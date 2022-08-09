@@ -6,7 +6,8 @@ import os
 import base64
 import json
 import math
-from multiprocessing import Process
+import threading
+import concurrent
 #root path for all assets and data
 #should be htdocs  root for production deployment
 path = "/root/HMC_Backend" 
@@ -86,16 +87,18 @@ def parse_all(data, conn_mem):
         query_hmc = methods.Database_operation(sql_hmc, conn_mem, 2, "main_HMC").conn()
         #print(type(query_hmc))
         #spawn child process for querying cover
-        query_hmc_cover = Process(target=methods.cover_database, args=(c_name,query_hmc,conn_mem))
+        query_hmc_cover = threading.Thread(target=methods.cover_database, args=(c_name,query_hmc,conn_mem,))
         query_hmc_cover.start()
         #loop through tulpa list from json and perform Database INSERTs, spawning child process to speed up
-        for i in range(len(parsed_json['tulpas_name'])):
-            query_tulpas = Process(target=methods.uploading_tulpa, args=(i, parsed_json, query_hmc, conn_mem))
-            query_tulpas.start()
-        # print (sql_hmc_file, sql_hmc_cover)
-        #Writing webinput to fi_tle
-        sql_hmc_webinput = methods.concatenate_sql().insert_doc("webinput", f_name+".html", query_hmc)
-        query_webinput = methods.Database_operation(sql_hmc_webinput, conn_mem, 2, "assets").conn()
+        executor = concurrent.futures.ProcessPoolExecutor(5)
+        futures = [executor.submit(methods.uploading_tulpa, i, parsed_json, query_hmc, conn_mem,) for i in range(len(parsed_json["tulpas_name"]))]
+        concurrent.futures.wait(futures)
+        # for i in range(len(parsed_json['tulpas_name'])):
+        #     query_tulpas = threading.Thread(target=methods.uploading_tulpa, args=(i, parsed_json, query_hmc, conn_mem,))
+        #     query_tulpas.start()
+        #Writing webinput to asset
+        sql_hmc_webinput = threading.Thread(target=methods.uploading_webinput, args=(f_name,query_hmc,conn_mem))
+        sql_hmc_webinput.start()
         # print(query_webinput)
         webinput_file = open(os.path.join(host_path, f_name)+".html", 'w' )
         webinput_file.write(parsed_json['webinput'])
@@ -106,16 +109,21 @@ def parse_all(data, conn_mem):
                 return ("""{
                     "error" : "Image File too large"
                 }""")
-
-        for i in range(len(parsed_json["imgs"])):
-            image_file = open(host_path+parsed_json["img_names"][i])
-            image_file.write(base64.b64decode(parsed_json["imgs"][i]))
-            image_file.close()
-        #decode base64 and write to folders
-        cover_file = open(os.path.join(host_path, parsed_json["cover_name"]), 'wb')
-        cover_file.write(base64.b64decode(parsed_json["cover"]))
-        cover_file.close()
         
+        #loop through images for writing
+        futures = [executor.submit(methods.writing_cover, i) for i in range(len(parsed_json["imgs"]))]
+        concurrent.futures.wait(futures)
+        # for i in range(len(parsed_json["imgs"])):
+        #     image_query =threading.Thread(target= methods.writing_image, args=(host_path,parsed_json,i))
+        #     image_query
+        #decode base64 and write to folders
+        
+        cover_thread = threading.Thread(target=methods.writing_cover, args=(host_path,parsed_json,))
+        cover_thread.start()
+        #wait for the subprocesses to complete
+        query_hmc_cover.join()
+        sql_hmc_webinput.join()
+        cover_thread.join()
         print("Record for host {} have been created with a host id of {}".format(parsed_json["host_name"],query_hmc[0]))
 
         return_dict = {
