@@ -6,14 +6,18 @@ import time
 from random import randrange
 import base64
 import os
+import sys
+import threading
+sema = threading.Semaphore(value=2)
+
 #class for operating with DB
 class Database_operation():
-    def __init__(self, sql, conn_obj, op_type, table, result_bool):
+    def __init__(self, sql, conn_obj, op_type, table):
         self.sql = sql
         self.conn_obj = conn_obj
         self.op_type = op_type
         self.table = table
-        self.result_bool = result_bool
+        
     def connect(self):   
         #Sql Statement
         sql = self.sql
@@ -32,18 +36,14 @@ class Database_operation():
             return data
         elif op_type == 2:
             conn.commit()
-            if self.result_bool == True:
-                cursor.execute(' SELECT MAX(id) FROM {};'.format(self.table))
+
+            cursor.execute(' SELECT MAX(id) FROM {};'.format(self.table))
             #returns last row id on insert
-                return cursor.fetchone()
-            else:
-                return None
+            return cursor.fetchone()
     def conn(self):
         result = self.connect()
-        if self.result_bool == True:
-            return result
-        if self.result_bool == False:
-            pass
+        
+        return result
 #concatenate sql statement
 class concatenate_sql:
     def __init__(self):
@@ -98,28 +98,34 @@ class gen_file_name:
             return final_file
 
 def cover_database(c_name, query_hmc, conn_mem):
+    sema.acquire()
     #sql for INSERTING into assets for HMC cover
     sql_hmc_cover = concatenate_sql().insert_doc("cover", c_name, query_hmc)
     #query for executing code for hmc cover
-    Database_operation(sql_hmc_cover,conn_mem, 2, "assets", False).conn()
-    
+    Database_operation(sql_hmc_cover,conn_mem, 2, "assets").conn()
+    sema.release()
 def uploading_tulpa(i, parsed_json, query_hmc, conn_mem):
+    sema.acquire()
     sql_tulpa = concatenate_sql().insert_tulpa(i, parsed_json, query_hmc)
     print(sql_tulpa)
-    Database_operation(sql_tulpa, conn_mem, 2, "tulpas", False).conn()
-
+    Database_operation(sql_tulpa, conn_mem, 2, "tulpas").conn()
+    sema.release()
 def uploading_webinput(f_name, query_hmc, conn_mem):
+    sema.acquire()
     #concatenate sql for storing webinput records in asset table
     sql_hmc_webinput = concatenate_sql().insert_doc("webinput", f_name+".html", query_hmc)
-    Database_operation(sql_hmc_webinput, conn_mem, 2, "assets", False).conn()
-
+    Database_operation(sql_hmc_webinput, conn_mem, 2, "assets").conn()
+    sema.release()
 def writing_image(host_path, parsed_json, i):
+    sema.acquire()
     #decoding image from base64 and write them into perspective files
-    image_file = open(host_path+"\\"+parsed_json["img_names"][i], 'wb')
+    image_file = open(os.path.join(host_path, parsed_json["img_names"][i]), 'wb')
     image_file.write(base64.b64decode(parsed_json["imgs"][i]))
     image_file.close()
-
+    sema.release()
 def writing_cover(host_path, parsed_json):
+    sema.acquire()
     cover_file = open(os.path.join(host_path, parsed_json["cover_name"]), 'wb')
     cover_file.write(base64.b64decode(parsed_json["cover"]))
     cover_file.close()
+    sema.release()
