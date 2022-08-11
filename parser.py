@@ -7,7 +7,8 @@ import base64
 import json
 import math
 import threading
-import concurrent
+from multiprocessing.pool import ThreadPool
+
 #root path for all assets and data
 #should be htdocs  root for production deployment
 path = "/root/HMC_Backend" 
@@ -29,10 +30,10 @@ def parse_all(data, conn_mem):
         query_sql_hmc = methods.concatenate_sql().query_main_List(int(parsed_json['page']))
         #concatenate sql for query main_hmc total row for pagination
         query_sql_hmc_trow = methods.concatenate_sql().get_total_row("main_HMC")
-        total_row = methods.Database_operation(query_sql_hmc_trow, conn_mem,1, "").conn()
+        total_row = methods.Database_operation(query_sql_hmc_trow, conn_mem,1, "", True).conn()
         #concatenate sql for query tulpa
         #query hmc
-        dat_hmc = methods.Database_operation(query_sql_hmc, conn_mem,1,"").conn()
+        dat_hmc = methods.Database_operation(query_sql_hmc, conn_mem,1,"", True).conn()
 
         page_num = (total_row[0][0]/10)
         page_num = math.ceil(page_num)
@@ -51,11 +52,11 @@ def parse_all(data, conn_mem):
             site_dict["h_name"] = details[2]
             site_dict["createdDate"] = str(details[1])
             sql_asset = methods.concatenate_sql().query_file(str(details[3]), "webinput")
-            query_asset = methods.Database_operation(sql_asset, conn_mem, 1, "assets").conn()
-            print(query_asset)
+            query_asset = methods.Database_operation(sql_asset, conn_mem, 1, "assets", True).conn()
+            # print(query_asset)
             site_dict["url"] = str(details[0]) +"/"+query_asset[0][0   ]
             query_tulpa = methods.concatenate_sql().query_tulpa_main_List(details[3])
-            dat_tulpa = methods.Database_operation(query_tulpa, conn_mem, 1, "tulpas").conn()
+            dat_tulpa = methods.Database_operation(query_tulpa, conn_mem, 1, "tulpas", True).conn()
             list_tulpa = []
             for tulpas in dat_tulpa:
                 list_tulpa.append(tulpas[0])
@@ -84,18 +85,18 @@ def parse_all(data, conn_mem):
         os.mkdir(host_path)
         #concatenate sql for db operation
         sql_hmc = methods.concatenate_sql().insert_HMC(parsed_json, host_path)
-        query_hmc = methods.Database_operation(sql_hmc, conn_mem, 2, "main_HMC").conn()
+        query_hmc = methods.Database_operation(sql_hmc, conn_mem, 2, "main_HMC", True).conn()
         #print(type(query_hmc))
         #spawn child process for querying cover
         query_hmc_cover = threading.Thread(target=methods.cover_database, args=(c_name,query_hmc,conn_mem,))
         query_hmc_cover.start()
         #loop through tulpa list from json and perform Database INSERTs, spawning child process to speed up
-        executor = concurrent.futures.ProcessPoolExecutor(5)
-        futures = [executor.submit(methods.uploading_tulpa, i, parsed_json, query_hmc, conn_mem,) for i in range(len(parsed_json["tulpas_name"]))]
-        concurrent.futures.wait(futures)
-        # for i in range(len(parsed_json['tulpas_name'])):
-        #     query_tulpas = threading.Thread(target=methods.uploading_tulpa, args=(i, parsed_json, query_hmc, conn_mem,))
-        #     query_tulpas.start()
+        threads = []
+        for i in range(len(parsed_json['tulpas_name'])):
+            threads.append(threading.Thread(target=methods.uploading_tulpa, args=(i, parsed_json, query_hmc, conn_mem,)))
+            threads[-1].start()
+        for thread in threads:
+             thread.join()
         #Writing webinput to asset
         sql_hmc_webinput = threading.Thread(target=methods.uploading_webinput, args=(f_name,query_hmc,conn_mem))
         sql_hmc_webinput.start()
@@ -111,11 +112,12 @@ def parse_all(data, conn_mem):
                 }""")
         
         #loop through images for writing
-        futures = [executor.submit(methods.writing_cover, i) for i in range(len(parsed_json["imgs"]))]
-        concurrent.futures.wait(futures)
-        # for i in range(len(parsed_json["imgs"])):
-        #     image_query =threading.Thread(target= methods.writing_image, args=(host_path,parsed_json,i))
-        #     image_query
+        threads = []
+        for i in range(len(parsed_json["imgs"])):
+            threads.append(threading.Thread(target= methods.writing_image, args=(host_path,parsed_json,i)))
+            threads[-1].start()
+        for thread in threads:
+            thread.join()
         #decode base64 and write to folders
         
         cover_thread = threading.Thread(target=methods.writing_cover, args=(host_path,parsed_json,))

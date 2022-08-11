@@ -9,7 +9,7 @@ import websockets
 # print(ws.recv())
 # ws.close()
 
-# input_int = input("input page number:")
+input_int = input("input page number:")
 # json = ("""{
 #     "request":"uploading",
 #     "host_name":"Dylan",
@@ -18,6 +18,8 @@ import websockets
 #     "email": "chendylan680@gmail.com",
 #     "file_name": "dchen4",
 #     "cover_name": "cover",
+#     "imgs": ["imagebrurbub","image placeholder"],
+#     "img_names": ["random.jpg","placeholder.jpg"],
 #     "introduce": "Hello guys",
 #     "webinput": "<h1>This is dang intresting</h1>",
 #     "cover": "PGgxPuWXqOWXqOWXqDwvaDE+",
@@ -29,7 +31,7 @@ json = ("""
 "page": 1
 }""")
 async def test():
-    async with websockets.connect("ws://english-poetry.com:2186") as websocket:
+    async with websockets.connect("ws://127.0.0.1:2186") as websocket:
         await websocket.send(json)
         retur_msg = await websocket.recv()
         return retur_msg
