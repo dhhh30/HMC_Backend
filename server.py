@@ -1,7 +1,6 @@
 import asyncio
 from cProfile import run
 from multiprocessing import Process
-from typing_extensions import Self
 import websockets
 from parser import parse_all
 from os import environ, path
