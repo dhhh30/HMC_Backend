@@ -3,14 +3,15 @@ from cProfile import run
 import websockets
 from parser import parse_all
 from os import environ, path
-import signal
+from multiprocessing import Process
 import init
 import threading
+from multiprocessing import Semaphore
 #returned mem_con object from init
 memcon = init.init()
-
-#main handler of request
-async def handler(websocket):
+concurrency = 4
+sema = Semaphore(concurrency)
+async def parser(websocket):
     print("Got request")
     remote_ip = websocket.remote_address
     print("Client Disconnected with IP:", remote_ip)    
@@ -24,6 +25,14 @@ async def handler(websocket):
     #Catch connection reset by peer
     except ConnectionResetError:
         print("Connection reset by peer with IP:", remote_ip)
+#main handler of request
+def handler(websocket):
+    all_processes = []
+    sema.acquire()
+    p = Process(target=f, args=(i, sema))
+    all_processes.append(p)
+    p.start()
+    p.join()
 def main():
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
