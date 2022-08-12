@@ -11,7 +11,7 @@ from multiprocessing import Semaphore
 memcon = init.init()
 concurrency = 4
 sema = Semaphore(concurrency)
-async def parser(websocket):
+async parser(websocket):
     print("Got request")
     remote_ip = websocket.remote_address
     print("Client Disconnected with IP:", remote_ip)    
