@@ -11,7 +11,7 @@ from multiprocessing import Semaphore
 memcon = init.init()
 concurrency = 4
 sema = Semaphore(concurrency)
-async parser(websocket):
+async def parser(websocket, sema):
     print("Got request")
     remote_ip = websocket.remote_address
     print("Client Disconnected with IP:", remote_ip)    
@@ -22,14 +22,16 @@ async parser(websocket):
         await websocket.send(str(response))
     except websockets.ConnectionClosedOK:
         print("Client Disconnected with IP:", remote_ip)
+        sema.release()
     #Catch connection reset by peer
     except ConnectionResetError:
         print("Connection reset by peer with IP:", remote_ip)
+        sema.release()
 #main handler of request
 def handler(websocket):
     all_processes = []
     sema.acquire()
-    p = Process(target=f, args=(i, sema))
+    p = Process(target=parser, args=(websocket, sema))
     all_processes.append(p)
     p.start()
     p.join()
