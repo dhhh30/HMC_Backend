@@ -1,17 +1,19 @@
 import asyncio
 from cProfile import run
+from multiprocessing import Process
+from typing_extensions import Self
 import websockets
 from parser import parse_all
 from os import environ, path
-from multiprocessing import Process
+import signal
 import init
 import threading
 from multiprocessing import Semaphore
 #returned mem_con object from init
 memcon = init.init()
-concurrency = 4
-sema = Semaphore(concurrency)
-async def parser(websocket, sema):
+concurrency = 3
+#main handler of request
+async def handler(websocket,sema):
     print("Got request")
     remote_ip = websocket.remote_address
     print("Client Disconnected with IP:", remote_ip)    
@@ -22,17 +24,13 @@ async def parser(websocket, sema):
         await websocket.send(str(response))
     except websockets.ConnectionClosedOK:
         print("Client Disconnected with IP:", remote_ip)
-        sema.release()
     #Catch connection reset by peer
     except ConnectionResetError:
         print("Connection reset by peer with IP:", remote_ip)
-        sema.release()
-#main handler of request
-def handler(websocket):
-    all_processes = []
+async def handler(websocket):
+    sema = Semaphore(concurrency)
     sema.acquire()
-    p = Process(target=parser, args=(websocket, sema))
-    all_processes.append(p)
+    p = Process(target=handler, args=(websocket, sema))
     p.start()
     p.join()
 def main():
@@ -58,5 +56,5 @@ def main():
 #      await asyncio.Future()
 #ping client
 #run main function
-server_main = threading.Thread(target=main)
-server_main.start()
+
+main()
