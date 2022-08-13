@@ -43,9 +43,10 @@ async def main():
     #     await asyncio.Future()
 
 
-    async with websockets.serve(handler,"",2186):
-        await asyncio.Future()
+    websockets.serve(handler,"",2186):
 #ping client
 #run main function
 
-asyncio.run(main())
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
+loop.run_forever
