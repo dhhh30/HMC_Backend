@@ -31,6 +31,7 @@ async def handler(websocket):
 
     message = await websocket.recv()
     response = get_response(message)
+    print(response)
     sender(websocket, response)
     
         # for task in asyncio.asyncio.as_completed(tasks):
