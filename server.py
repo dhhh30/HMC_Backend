@@ -19,7 +19,8 @@ async def handler(websocket):
     #multiprocessing
     try:
         message = await websocket.recv()
-        async for mess in websocket():
+        print (websocket)
+        async for mess in websocket:
             tasks.append(loop.run_in_executor(task_executer, parse_all, message, memcon))
         #print(response)
             for task in asyncio.asyncio.as_completed(tasks):
