@@ -40,7 +40,6 @@ class Database_operation():
             cursor.execute(' SELECT MAX(id) FROM {};'.format(self.table))
             #returns last row id on insert
             last_id =  cursor.fetchone()
-            cursor.close()
             return last_id
     def conn(self):
         result = self.connect()
