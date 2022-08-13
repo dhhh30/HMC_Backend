@@ -10,14 +10,13 @@ from concurrent.futures import ProcessPoolExecutor
 #task executor for multiprocessing
 task_executer = ProcessPoolExecutor(max_workers=3)
 #main handler of request
-def get_response(message):
+async def get_response(message):
     loop = asyncio.get_running_loop()
-    response = loop.run_in_executor(task_executer, parse_all, message)
-    return response
+    return await loop.run_in_executor(task_executer, parse_all, message)
 async def sender(websocket, message):
     remote_ip = websocket.remote_address 
     try:
-        await websocket.send(message)
+        await websocket.send(str(message))
     except websockets.ConnectionClosedOK:
         print("Client Disconnected with IP:", remote_ip)
 async def handler(websocket):
