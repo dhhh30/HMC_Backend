@@ -19,11 +19,10 @@ async def handler(websocket):
     remote_ip = websocket.remote_address  
     #multiprocessing
     try:
-        message = await websocket.recv()
         print (websocket)
-        async for mess in websocket:
+        async for message in websocket:
             tasks.append(loop.run_in_executor(task_executer, parse_all, message, memcon))
-        #print(response)
+            print(tasks)
             for task in asyncio.asyncio.as_completed(tasks):
                 response = await task
                 loop.create_task(sender(websocket, response))
