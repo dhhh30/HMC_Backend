@@ -4,18 +4,26 @@ from parser import parse_all
 from os import environ, path
 import signal
 import init
+from concurrent.futures import ProcessPoolExecutor
 #returned mem_con object from init
 memcon = init.init()
-        
+#task executor for multiprocessing
+task_executer = ProcessPoolExecutor(max_workers=3)
 #main handler of request
 async def handler(websocket):
+    tasks = []
+    loop = asyncio.get_running_loop()
     print("Got request")
     remote_ip = websocket.remote_address
     print("Client Disconnected with IP:", remote_ip)    
+    #multiprocessing
     try:
         message = await websocket.recv()
-        response = parse_all(message, memcon)
+        async for mess in websocket():
+            tasks.append(loop.run_in_executor(task_executer, parse_all, message, memcon))
         #print(response)
+            for task in asyncio.asyncio.as_completed(tasks):
+                response = await task
         await websocket.send(str(response))
     except websockets.ConnectionClosedOK:
         print("Client Disconnected with IP:", remote_ip)
