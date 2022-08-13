@@ -33,16 +33,17 @@ class Database_operation():
         if op_type == 1:
             data = cursor.fetchall()
             #returns fetched data in list
+            cursor.close()
             return data
         elif op_type == 2:
             conn.commit()
-
             cursor.execute(' SELECT MAX(id) FROM {};'.format(self.table))
             #returns last row id on insert
-            return cursor.fetchone()
+            last_id =  cursor.fetchone()
+            cursor.close()
+            return last_id
     def conn(self):
         result = self.connect()
-        
         return result
 #concatenate sql statement
 class concatenate_sql:
