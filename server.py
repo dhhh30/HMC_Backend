@@ -16,8 +16,7 @@ async def handler(websocket):
     tasks = []
     loop = asyncio.get_running_loop()
     print("Got request")
-    remote_ip = websocket.remote_address
-    print("Client Disconnected with IP:", remote_ip)    
+    remote_ip = websocket.remote_address  
     #multiprocessing
     try:
         message = await websocket.recv()
