@@ -20,9 +20,6 @@ async def sender(websocket, message):
         await websocket.send(message)
     except websockets.ConnectionClosedOK:
         print("Client Disconnected with IP:", remote_ip)
-    #Catch connection reset by peer
-    except websockets.ConnectionResetError:
-        print("Connection reset by peer with IP:", remote_ip)    
 async def handler(websocket):
 
     print("Got request")
