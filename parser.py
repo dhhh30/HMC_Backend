@@ -8,19 +8,19 @@ import json
 import math
 import threading
 from multiprocessing.pool import ThreadPool
-
+import init
 #root path for all assets and data
 #should be htdocs  root for production deployment
 path = "/root/HMC_Backend" 
 
 #dictionary for site
-
-#Hash table
+conn_mem = init.init()
+#connection object
 
 #Search Method hash table
 
 #Parsing and deserializing
-def parse_all(data, conn_mem):
+def parse_all(data):
     parsed_json = json.loads(data)
     #mainList method
     if parsed_json['request'] ==  "mainList":

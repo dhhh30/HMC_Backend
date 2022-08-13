@@ -6,13 +6,13 @@ import signal
 import init
 from concurrent.futures import ProcessPoolExecutor
 #returned mem_con object from init
-memcon = init.init()
+
 #task executor for multiprocessing
 task_executer = ProcessPoolExecutor(max_workers=3)
 #main handler of request
 def get_response(message):
     loop = asyncio.get_running_loop()
-    response = loop.run_in_executor(task_executer, parse_all, message, memcon)
+    response = loop.run_in_executor(task_executer, parse_all, message)
     return response
 async def sender(websocket, message):
     remote_ip = websocket.remote_address 
