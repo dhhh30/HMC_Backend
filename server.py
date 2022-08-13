@@ -33,20 +33,20 @@ async def handler(websocket):
         print("Connection reset by peer with IP:", remote_ip)
 
 #main function
-async def main():
+# async def main():
 
-    #Serves WS behind NGINX via UNIX Socket
-    # loop = asyncio.get_running_loop()
-    # stop = loop.create_future()
-    # loop.add_signal_handler(signal.SIGTERM, stop.set_result, None)
-    # async with websockets.unix_serve(handler, path=f"{os.environ['SUPERVISOR_PROCESS_NAME']}.sock",):
-    #     await asyncio.Future()
+#     #Serves WS behind NGINX via UNIX Socket
+#     # loop = asyncio.get_running_loop()
+#     # stop = loop.create_future()
+#     # loop.add_signal_handler(signal.SIGTERM, stop.set_result, None)
+#     # async with websockets.unix_serve(handler, path=f"{os.environ['SUPERVISOR_PROCESS_NAME']}.sock",):
+#     #     await asyncio.Future()
 
 
-    websockets.serve(handler,"",2186)
+
 #ping client
 #run main function
-
+main = websockets.serve(handler,"",2186)
 loop = asyncio.get_event_loop()
-loop.run_until_complete(main())
+loop.run_until_complete(main)
 loop.run_forever()
