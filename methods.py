@@ -8,7 +8,7 @@ import base64
 import os
 import sys
 import threading
-sema = threading.Semaphore(value=8)
+sema = threading.Semaphore(value=2)
 
 #class for operating with DB
 class Database_operation():
