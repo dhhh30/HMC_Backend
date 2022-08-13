@@ -88,13 +88,13 @@ class gen_file_name:
         ms = int(round(time.time() * 1000))
         rand_num = randrange(10)
         if self.op_num == 1:
-            final_file = (self.parsed_json["file_name"]+"-"+str(ms)+str(rand_num))
+            final_file = (str(ms)+str(rand_num))
             return final_file
         if self.op_num == 2:
-            final_file = (self.parsed_json["host_name"]+"-"+str(ms)+str(rand_num))
+            final_file = (str(self.parsed_json["host_name"])+"-"+str(ms)+str(rand_num))
             return final_file
         if self.op_num ==3:
-            final_file = (self.parsed_json["cover_name"]+"-"+str(ms)+str(rand_num))
+            final_file = (str(self.parsed_json["cover_name"])+"-"+str(ms)+str(rand_num))
             return final_file
 
 def cover_database(c_name, query_hmc, conn_mem):
