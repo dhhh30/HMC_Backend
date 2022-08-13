@@ -10,6 +10,8 @@ memcon = init.init()
 #task executor for multiprocessing
 task_executer = ProcessPoolExecutor(max_workers=3)
 #main handler of request
+async def sender(websocket, message):
+    await websocket.send(message)
 async def handler(websocket):
     tasks = []
     loop = asyncio.get_running_loop()
@@ -25,7 +27,8 @@ async def handler(websocket):
         #print(response)
             for task in asyncio.asyncio.as_completed(tasks):
                 response = await task
-                await websocket.send(str(response))
+                loop.create_task(sender(websocket, response))
+
     except websockets.ConnectionClosedOK:
         print("Client Disconnected with IP:", remote_ip)
     #Catch connection reset by peer
