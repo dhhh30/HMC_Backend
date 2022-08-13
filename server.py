@@ -10,6 +10,9 @@ memcon = init.init()
 #task executor for multiprocessing
 task_executer = ProcessPoolExecutor(max_workers=3)
 #main handler of request
+def get_response(message):
+    response = loop.run_in_executor(task_executer, parse_all, message, memcon)
+    loop = asyncio.get_running_loop()
 async def sender(websocket, message):
     await websocket.send(message)
 async def handler(websocket):
@@ -19,7 +22,7 @@ async def handler(websocket):
     #multiprocessing
     try:
         message = await websocket.recv()
-        response = loop.run_in_executor(task_executer, parse_all, message, memcon)
+        response = get_response(message)
         sender(websocket, response)
         
         # for task in asyncio.asyncio.as_completed(tasks):
