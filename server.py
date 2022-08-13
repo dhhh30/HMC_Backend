@@ -43,7 +43,7 @@ async def main():
     #     await asyncio.Future()
 
 
-    websockets.serve(handler,"",2186):
+    websockets.serve(handler,"",2186)
 #ping client
 #run main function
 
