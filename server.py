@@ -26,7 +26,7 @@ async def handler(websocket):
     #multiprocessing
 
     message = await websocket.recv()
-    response = get_response(message)
+    response = await get_response(message)
     print(response)
     sender(websocket, response)
     
