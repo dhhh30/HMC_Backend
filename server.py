@@ -13,9 +13,9 @@ task_executer = ProcessPoolExecutor(max_workers=3)
 async def handler(websocket):
     print("Got request")
     remote_ip = websocket.remote_address
-    print (websocket.message)
     try:
         async for message in websocket:
+            print(message)
             response = await parse_all(message)
         #print(response)
             await websocket.send(str(response))
