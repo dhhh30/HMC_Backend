@@ -21,6 +21,7 @@ conn_mem = init.init()
 
 #Parsing and deserializing
 def parse_all(data):
+    print(data)
     parsed_json = json.loads(data)
     #mainList method
     if parsed_json['request'] ==  "mainList":

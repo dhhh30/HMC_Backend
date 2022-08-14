@@ -13,18 +13,19 @@ task_executer = ProcessPoolExecutor(max_workers=3)
 async def handler(websocket):
     print("Got request")
     remote_ip = websocket.remote_address
-    print("Client Disconnected with IP:", remote_ip)    
+    print (websocket.message)
     try:
-        message = await websocket.recv()
-        response = parse_all(message)
+        async for message in websocket:
+            response = await parse_all(message)
         #print(response)
-        await websocket.send(str(response))
+            await websocket.send(str(response))
     except websockets.ConnectionClosedOK:
         print("Client Disconnected with IP:", remote_ip)
     #Catch connection reset by peer
     except ConnectionResetError:
         print("Connection reset by peer with IP:", remote_ip)
-
+    finally:
+        return
 #main function
 async def main():
 
