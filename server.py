@@ -8,7 +8,7 @@ from concurrent.futures import ProcessPoolExecutor
 #returned mem_con object from init
 
 #task executor for multiprocessing
-task_executer = ProcessPoolExecutor(max_workers=3)
+task_executer = ProcessPoolExecutor(max_workers=2)
 #main handler of request
 async def get_response(message):
     loop = asyncio.get_running_loop()

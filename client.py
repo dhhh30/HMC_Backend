@@ -41,6 +41,6 @@ async def test():
         retur_msg = await websocket.recv()
         return retur_msg
 for i in range(1000):
-    asyncio.run(test())
+    print(asyncio.run(test()))
 end = time.time()
 print("1000 queries completed in:"+ str(end - start))
