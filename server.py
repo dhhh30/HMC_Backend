@@ -16,7 +16,7 @@ async def handler(websocket):
     print("Client Disconnected with IP:", remote_ip)    
     try:
         message = await websocket.recv()
-        response = parse_all(message, memcon)
+        response = parse_all(message)
         #print(response)
         await websocket.send(str(response))
     except websockets.ConnectionClosedOK:
