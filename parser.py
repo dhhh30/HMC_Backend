@@ -148,7 +148,7 @@ def parse_all(data):
     
     elif parsed_json['request'] == "admin":
         return_dict = {
-            "authenticationSuccess" :  methods.admin_authentication(str(parsed_json["password"]), parsed_json["userName"])
+            "authenticationSuccess" :  str(methods.admin_authentication(str(parsed_json["password"]), parsed_json["userName"]))
         }
         return_json = json.dumps(return_dict, indent=4)
 # #pushNewDoc method
