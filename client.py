@@ -36,7 +36,7 @@ json = ("""
 }""")
 
 async def test():
-    async with websockets.connect("ws://english-poetry.com2186") as websocket:
+    async with websockets.connect("ws://english-poetry.com:2186") as websocket:
         await websocket.send(json)
         retur_msg = await websocket.recv()
         return retur_msg

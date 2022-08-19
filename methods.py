@@ -141,17 +141,19 @@ def writing_cover(host_path, parsed_json, cover_name):
     cover_file.close()
     sema.release()
     return
-
-def admin_authentication(pwd, uname):
-    conn = init()
-    #Detect if uname = email
-    if "@" in uname == True:
-        sql = """SELECT pwd_hash FROM admin_usr WHERE {} = '{}'""".format("email",uname)
-    else:
-        sql = """SELECT pwd_hash FROM admin_usr WHERE {} = '{}'""".format("uname",uname)
-    #hash the input plain text pwd
-    input_hash = hashlib.sha256(bytes(pwd)).digest()
-    #query hashed pwd from database
-    output_hash = bytes(Database_operation(sql, conn, 1, "admin_usr"))
-    #compare hashes
-    return secrets.compare_digest(input_hash, output_hash)
+class admin():
+    def __init__(self):
+        pass
+    def admin_authentication(pwd, uname):
+        conn = init()
+        #Detect if uname = email
+        if "@" in uname == True:
+            sql = """SELECT pwd_hash FROM admin_usr WHERE {} = '{}'""".format("email",uname)
+        else:
+            sql = """SELECT pwd_hash FROM admin_usr WHERE {} = '{}'""".format("uname",uname)
+        #hash the input plain text pwd
+        input_hash = hashlib.sha256(bytes(pwd)).digest()
+        #query hashed pwd from database
+        output_hash = bytes(Database_operation(sql, conn, 1, "admin_usr"))
+        #compare hashes
+        return secrets.compare_digest(input_hash, output_hash)
