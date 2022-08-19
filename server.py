@@ -23,8 +23,9 @@ async def handler(websocket):
     except ConnectionResetError:
         print("Connection reset by peer with IP:", remote_ip)
 #main function
-
+async def main():
+    server = await websockets.serve(handler,"",2186)
+    await server.server.serve_forever()
 #ping client
 #run main function
-loop = asyncio.get_event_loop().run_until_complete(websockets.serve(handler,"",2186))
-loop.run_forever()
+asyncio.run(main())
