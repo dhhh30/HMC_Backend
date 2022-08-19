@@ -144,10 +144,10 @@ async def parse_all(data):
     parsed_json = json.loads(data)
     #mainList method
     if parsed_json['request'] ==  "mainList":
-        return loop.run_in_executor(p, mainList, parsed_json, conn_mem)
+        return await loop.run_in_executor(p, mainList, parsed_json, conn_mem)
     #handle uploading request
     elif parsed_json['request'] == "uploading":
-        return loop.run_in_executor(p, uploading, parsed_json, conn_mem)
+        return await loop.run_in_executor(p, uploading, parsed_json, conn_mem)
     elif parsed_json['request'] == "admin":
         return_dict = {
             "authenticationSuccess" :  str(methods.admin.admin_authentication(str(parsed_json["password"]), parsed_json["userName"]))
