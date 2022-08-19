@@ -70,7 +70,7 @@ def parse_all(data):
             "pagesQuantity": page_num,
             "sites": list_of_site
         }
-        
+        conn_mem.close()
         #serialize return_dict to json
         data = json.dumps(return_dict, indent=4)
         return (data)
@@ -138,6 +138,7 @@ def parse_all(data):
         #           "success" : "False"
         #       }
         return_json = json.dumps(return_dict, indent=4)
+        conn_mem.close()
         return (return_json)
     
     elif parsed_json['request'] == "admin":
