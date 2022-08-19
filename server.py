@@ -4,7 +4,7 @@ from os import environ, path
 import signal
 from parser import parse_all
 from concurrent.futures import ProcessPoolExecutor
-task_executor = ProcessPoolExecutor(max_workers=3)
+
 async def handler(websocket):
     print("Got request")
     remote_ip = websocket.remote_address
@@ -12,6 +12,8 @@ async def handler(websocket):
     loop = asyncio.get_event_loop()
     try:
         async for message in websocket:
+
+            task_executor = ProcessPoolExecutor(max_workers=3)
             print(message)
             response = await loop.run_in_executor(task_executor,parse_all, message)
             print(response)
