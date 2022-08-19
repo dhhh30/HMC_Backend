@@ -10,6 +10,7 @@ async def handler(websocket):
     print("Got request")
     remote_ip = websocket.remote_address
     print(remote_ip)
+    loop = asyncio.get_running_loop()
     try:
         async for message in websocket:
             print(message)
