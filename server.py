@@ -5,9 +5,9 @@ import signal
 from parser import parse_all
 from concurrent.futures import ProcessPoolExecutor
 task_executor = ProcessPoolExecutor()
-loop = asyncio.get_running_loop()
-async def handler(websocket):
 
+async def handler(websocket):
+    loop = asyncio.get_running_loop()
     print("Got request")
     remote_ip = websocket.remote_address
     print(remote_ip)
