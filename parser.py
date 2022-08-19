@@ -1,6 +1,7 @@
 from ast import parse
 import hashlib
 import json
+from urllib import request
 import methods
 import os
 import base64
@@ -144,17 +145,21 @@ def parse_all(data):
         return_json = json.dumps(return_dict, indent=4)
         conn_mem.close()
         return (return_json)
-        
-        
-    # #pushNewDoc method
-    # elif parsed_json['request'] == "pushNewDoc":
-    #     return_to_serialize = {"flag": True}
-    #     #serialize dict into json
-    #     json_ = json.dumps(return_to_serialize, indent=4)
-    #     return(str(json_))
-    # #delDoc method
-    # elif parsed_json['request'] == "delDoc":
-    #     return("deldoc")
-    #     pass
-    # else:
-    #     pass
+    
+    elif parsed_json['request'] == "admin":
+        return_dict = {
+            "authentication" :  methods.admin_authentication(str(parsed_json["password"]), parsed_json["userName"])
+        }
+        return_json = json.dumps(return_dict, indent=4)
+# #pushNewDoc method
+# elif parsed_json['request'] == "pushNewDoc":
+#     return_to_serialize = {"flag": True}
+#     #serialize dict into json
+#     json_ = json.dumps(return_to_serialize, indent=4)
+#     return(str(json_))
+# #delDoc method
+# elif parsed_json['request'] == "delDoc":
+#     return("deldoc")
+#     pass
+# else:
+#     pass
