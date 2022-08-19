@@ -11,7 +11,7 @@ import threading
 import hashlib, secrets
 from init import init
 #max concurrent thread
-sema = threading.Semaphore(value=4)
+sema = threading.Semaphore(value=16)
 
 #class for operating with DB
 class Database_operation():
