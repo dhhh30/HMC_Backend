@@ -7,7 +7,7 @@ from concurrent.futures import ProcessPoolExecutor
 
 
 async def handler(websocket):
-    task_executor = ProcessPoolExecutor(max_workers=3)
+    task_executor = ProcessPoolExecutor()
     print("Got request")
     remote_ip = websocket.remote_address
     print(remote_ip)
