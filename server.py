@@ -11,12 +11,11 @@ async def handler(websocket):
     print(remote_ip)
     loop = asyncio.get_event_loop()
     try:
-        # async for message in websocket:
-        message = await websocket.recv()
-        print(message)
-        response = await loop.run_in_executor(task_executor,parse_all, message)
-        print(response)
-        await websocket.send(response)
+        async for message in websocket:
+            print(message)
+            response = await loop.run_in_executor(task_executor,parse_all, message)
+            print(response)
+            await websocket.send(response)
     except websockets.ConnectionClosedOK:
         print("Client Disconnected with IP:", remote_ip)
     #Catch connection reset by peer
