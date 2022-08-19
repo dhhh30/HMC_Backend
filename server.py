@@ -13,7 +13,7 @@ async def handler(websocket):
     try:
         async for message in websocket:
             print(message)
-            response = await loop.run_in_executor(task_executor,parse_all, message)
+            response = loop.run_in_executor(task_executor,parse_all, message)
             print(response)
             await websocket.send(response)
 
