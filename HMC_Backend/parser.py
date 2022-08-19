@@ -131,7 +131,7 @@ def parse_all(data):
         #query_hmc_cover.join()
         #sql_hmc_webinput.join()
         #cover_thread.join()
-        print("Record for host {} have been created with a host id of {}".format(str(parsed_json["host_name"]),query_hmc[0]))
+        print("Record for host {} have been created with a host id of {}".format(parsed_json["host_name"],query_hmc[0]))
 
         return_dict = {
             "success" : "True"
