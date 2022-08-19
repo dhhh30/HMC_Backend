@@ -15,65 +15,66 @@ path = "/root/HMC_Backend"
 #connection object
 
 #Search Method hash table
+def mainList(parsed_json, conn_mem):
+        #site dictionary
+    site_dict = {}
+    #concatenate sql for query hmc
+    query_sql_hmc = methods.concatenate_sql().query_main_List(int(parsed_json['page']))
+    #concatenate sql for query main_hmc total row for pagination
+    query_sql_hmc_trow = methods.concatenate_sql().get_total_row("main_HMC")
+    total_row = methods.Database_operation(query_sql_hmc_trow, conn_mem,1, "").conn()
+    #concatenate sql for query tulpa
+    #query hmc
+    dat_hmc = methods.Database_operation(query_sql_hmc, conn_mem,1,"").conn()
 
+    page_num = (total_row[0][0]/10)
+    print(page_num)
+    page_num = math.ceil(page_num)
+    #print (total_row)
+    list_of_site = []
+    #if page_num <= parsed_json['page']:
+    #    return_json = """{
+    #        "error":"Page number out of range"
+    #    }"""
+    #    return return_json
+    #else:
+    #    pass
+    #print (dat_hmc)
+    #Create Site list by looping through hmc query and tulpas query
+    for details in dat_hmc:
+        site_dict["h_name"] = details[2]
+        site_dict["createdDate"] = str(details[1])
+        sql_asset = methods.concatenate_sql().query_file(str(details[3]), "webinput")
+        #print(sql_asset)
+        query_asset = methods.Database_operation(sql_asset, conn_mem, 1, "assets").conn()
+        #print(query_asset)
+        site_dict["url"] = str(details[0]) +"/"+query_asset[0][0]
+        query_tulpa = methods.concatenate_sql().query_tulpa_main_List(details[3])
+        dat_tulpa = methods.Database_operation(query_tulpa, conn_mem, 1, "tulpas").conn()
+        list_tulpa = []
+        for tulpas in dat_tulpa:
+            list_tulpa.append(tulpas[0])
+        site_dict["tulpas"] = list_tulpa
+        list_of_site.append(site_dict)
+        site_dict = {}
+
+    #construct_return dict to be returned and serializedd
+    # print(list_of_site)
+    return_dict = {
+        "pagesQuantity": page_num,
+        "sites": list_of_site
+    }
+    conn_mem.close()
+    #serialize return_dict to json
+    data = json.dumps(return_dict, indent=4)
+    return (data)
 #Parsing and deserializing
 def parse_all(data):
     conn_mem = init.init()
     parsed_json = json.loads(data)
     #mainList method
     if parsed_json['request'] ==  "mainList":
-        #site dictionary
-        site_dict = {}
-        #concatenate sql for query hmc
-        query_sql_hmc = methods.concatenate_sql().query_main_List(int(parsed_json['page']))
-        #concatenate sql for query main_hmc total row for pagination
-        query_sql_hmc_trow = methods.concatenate_sql().get_total_row("main_HMC")
-        total_row = methods.Database_operation(query_sql_hmc_trow, conn_mem,1, "").conn()
-        #concatenate sql for query tulpa
-        #query hmc
-        dat_hmc = methods.Database_operation(query_sql_hmc, conn_mem,1,"").conn()
-
-        page_num = (total_row[0][0]/10)
-        print(page_num)
-        page_num = math.ceil(page_num)
-       #print (total_row)
-        list_of_site = []
-        #if page_num <= parsed_json['page']:
-        #    return_json = """{
-        #        "error":"Page number out of range"
-        #    }"""
-        #    return return_json
-        #else:
-        #    pass
-        #print (dat_hmc)
-        #Create Site list by looping through hmc query and tulpas query
-        for details in dat_hmc:
-            site_dict["h_name"] = details[2]
-            site_dict["createdDate"] = str(details[1])
-            sql_asset = methods.concatenate_sql().query_file(str(details[3]), "webinput")
-            #print(sql_asset)
-            query_asset = methods.Database_operation(sql_asset, conn_mem, 1, "assets").conn()
-            #print(query_asset)
-            site_dict["url"] = str(details[0]) +"/"+query_asset[0][0]
-            query_tulpa = methods.concatenate_sql().query_tulpa_main_List(details[3])
-            dat_tulpa = methods.Database_operation(query_tulpa, conn_mem, 1, "tulpas").conn()
-            list_tulpa = []
-            for tulpas in dat_tulpa:
-                list_tulpa.append(tulpas[0])
-            site_dict["tulpas"] = list_tulpa
-            list_of_site.append(site_dict)
-            site_dict = {}
-
-        #construct_return dict to be returned and serializedd
-        # print(list_of_site)
-        return_dict = {
-            "pagesQuantity": page_num,
-            "sites": list_of_site
-        }
-        conn_mem.close()
-        #serialize return_dict to json
-        data = json.dumps(return_dict, indent=4)
-        return (data)
+        return mainList(parsed_json, conn_mem)
     #handle uploading request
     elif parsed_json['request'] == "uploading":
         #generate file names and path
