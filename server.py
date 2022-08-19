@@ -3,8 +3,8 @@ import websockets
 from os import environ, path
 import signal
 from parser import parse_all
-from concurrent.futures import ProcessPoolExecutor
-task_executor = ProcessPoolExecutor(max_workers=30)
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+task_executor = ThreadPoolExecutor(max_workers=30)
 async def handler(websocket):
     print("Got request")
     remote_ip = websocket.remote_address
