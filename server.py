@@ -13,9 +13,12 @@ task_executer = ProcessPoolExecutor(max_workers=3)
 async def handler(websocket):
     print("Got request")
     remote_ip = websocket.remote_address
-    print("Client Disconnected with IP:", remote_ip)    
+
+    print("Client connected with IP:", remote_ip)    
+    loop = asyncio.get_running_loop()
     try:
         message = await websocket.recv()
+        response = await loop.run_in_executor(task_executer, parse_all, message)
         response = parse_all(message)
         #print(response)
         await websocket.send(str(response))

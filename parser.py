@@ -104,7 +104,7 @@ def parse_all(data):
         sql_hmc_webinput.start()
         # print(query_webinput)
         webinput_file = open(host_path+"/"+ f_name+".html", 'w' )
-        webinput_file.write(parsed_json['webinput'])
+        webinput_file.write(parsed_json['webInput'])
         #write image to file
         #if the image is more than 10MB then return error
         for ind_img in parsed_json["imgs"]:
