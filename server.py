@@ -11,8 +11,7 @@ async def handler(websocket):
     print(remote_ip)
     loop = asyncio.get_event_loop()
     try:
-        async for message in websocket:
-
+        async for message in websocket:       
             print(message)
             response = await loop.run_in_executor(task_executor,parse_all, message)
             print(response)
