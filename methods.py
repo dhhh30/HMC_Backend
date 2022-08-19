@@ -65,7 +65,7 @@ class concatenate_sql:
         else:
             pg_num -= 1
             row_num = pg_num*10
-        sql = ("""SELECT path, creation_time, h_name, id FROM main_HMC WHERE v_status=1 LIMIT {}, 4;""".format(row_num))
+        sql = ("""SELECT path, creation_time, h_name, id FROM main_HMC LIMIT {}, 4;""".format(row_num))
         print(sql)
         return (sql)
     #concatenate sql for inserting into tulpa

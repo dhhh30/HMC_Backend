@@ -1,7 +1,6 @@
 from ast import parse
 import hashlib
 import json
-from urllib import request
 import methods
 import os
 import base64
