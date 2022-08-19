@@ -57,9 +57,13 @@ class concatenate_sql:
         return (sql)
     #concatenate sql for querying main HMC
     def query_main_List(self, pg_num):
-        if pg_num != 0: 
-            pg_num = pg_num*10
-        sql = ("""SELECT path, creation_time, h_name, id FROM main_HMC LIMIT {}, 10""".format(pg_num))
+        if pg_num == 1:
+            row_num = pg_num-1
+        else:
+            pg_num -= 1
+            row_num = pg_num*10
+        sql = ("""SELECT path, creation_time, h_name, id FROM main_HMC WHERE v_status=1 LIMIT {}, 4;""".format(row_num))
+        print(sql)
         return (sql)
     #concatenate sql for inserting into tulpa
     def insert_tulpa(self,i,  t_name, hID):
@@ -94,7 +98,7 @@ class gen_file_name:
             final_file = (str(self.parsed_json["host_name"])+"-"+str(ms)+str(rand_num))
             return final_file
         if self.op_num ==3:
-            final_file = (str(self.parsed_json["cover_name"])+"-"+str(ms)+str(rand_num))
+            final_file = (str("cover")+"-"+str(ms)+str(rand_num)+".jpg")
             return final_file
 
 def cover_database(c_name, query_hmc, conn_mem):
@@ -122,14 +126,14 @@ def uploading_webinput(f_name, query_hmc, conn_mem):
 def writing_image(host_path, parsed_json, i):
     sema.acquire()
     #decoding image from base64 and write them into perspective files
-    image_file = open(os.path.join(host_path, parsed_json["img_names"][i]), 'wb')
-    image_file.write(base64.b64decode(parsed_json["imgs"][i]))
+    image_file = open(os.path.join(host_path, str(parsed_json["imgs_names"])[i]), 'wb')
+    image_file.write(base64.b64decode(str(parsed_json["imgs"][i])))
     image_file.close()
     sema.release()
     return
-def writing_cover(host_path, parsed_json):
+def writing_cover(host_path, parsed_json, cover_name):
     sema.acquire()
-    cover_file = open(os.path.join(host_path, parsed_json["cover_name"]), 'wb')
+    cover_file = open(os.path.join(host_path, cover_name), 'wb')
     cover_file.write(base64.b64decode(parsed_json["cover"]))
     cover_file.close()
     sema.release()

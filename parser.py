@@ -14,13 +14,14 @@ import init
 path = "/root/HMC_Backend" 
 
 #dictionary for site
-conn_mem = init.init()
+
 #connection object
 
 #Search Method hash table
 
 #Parsing and deserializing
 def parse_all(data):
+    conn_mem = init.init()
     parsed_json = json.loads(data)
     #mainList method
     if parsed_json['request'] ==  "mainList":
@@ -36,16 +37,17 @@ def parse_all(data):
         dat_hmc = methods.Database_operation(query_sql_hmc, conn_mem,1,"").conn()
 
         page_num = (total_row[0][0]/10)
+        print(page_num)
         page_num = math.ceil(page_num)
        #print (total_row)
         list_of_site = []
-        if page_num <= parsed_json['page']:
-            return_json = """{
-                "error":"Page number out of range"
-            }"""
-            return return_json
-        else:
-            pass
+        #if page_num <= parsed_json['page']:
+        #    return_json = """{
+        #        "error":"Page number out of range"
+        #    }"""
+        #    return return_json
+        #else:
+        #    pass
         #print (dat_hmc)
         #Create Site list by looping through hmc query and tulpas query
         for details in dat_hmc:
@@ -71,7 +73,8 @@ def parse_all(data):
             "pagesQuantity": page_num,
             "sites": list_of_site
         }
-
+        
+        conn_mem.close() 
         #serialize return_dict to json
         data = json.dumps(return_dict, indent=4)
         return (data)
@@ -122,7 +125,7 @@ def parse_all(data):
             thread.join()
         #decode base64 and write to folders
         
-        cover_thread = threading.Thread(target=methods.writing_cover, args=(host_path,parsed_json,))
+        cover_thread = threading.Thread(target=methods.writing_cover, args=(host_path,parsed_json, c_name,))
         cover_thread.start()
         #wait for the subprocesses to complete
         #query_hmc_cover.join()
@@ -139,6 +142,7 @@ def parse_all(data):
         #           "success" : "False"
         #       }
         return_json = json.dumps(return_dict, indent=4)
+        conn_mem.close()
         return (return_json)
         
         
