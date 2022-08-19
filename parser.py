@@ -16,7 +16,8 @@ path = "/root/HMC_Backend"
 #connection object
 p = ProcessPoolExecutor(3) 
 #Search Method hash table
-def mainList(parsed_json, conn_mem):
+def mainList(parsed_json):
+    conn_mem = init.init()
         #site dictionary
     site_dict = {}
     #concatenate sql for query hmc
@@ -70,7 +71,8 @@ def mainList(parsed_json, conn_mem):
     data = json.dumps(return_dict, indent=4)
     return (data)
 
-def uploading(parsed_json, conn_mem):
+def uploading(parsed_json):
+    conn_mem = init.init()
         #generate file names and path
     h_path = methods.gen_file_name(parsed_json, 2).fname()
     f_name = methods.gen_file_name(parsed_json, 1).fname()
@@ -140,14 +142,14 @@ def uploading(parsed_json, conn_mem):
 #Parsing and deserializing
 async def parse_all(data):
     loop = asyncio.get_event_loop()
-    conn_mem = init.init()
+
     parsed_json = json.loads(data)
     #mainList method
     if parsed_json['request'] ==  "mainList":
-        return await loop.run_in_executor(p, mainList, parsed_json, conn_mem)
+        return await loop.run_in_executor(p, mainList, parsed_json)
     #handle uploading request
     elif parsed_json['request'] == "uploading":
-        return await loop.run_in_executor(p, uploading, parsed_json, conn_mem)
+        return await loop.run_in_executor(p, uploading, parsed_json)
     elif parsed_json['request'] == "admin":
         return_dict = {
             "authenticationSuccess" :  str(methods.admin.admin_authentication(str(parsed_json["password"]), parsed_json["userName"]))
