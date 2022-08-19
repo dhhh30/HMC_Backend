@@ -4,9 +4,10 @@ from os import environ, path
 import signal
 from parser import parse_all
 from concurrent.futures import ProcessPoolExecutor
-task_executor = ProcessPoolExecutor(max_workers=3)
+
 
 async def handler(websocket):
+    task_executor = ProcessPoolExecutor(max_workers=3)
     print("Got request")
     remote_ip = websocket.remote_address
     print(remote_ip)
@@ -15,7 +16,6 @@ async def handler(websocket):
         async for message in websocket:
             print(message)
             response = await loop.run_in_executor(task_executor,parse_all, message)
-            print(response)
             await websocket.send(str(response))
 
     except websockets.ConnectionClosedOK:
