@@ -9,7 +9,7 @@ import os
 import sys
 import threading
 import hashlib, secrets
-from .init import init
+from init import init
 #max concurrent thread
 sema = threading.Semaphore(value=4)
 
