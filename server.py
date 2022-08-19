@@ -4,7 +4,7 @@ from os import environ, path
 import signal
 from parser import parse_all
 from concurrent.futures import ProcessPoolExecutor
-task_executor = ProcessPoolExecutor()
+task_executor = ProcessPoolExecutor(max_workers=3)
 
 async def handler(websocket):
     print("Got request")
@@ -14,7 +14,7 @@ async def handler(websocket):
     try:
         async for message in websocket:
             print(message)
-            response = loop.run_in_executor(task_executor,parse_all, message)
+            response = await loop.run_in_executor(task_executor,parse_all, message)
             print(response)
             await websocket.send(str(response))
 
