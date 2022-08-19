@@ -23,7 +23,7 @@ json = ("""{
     "file_name": "dchen4",
     "cover_name": "cover",
     "imgs": ["imagebrurbub","image placeholder"],
-    "img_names": ["random.jpg","placeholder.jpg"],
+    "imgs_names": ["random.jpg","placeholder.jpg"],
     "introduce": "Hello guys",
     "webInput": "<h1>This is dang intresting</h1>",
     "cover": "PGgxPuWXqOWXqOWXqDwvaDE+",

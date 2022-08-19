@@ -40,7 +40,8 @@ class Database_operation():
             return data
         elif op_type == 2:
             conn.commit()
-            cursor.execute(' SELECT MAX(id) FROM {};'.format(self.table))
+            cursor.execute("""SELECT AUTO_INCREMENT - 1 as CurrentId FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'tulpas' AND TABLE_NAME = '{}'
+""".format(self.table))
             #returns last row id on insert
             last_id =  cursor.fetchone()
             cursor.close()
