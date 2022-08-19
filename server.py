@@ -4,10 +4,9 @@ from os import environ, path
 import signal
 from parser import parse_all
 from concurrent.futures import ProcessPoolExecutor
-
-
+task_executor = ProcessPoolExecutor()
 async def handler(websocket):
-    task_executor = ProcessPoolExecutor()
+
     print("Got request")
     remote_ip = websocket.remote_address
     print(remote_ip)
