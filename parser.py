@@ -14,14 +14,14 @@ import init
 path = "/root/HMC_Backend" 
 
 #dictionary for site
-conn_mem = init.init()
+
 #connection object
 
 #Search Method hash table
 
 #Parsing and deserializing
 def parse_all(data):
-
+    conn_mem = init.init()
     parsed_json = json.loads(data)
     #mainList method
     if parsed_json['request'] ==  "mainList":
