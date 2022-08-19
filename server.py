@@ -27,5 +27,4 @@ async def handler(websocket):
 #ping client
 #run main function
 loop = asyncio.get_event_loop().run_until_complete(websockets.serve(handler,"",2186))
-asyncio.get_event_loop.run_forever()
-
+loop.run_forever()
