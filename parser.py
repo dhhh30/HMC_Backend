@@ -4,8 +4,9 @@ import os
 import json
 import math
 import threading
-from multiprocessing.pool import ThreadPool
+from concurrent.futures import ProcessPoolExecutor
 import init
+import asyncio
 #root path for all assets and data
 #should be htdocs  root for production deployment
 path = "/root/HMC_Backend" 
@@ -13,7 +14,7 @@ path = "/root/HMC_Backend"
 #dictionary for site
 
 #connection object
-
+p = ProcessPoolExecutor(3) 
 #Search Method hash table
 def mainList(parsed_json, conn_mem):
         #site dictionary
@@ -68,85 +69,92 @@ def mainList(parsed_json, conn_mem):
     #serialize return_dict to json
     data = json.dumps(return_dict, indent=4)
     return (data)
+
+def uploading(parsed_json, conn_mem):
+        #generate file names and path
+    h_path = methods.gen_file_name(parsed_json, 2).fname()
+    f_name = methods.gen_file_name(parsed_json, 1).fname()
+    c_name = methods.gen_file_name(parsed_json, 3).fname()
+    host_path = (path+"/"+ h_path)
+    #create host path
+    os.mkdir(host_path)
+    #concatenate sql for db operation
+    sql_hmc = methods.concatenate_sql().insert_HMC(parsed_json, host_path)
+    query_hmc = methods.Database_operation(sql_hmc, conn_mem, 2, "main_HMC").conn()
+    #print(type(query_hmc))
+    #spawn child process for querying cover
+    query_hmc_cover = threading.Thread(target=methods.cover_database, args=(c_name,query_hmc,conn_mem,))
+    query_hmc_cover.start()
+    #loop through tulpa list from json and perform Database INSERTs, spawning child process to speed up
+    threads = []
+    for i in range(len(parsed_json['tulpas_name'])):
+        threads.append(threading.Thread(target=methods.uploading_tulpa, args=(i, parsed_json, query_hmc, conn_mem,)))
+        threads[-1].start()
+    print (threads)
+    for thread in threads:
+            thread.join()
+    #Writing webinput to asset
+    sql_hmc_webinput = threading.Thread(target=methods.uploading_webinput, args=(f_name,query_hmc,conn_mem))
+    sql_hmc_webinput.start()
+    # print(query_webinput)
+    webinput_file = open(host_path+"/"+ f_name+".html", 'w' )
+    webinput_file.write(parsed_json['webInput'])
+    #write image to file
+    #if the image is more than 10MB then return error
+    for ind_img in parsed_json["imgs"]:
+        if len(ind_img) >= 10000000:
+            return ("""{
+                "error" : "Image File too large"
+            }""")
+    
+    #loop through images for writing
+    threads = []
+    for i in range(len(parsed_json["imgs"])):
+        threads.append(threading.Thread(target= methods.writing_image, args=(host_path,parsed_json,i)))
+        threads[-1].start()
+    for thread in threads:
+        thread.join()
+    #decode base64 and write to folders
+    
+    cover_thread = threading.Thread(target=methods.writing_cover, args=(host_path,parsed_json, c_name,))
+    cover_thread.start()
+    #wait for the subprocesses to complete
+    #query_hmc_cover.join()
+    #sql_hmc_webinput.join()
+    #cover_thread.join()
+    print("Record for host {} have been created with a host id of {}".format(parsed_json["host_name"],query_hmc[0]))
+
+    return_dict = {
+        "success" : "True"
+}
+    
+    # except:
+    #       return_dict = {
+    #           "success" : "False"
+    #       }
+    return_json = json.dumps(return_dict, indent=4)
+    conn_mem.close()
+    return (return_json)
+
+
 #Parsing and deserializing
-def parse_all(data):
+async def parse_all(data):
+    loop = asyncio.get_event_loop()
     conn_mem = init.init()
     parsed_json = json.loads(data)
     #mainList method
     if parsed_json['request'] ==  "mainList":
-        return mainList(parsed_json, conn_mem)
+        return loop.run_in_executor(p, mainList(parsed_json, conn_mem))
     #handle uploading request
     elif parsed_json['request'] == "uploading":
-        #generate file names and path
-        h_path = methods.gen_file_name(parsed_json, 2).fname()
-        f_name = methods.gen_file_name(parsed_json, 1).fname()
-        c_name = methods.gen_file_name(parsed_json, 3).fname()
-        host_path = (path+"/"+ h_path)
-        #create host path
-        os.mkdir(host_path)
-        #concatenate sql for db operation
-        sql_hmc = methods.concatenate_sql().insert_HMC(parsed_json, host_path)
-        query_hmc = methods.Database_operation(sql_hmc, conn_mem, 2, "main_HMC").conn()
-        #print(type(query_hmc))
-        #spawn child process for querying cover
-        query_hmc_cover = threading.Thread(target=methods.cover_database, args=(c_name,query_hmc,conn_mem,))
-        query_hmc_cover.start()
-        #loop through tulpa list from json and perform Database INSERTs, spawning child process to speed up
-        threads = []
-        for i in range(len(parsed_json['tulpas_name'])):
-            threads.append(threading.Thread(target=methods.uploading_tulpa, args=(i, parsed_json, query_hmc, conn_mem,)))
-            threads[-1].start()
-        print (threads)
-        for thread in threads:
-             thread.join()
-        #Writing webinput to asset
-        sql_hmc_webinput = threading.Thread(target=methods.uploading_webinput, args=(f_name,query_hmc,conn_mem))
-        sql_hmc_webinput.start()
-        # print(query_webinput)
-        webinput_file = open(host_path+"/"+ f_name+".html", 'w' )
-        webinput_file.write(parsed_json['webInput'])
-        #write image to file
-        #if the image is more than 10MB then return error
-        for ind_img in parsed_json["imgs"]:
-            if len(ind_img) >= 10000000:
-                return ("""{
-                    "error" : "Image File too large"
-                }""")
-        
-        #loop through images for writing
-        threads = []
-        for i in range(len(parsed_json["imgs"])):
-            threads.append(threading.Thread(target= methods.writing_image, args=(host_path,parsed_json,i)))
-            threads[-1].start()
-        for thread in threads:
-            thread.join()
-        #decode base64 and write to folders
-        
-        cover_thread = threading.Thread(target=methods.writing_cover, args=(host_path,parsed_json, c_name,))
-        cover_thread.start()
-        #wait for the subprocesses to complete
-        #query_hmc_cover.join()
-        #sql_hmc_webinput.join()
-        #cover_thread.join()
-        print("Record for host {} have been created with a host id of {}".format(parsed_json["host_name"],query_hmc[0]))
-
-        return_dict = {
-            "success" : "True"
-}
-        
-        # except:
-        #       return_dict = {
-        #           "success" : "False"
-        #       }
-        return_json = json.dumps(return_dict, indent=4)
-        conn_mem.close()
-        return (return_json)
-    
+        return loop.run_in_executor(p, uploading(parsed_json, conn_mem))
     elif parsed_json['request'] == "admin":
         return_dict = {
             "authenticationSuccess" :  str(methods.admin.admin_authentication(str(parsed_json["password"]), parsed_json["userName"]))
         }
         return_json = json.dumps(return_dict, indent=4)
+        return return_json
+
 # #pushNewDoc method
 # elif parsed_json['request'] == "pushNewDoc":
 #     return_to_serialize = {"flag": True}
