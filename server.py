@@ -21,6 +21,8 @@ async def handler(websocket):
     #Catch connection reset by peer
     except ConnectionResetError:
         print("Connection reset by peer with IP:", remote_ip)
+    except websockets.exceptions.ConnectionClosedError:
+        print("client at "+remote_ip+"disconnected improperly")
 #main function
 async def main():
     async with websockets.serve(handler,"",2186):
