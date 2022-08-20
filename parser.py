@@ -29,7 +29,7 @@ def mainList(parsed_json):
     #query hmc
     dat_hmc = methods.Database_operation(query_sql_hmc, conn_mem,1,"").conn()
 
-    page_num = (total_row[0][0]/10)
+    page_num = (total_row[0][0]/4)
     print(page_num)
     page_num = math.ceil(page_num)
     #print (total_row)
@@ -63,6 +63,7 @@ def mainList(parsed_json):
     #construct_return dict to be returned and serializedd
     # print(list_of_site)
     return_dict = {
+        "request" : "mainList",
         "pagesQuantity": page_num,
         "sites": list_of_site
     }
@@ -127,6 +128,7 @@ def uploading(parsed_json):
     print("Record for host {} have been created with a host id of {}".format(parsed_json["host_name"],query_hmc[0]))
 
     return_dict = {
+        "request" : "uploading",
         "success" : "True"
 }
     
