@@ -1,10 +1,8 @@
 import asyncio
 import websockets
-from os import environ, path
 import signal
 from parser import parse_all
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
-task_executor = ProcessPoolExecutor()
+import logging
 async def handler(websocket):
     print("Got request")
     remote_ip = websocket.remote_address
@@ -12,9 +10,9 @@ async def handler(websocket):
     loop = asyncio.get_event_loop()
     try:
         async for message in websocket:       
-            print(message)
+            # print(message)
             response = await parse_all(message)
-            print(response)
+            # print(response)
             await websocket.send(str(response))
     except websockets.ConnectionClosedOK:
         print("Client Disconnected with IP:", remote_ip)
