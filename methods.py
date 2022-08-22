@@ -61,7 +61,7 @@ class concatenate_sql:
     def insert_HMC(self, parsed_dict, host_path):
         sql = ("""INSERT INTO main_HMC (id, h_name, h_age, email, description, path, v_status, creation_time)
          VALUES (NULL, "{}","{}","{}","{}","{}","0",NULL);
-         SELECT LAST_INSERT_ID();
+         SELECT LAST_INSERT_ID()
          """.format(parsed_dict['host_name'], parsed_dict['host_age'], parsed_dict['email'], parsed_dict['introduce'], host_path , 0))
         return (sql)
     #concatenate sql for querying main HMC
@@ -174,8 +174,14 @@ class admin():
         output_hash = bytes(Database_operation(sql, conn, 1, "admin_usr"))
         #compare hashes
         return secrets.compare_digest(input_hash, output_hash)
-    
     def admin_gen_token():
-        pass
+        ms = int(round(time.time() * 1000))
+        rand_num = randrange(100)
+        token = hashlib.sha256(bytes(str(ms))).digest()
+        token = hashlib.sha256(bytes(str(token)+str(rand_num)))
+        
+        token = base64.encodebytes(token)
+        return token
+            
     def admin_approve(token):
         pass
