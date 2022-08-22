@@ -3,6 +3,8 @@ import websockets
 import signal
 from parser import parse_all
 import logging
+import methods
+logging.basicConfig(level=logging.INFO)
 async def handler(websocket):
     print("Got request")
     remote_ip = websocket.remote_address
@@ -10,7 +12,7 @@ async def handler(websocket):
     loop = asyncio.get_event_loop()
     try:
         async for message in websocket:       
-            # print(message)
+            logging.debug("the client at "+remote_ip+"sent"+str(message))
             response = await parse_all(message)
             # print(response)
             await websocket.send(str(response))

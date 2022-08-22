@@ -10,9 +10,14 @@ import sys
 import threading
 import hashlib, secrets
 from init import init
+from datetime import datetime
 #max concurrent thread
 sema = threading.Semaphore(value=16)
-
+#logging time function
+def datetimenow():
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    return ("["+dt_string+"]")
 #class for operating with DB
 class Database_operation():
     def __init__(self, sql, conn_obj, op_type, table):
@@ -20,7 +25,8 @@ class Database_operation():
         self.conn_obj = conn_obj
         self.op_type = op_type
         self.table = table
-        
+    
+    #connect database for operation
     def connect(self):   
         #Sql Statement
         sql = self.sql
@@ -81,9 +87,11 @@ class concatenate_sql:
     def insert_doc(self, type , path, hID):
         sql = ("""INSERT INTO assets (id, assetPath, type, hID) VALUES (NULL,"{}","{}",{})""".format(path, type, hID[0]))
         return sql
+    #get total amount of row from table for pagination
     def get_total_row(self, table):
         sql = ("""SELECT COUNT(*) FROM {}""".format(table))
         return (sql)
+    #concatenate sql query for inserting files into database
     def query_file(self, hID, type):
         sql = ("""SELECT assetPath FROM assets WHERE hID='{}' AND type='{}'""".format(hID[0],type))
         return sql
@@ -93,15 +101,19 @@ class gen_file_name:
     def __init__(self, parsed_json, op_num):
         self.parsed_json = parsed_json
         self.op_num = op_num
+    #generate file name
     def fname(self):
         ms = int(round(time.time() * 1000))
         rand_num = randrange(10)
+        #generate file name
         if self.op_num == 1:
             final_file = (str(ms)+str(rand_num))
             return final_file
+        #generate folder name
         if self.op_num == 2:
             final_file = (str(self.parsed_json["host_name"])+"-"+str(ms)+str(rand_num))
             return final_file
+        #generate jpg
         if self.op_num ==3:
             final_file = (str("cover")+"-"+str(ms)+str(rand_num)+".jpg")
             return final_file
