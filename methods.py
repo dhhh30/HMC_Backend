@@ -96,7 +96,7 @@ class concatenate_sql:
         sql = ("""SELECT assetPath FROM assets WHERE hID='{}' AND type='{}'""".format(hID[0],type))
         return sql
     def query_approve_hmc(self, hID):
-        sql = ("""REMOVE * FROM Main_HMC WHERE hID='{}'""".format(hID))
+        sql = ("""UPDATE * FROM Main_HMC WHERE hID='{}'""".format(hID))
         return (sql)
    # def get_row_num:
 #generate file name
