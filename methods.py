@@ -99,6 +99,24 @@ class concatenate_sql:
     def get_last_id(table):
         sql =  """SELECT hID from {} ORDER BY hID DESC LIMIT 1;""".format(table)
         return sql
+    
+    def query_admin_list(self, pg_num, v_status):
+        if pg_num == 1:
+            row_num = pg_num-1
+        else:
+            pg_num -= 1
+            row_num = pg_num*10
+        
+        if v_status != "":
+            if v_status == True:
+                v_status = 1
+            if v_status == False:
+                v_status = 0
+            sql = ("""SELECT * FROM main_HMC WHERE v_status='{}' LIMIT {}, 4;""".format(str(v_status), row_num))
+        else:
+            sql = ("""SELECT * FROM mainHMC LIMIT {}, 4""".format(row_num))
+
+        return (sql)
 #generate file name
 class gen_file_name:
     def __init__(self, parsed_json, op_num):
