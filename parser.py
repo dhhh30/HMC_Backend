@@ -28,10 +28,9 @@ def mainList(parsed_json):
     total_row = methods.Database_operation(query_sql_hmc_trow, conn_mem,1, "").conn()
     #concatenate sql for query tulpa
     #query hmc
-    dat_hmc = methods.Database_operation(query_sql_hmc, conn_mem,1,"").conn()
-
+    dat_hmc = methods.Database_operation(query_sql_hmc, conn_mem,1).conn()
     page_num = (total_row[0][0]/4)
-    print(page_num)
+    logging.debug(methods.datetimenow+"mainList total page number is: "+page_num)
     page_num = math.ceil(page_num)
     #print (total_row)
     list_of_site = []
@@ -84,7 +83,7 @@ def uploading(parsed_json):
     os.mkdir(host_path)
     #concatenate sql for db operation
     sql_hmc = methods.concatenate_sql().insert_HMC(parsed_json, host_path)
-    query_hmc = methods.Database_operation(sql_hmc, conn_mem, 2, "main_HMC").conn()
+    query_hmc = methods.Database_operation(sql_hmc, conn_mem, 2).conn()
     #print(type(query_hmc))
     #spawn child process for querying cover
     query_hmc_cover = threading.Thread(target=methods.cover_database, args=(c_name,query_hmc,conn_mem,))

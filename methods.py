@@ -20,11 +20,10 @@ def datetimenow():
     return ("["+dt_string+"]")
 #class for operating with DB
 class Database_operation():
-    def __init__(self, sql, conn_obj, op_type, table):
+    def __init__(self, sql, conn_obj, op_type):
         self.sql = sql
         self.conn_obj = conn_obj
         self.op_type = op_type
-        self.table = table
     
     #connect database for operation
     def connect(self):   
@@ -35,7 +34,7 @@ class Database_operation():
         #Connection object for both memDB and HDDB
         conn = self.conn_obj
         #Cursor for above apsw connection object
-        cursor = conn.cursor()
+        cursor = conn.cursor(multi=True)
         cursor.execute(sql)
         #op_type 1 = select
         #op_type 2 = insert
@@ -45,11 +44,9 @@ class Database_operation():
             cursor.close()
             return data
         elif op_type == 2:
-            conn.commit()
-            cursor.execute("""SELECT AUTO_INCREMENT - 1 as CurrentId FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'tulpas' AND TABLE_NAME = '{}'
-""".format(self.table))
             #returns last row id on insert
             last_id =  cursor.fetchone()
+            conn.commit()
             cursor.close()
             return last_id
     def conn(self):
@@ -64,6 +61,7 @@ class concatenate_sql:
     def insert_HMC(self, parsed_dict, host_path):
         sql = ("""INSERT INTO main_HMC (id, h_name, h_age, email, description, path, v_status, creation_time)
          VALUES (NULL, "{}","{}","{}","{}","{}","0",NULL);
+         SELECT LAST_INSERT_ID();
          """.format(parsed_dict['host_name'], parsed_dict['host_age'], parsed_dict['email'], parsed_dict['introduce'], host_path , 0))
         return (sql)
     #concatenate sql for querying main HMC
@@ -98,7 +96,9 @@ class concatenate_sql:
     def query_approve_hmc(self, hID):
         sql = ("""UPDATE * FROM Main_HMC WHERE hID='{}'""".format(hID))
         return (sql)
-   # def get_row_num:
+    def get_last_id(table):
+        sql =  """SELECT hID from {} ORDER BY hID DESC LIMIT 1;""".format(table)
+        return sql
 #generate file name
 class gen_file_name:
     def __init__(self, parsed_json, op_num):
