@@ -7,6 +7,7 @@ import threading
 from concurrent.futures import ProcessPoolExecutor
 import init
 import asyncio
+import logging
 #root path for all assets and data
 #should be htdocs  root for production deployment
 path = "/root/HMC_Backend" 
@@ -47,7 +48,7 @@ def mainList(parsed_json):
         site_dict["h_name"] = details[2]
         site_dict["createdDate"] = str(details[1])
         sql_asset = methods.concatenate_sql().query_file(str(details[3]), "webinput")
-        #print(sql_asset)
+        print(sql_asset)
         query_asset = methods.Database_operation(sql_asset, conn_mem, 1, "assets").conn()
         #print(query_asset)
         site_dict["url"] = str(details[0]) +"/"+query_asset[0][0]
@@ -140,6 +141,8 @@ def uploading(parsed_json):
     conn_mem.close()
     return (return_json)
 
+def admin_authentication(data):
+    pass
 
 #Parsing and deserializing
 async def parse_all(data):
@@ -152,7 +155,7 @@ async def parse_all(data):
     #handle uploading request
     elif parsed_json['request'] == "uploading":
         return await loop.run_in_executor(p, uploading, parsed_json)
-    elif parsed_json['request'] == "admin":
+    elif parsed_json['request'] == "adminAuthentaication":
         return_dict = {
             "authenticationSuccess" :  str(methods.admin.admin_authentication(str(parsed_json["password"]), parsed_json["userName"]))
         }
