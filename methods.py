@@ -174,5 +174,8 @@ class admin():
         output_hash = bytes(Database_operation(sql, conn, 1, "admin_usr"))
         #compare hashes
         return secrets.compare_digest(input_hash, output_hash)
+    
+    def admin_gen_token():
+        pass
     def admin_approve(token):
         pass

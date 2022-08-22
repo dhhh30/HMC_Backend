@@ -156,12 +156,21 @@ async def parse_all(data):
     elif parsed_json['request'] == "uploading":
         return await loop.run_in_executor(p, uploading, parsed_json)
     elif parsed_json['request'] == "adminAuthentaication":
-        return_dict = {
-            "authenticationSuccess" :  str(methods.admin.admin_authentication(str(parsed_json["password"]), parsed_json["userName"]))
-        }
-        return_json = json.dumps(return_dict, indent=4)
-        return return_json
-
+        try:
+            compare_hash = methods.admin.admin_authentication(str(parsed_json["password"]), parsed_json["userName"])
+            if compare_hash = True:
+                token = methods.admin.admin_gen_token()        
+                return_dict = {
+                    "authenticationSuccess" :  True,
+                    "token": token
+                }
+                return_json = json.dumps(return_dict, indent=4)
+                logging.info(methods.datetimenow()+"User with username"+str(parsed_json["userName"])+"Obtained token")
+                logging.debug(methods.datetimenow()+" Function adminAuthentication returned"+return_json)
+                return return_json
+        except:
+            logging.error(methods.datetimenow()+"Function compare_hash failed")
+            
 # #pushNewDoc method
 # elif parsed_json['request'] == "pushNewDoc":
 #     return_to_serialize = {"flag": True}
