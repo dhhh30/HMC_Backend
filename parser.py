@@ -161,12 +161,13 @@ def admin_list(parsed_json):
         site_dict["h_name"] = details[1]
         site_dict["h_age"] = str(details[2])
         site_dict["id"] = details[0]
-        site_dict["createdDate"] = str(details[6])
+        site_dict["created_date"] = str(details[6])
         site_dict["h_email"] = str(details[3])
         if details[5] == 0:
             v_status = False
         if details[5] == 1:
             v_status = True
+        site_dict["v_status"] = v_status
         sql_asset = methods.concatenate_sql().query_file(str(details[3]), "webinput")
         print(sql_asset)
         query_asset = methods.Database_operation(sql_asset, conn_mem, 1, "assets").conn()
@@ -184,7 +185,7 @@ def admin_list(parsed_json):
     #construct_return dict to be returned and serializedd
     # print(list_of_site)
     return_dict = {
-        "request" : "mainList",
+        "request" : "adminList",
         "pagesQuantity": page_num,
         "sites": list_of_site
     }

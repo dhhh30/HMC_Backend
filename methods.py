@@ -195,11 +195,11 @@ class admin():
     def admin_gen_token():
         ms = int(round(time.time() * 1000))
         rand_num = randrange(100)
-        token = hashlib.sha256(bytes(str(ms))).digest()
-        token = hashlib.sha256(bytes(str(token)+str(rand_num)))
+        token = hashlib.sha256(bytes(str(ms), "utf-8")).digest()
+        token = hashlib.sha256(bytes(str(token)+str(rand_num) , "utf-8"))
         
         token = base64.encodebytes(token)
         return token
             
-    def admin_approve(token):
+    def admin_token_auth(token):
         pass
