@@ -30,16 +30,16 @@ start = time.time()
 #     "file": "PGgxPuWXqOWXqOWXqDwvaDE+"
 
 # }""")
-json = ("""
-        {
-            "request":"adminAuthentication",
-            "userName":"test",
-            "password":"test"
-            }""")
 # json = ("""
-# {"request":"mainList",
-# "page": 1
-# }""")
+#         {
+#             "request":"adminAuthentication",
+#             "userName":"test",
+#             "password":"test"
+#             }""")
+json = ("""
+{"request":"mainList",
+"page": 1
+}""")
 
 async def test():
     async with websockets.connect("ws://english-poetry.com:2186") as websocket:
