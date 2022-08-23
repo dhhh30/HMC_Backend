@@ -158,7 +158,7 @@ def admin_list(parsed_json):
     #query hmc
     dat_hmc = methods.Database_operation(query_sql_hmc, conn_mem,1).conn()
     page_num = (total_row[0][0]/4)
-    logging.debug(str(methods.datetimenow())+"mainList total page number is: "+page_num)
+    logging.debug(str(methods.datetimenow())+"mainList total page number is: "+ str(page_num))
     page_num = math.ceil(page_num)
     #print (total_row)
     list_of_site = []
