@@ -17,7 +17,7 @@ sema = threading.Semaphore(value=16)
 def datetimenow():
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
-    return ("["+dt_string+"]")
+    return str("["+dt_string+"]")
 #class for operating with DB
 class Database_operation():
     def __init__(self, sql, conn_obj, op_type):
