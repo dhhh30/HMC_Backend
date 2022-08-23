@@ -213,7 +213,7 @@ class admin():
         token = hashlib.sha256(bytes(str(token)+str(rand_num) , "utf-8"))
         #encode sha256 into base64
         token = base64.encodebytes(token)
-        return token
+        return str(token)
             
     def admin_token_auth(token):
         token = str(Database_operation(str(concatenate_sql.token_operation(token)), init(), 1).connect())
