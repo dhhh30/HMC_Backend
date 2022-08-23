@@ -1,7 +1,6 @@
 from select import select
 from os import path
 from unittest import result
-from mysql import connector
 import time
 from random import randrange
 import base64

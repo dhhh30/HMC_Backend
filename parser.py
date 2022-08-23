@@ -194,7 +194,32 @@ def admin_list(parsed_json):
     #serialize return_dict to json
     data = json.dumps(return_dict, indent=4)
     return (data)
-    
+
+def adminAuthentication(parsed_json):
+    conn_mem = init.init()
+    try:
+        compare_hash = methods.admin.admin_authentication(str(parsed_json["password"]), str(parsed_json["userName"]))
+        print(str(compare_hash))
+        if compare_hash == True:
+            token =  methods.admin.admin_gen_token()   
+            token_sql = methods.concatenate_sql.token_operation()    
+            methods.Database_operation(token_sql, conn_mem, 2)
+            return_dict = {
+                "authenticationSuccess" :  True,
+                "token": token
+            }
+            return_json = json.dumps(return_dict, indent=4)
+            logging.info(methods.datetimenow()+"User with username"+str(parsed_json["userName"])+"Obtained token")
+            logging.debug(methods.datetimenow()+" Function adminAuthentication returned"+return_json)
+            return return_json
+        else:
+            return_dict= {
+                "authenticationSuccess" :  False
+            }
+            return_json = json.dump(return_dict, indent=4)
+            return return_json
+    except:
+        logging.error(methods.datetimenow()+"Function compare_hash failed")
 #Parsing and deserializing
 async def parse_all(data):
 
@@ -208,30 +233,7 @@ async def parse_all(data):
     elif parsed_json['request'] == "uploading":
         return await loop.run_in_executor(p, uploading, parsed_json)
     elif parsed_json['request'] == "adminAuthentaication":
-        conn_mem = await init.init()
-        try:
-            compare_hash = await methods.admin.admin_authentication(str(parsed_json["password"]), str(parsed_json["userName"]))
-            print(str(compare_hash))
-            if compare_hash == True:
-                token = await methods.admin.admin_gen_token()   
-                token_sql = await methods.concatenate_sql.token_operation()    
-                await methods.Database_operation(token_sql, conn_mem, 2)
-                return_dict = {
-                    "authenticationSuccess" :  True,
-                    "token": token
-                }
-                return_json = json.dumps(return_dict, indent=4)
-                logging.info(methods.datetimenow()+"User with username"+str(parsed_json["userName"])+"Obtained token")
-                logging.debug(methods.datetimenow()+" Function adminAuthentication returned"+return_json)
-                return return_json
-            else:
-                return_dict= {
-                    "authenticationSuccess" :  False
-                }
-                return_json = json.dump(return_dict, indent=4)
-                return return_json
-        except:
-            logging.error(methods.datetimenow()+"Function compare_hash failed")
+        return await loop.run_in_executor(p, adminAuthentication, parsed_json)
     elif parsed_json['request'] == "adminList":
         return await loop.run_in_executor(p, admin_list, parsed_json)
         
