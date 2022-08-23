@@ -221,13 +221,13 @@ async def parse_all(data):
                 return_json = json.dumps(return_dict, indent=4)
                 logging.info(methods.datetimenow()+"User with username"+str(parsed_json["userName"])+"Obtained token")
                 logging.debug(methods.datetimenow()+" Function adminAuthentication returned"+return_json)
-                return await return_json
+                return return_json
             else:
                 return_dict= {
                     "authenticationSuccess" :  False
                 }
                 return_json = json.dump(return_dict, indent=4)
-                return await return_json
+                return return_json
         except:
             logging.error(methods.datetimenow()+"Function compare_hash failed")
     elif parsed_json['request'] == "adminList":

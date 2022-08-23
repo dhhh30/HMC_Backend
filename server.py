@@ -4,7 +4,7 @@ import signal
 from parser import parse_all
 import logging
 import methods
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 #current datetime for logging
 cur_datetime = methods.datetimenow()
 async def handler(websocket):
