@@ -21,13 +21,13 @@ async def handler(websocket):
             await websocket.send(str(response))
         #on proper exit
     except websockets.ConnectionClosedOK:
-        logging.info(cur_datetime+"Client Disconnected with IP:"+remote_ip)
+        logging.info(str(cur_datetime)+"Client Disconnected with IP:"+str(remote_ip))
     #Catch connection reset by peer TCP RST
     except ConnectionResetError:
-        logging.info(cur_datetime+"Connection reset by peer with IP:"+remote_ip)
+        logging.info(cur_datetime+"Connection reset by peer with IP:"+str(remote_ip))
     #on client refresh page, force end of connection
     except websockets.exceptions.ConnectionClosedError:
-        logging.info(cur_datetime+"client at "+remote_ip+"disconnected improperly")
+        logging.info(str(cur_datetime)+"client at "+str(remote_ip)+"disconnected improperly")
 #main function
 async def main():
     async with websockets.serve(handler,"",2186):
