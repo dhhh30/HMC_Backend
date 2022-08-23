@@ -33,7 +33,7 @@ class Database_operation():
         #Connection object for both memDB and HDDB
         conn = self.conn_obj
         #Cursor for above apsw connection object
-        cursor = conn.cursor(multi=True)
+        cursor = conn.cursor()
         cursor.execute(sql)
         #op_type 1 = select
         #op_type 2 = insert
@@ -59,8 +59,7 @@ class concatenate_sql:
     #concatenate sql for inserting into HMC
     def insert_HMC(self, parsed_dict, host_path):
         sql = ("""INSERT INTO main_HMC (id, h_name, h_age, email, description, path, v_status, creation_time)
-         VALUES (NULL, "{}","{}","{}","{}","{}","0",NULL);
-         SELECT LAST_INSERT_ID()
+         VALUES (NULL, "{}","{}","{}","{}","{}","0",NULL)
          """.format(parsed_dict['host_name'], parsed_dict['host_age'], parsed_dict['email'], parsed_dict['introduce'], host_path , 0))
         return (sql)
     #concatenate sql for querying main HMC
@@ -95,8 +94,8 @@ class concatenate_sql:
     def query_approve_hmc(self, hID):
         sql = ("""UPDATE * FROM Main_HMC WHERE hID='{}'""".format(hID))
         return (sql)
-    def get_last_id(table):
-        sql =  """SELECT hID from {} ORDER BY hID DESC LIMIT 1;""".format(table)
+    def get_host_id(h_name):
+        sql =  """SELECT hID from Main_HMC WHERE h_name = '{}' """.format(h_name)
         return sql
     
     def query_admin_list(self, pg_num, v_status):

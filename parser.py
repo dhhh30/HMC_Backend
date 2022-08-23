@@ -88,6 +88,9 @@ def uploading(parsed_json):
     query_hmc = methods.Database_operation(sql_hmc, conn_mem, 2).conn()
     #print(type(query_hmc))
     #spawn child process for querying cover
+    
+    query_hmc_sql = methods.concatenate_sql().get_last_id(str(parsed_json["host_name"]))
+    methods.Database_operation(query_hmc_sql, conn_mem).connect()
     query_hmc_cover = threading.Thread(target=methods.cover_database, args=(c_name,query_hmc,conn_mem,))
     query_hmc_cover.start()
     #loop through tulpa list from json and perform Database INSERTs, spawning child process to speed up
@@ -109,6 +112,7 @@ def uploading(parsed_json):
     for ind_img in parsed_json["imgs"]:
         if len(ind_img) >= 10000000:
             return ("""{
+                "request" : "uploading",
                 "error" : "Image File too large"
             }""")
     
