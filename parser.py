@@ -196,6 +196,7 @@ def admin_list(parsed_json):
     
 #Parsing and deserializing
 async def parse_all(data):
+
     loop = asyncio.get_event_loop()
 
     parsed_json = json.loads(data)
@@ -206,10 +207,13 @@ async def parse_all(data):
     elif parsed_json['request'] == "uploading":
         return await loop.run_in_executor(p, uploading, parsed_json)
     elif parsed_json['request'] == "adminAuthentaication":
+        conn_mem = await init.init()
         try:
             compare_hash = await methods.admin.admin_authentication(str(parsed_json["password"]), str(parsed_json["userName"]))
             if compare_hash == True:
-                token = await methods.admin.admin_gen_token()        
+                token = await methods.admin.admin_gen_token()   
+                token_sql = await methods.concatenate_sql.token_operation()    
+                await methods.Database_operation(token_sql, conn_mem, 2)
                 return_dict = {
                     "authenticationSuccess" :  True,
                     "token": token

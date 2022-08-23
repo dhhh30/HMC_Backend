@@ -117,6 +117,14 @@ class concatenate_sql:
             sql = ("""SELECT * FROM mainHMC LIMIT {}, 4""".format(row_num))
 
         return (sql)
+    def token_operation(uname, token, op_code):
+        #if the operation is to insert token into admin_token
+        if op_code == 1:
+            sql = ("""INSERT INTO admin_token (uname, token, issued_time) VALUES('{}','{}', NULL)""".format(uname, token))
+        #if the operation is to query token from admin_token
+        if op_code == 2:
+            sql = ("""SELECT token FROM admin_token WHERE uname = '{}'""".format(uname))
+        return sql
 #generate file name
 class gen_file_name:
     def __init__(self, parsed_json, op_num):
@@ -169,6 +177,7 @@ def writing_image(host_path, parsed_json, i):
     image_file.close()
     sema.release()
     return
+#write cover to disk
 def writing_cover(host_path, parsed_json, cover_name):
     sema.acquire()
     cover_file = open(os.path.join(host_path, cover_name), 'wb')
@@ -193,11 +202,12 @@ class admin():
         #compare hashes
         return secrets.compare_digest(input_hash, output_hash)
     def admin_gen_token():
+        #random sha256 generation function
         ms = int(round(time.time() * 1000))
         rand_num = randrange(100)
         token = hashlib.sha256(bytes(str(ms), "utf-8")).digest()
         token = hashlib.sha256(bytes(str(token)+str(rand_num) , "utf-8"))
-        
+        #encode sha256 into base64
         token = base64.encodebytes(token)
         return token
             
