@@ -210,6 +210,7 @@ async def parse_all(data):
         conn_mem = await init.init()
         try:
             compare_hash = await methods.admin.admin_authentication(str(parsed_json["password"]), str(parsed_json["userName"]))
+            logging.debug(str(compare_hash))
             if compare_hash == True:
                 token = await methods.admin.admin_gen_token()   
                 token_sql = await methods.concatenate_sql.token_operation()    
