@@ -117,14 +117,18 @@ class concatenate_sql:
             sql = ("""SELECT * FROM mainHMC LIMIT {}, 4""".format(row_num))
 
         return (sql)
-    def token_operation(uname, token, op_code):
+    def token_operation(token, op_code):
         #if the operation is to insert token into admin_token
         if op_code == 1:
-            sql = ("""INSERT INTO admin_token (uname, token, issued_time) VALUES('{}','{}', NULL)""".format(uname, token))
+            sql = ("""INSERT INTO admin_token (token, issued_time) VALUES('{}', NULL)""".format(token))
         #if the operation is to query token from admin_token
         if op_code == 2:
-            sql = ("""SELECT token FROM admin_token WHERE uname = '{}'""".format(uname))
+            sql = ("""SELECT token FROM admin_token WHERE token = '{}'""".format(token))
+        if op_code == 3:
+            sql = ("""SELECT EXISTS(SELECT * from admin_token WHERE token = '{}')""".format(token))
         return sql
+    
+    
 #generate file name
 class gen_file_name:
     def __init__(self, parsed_json, op_num):
@@ -198,7 +202,7 @@ class admin():
         #hash the input plain text pwd
         input_hash = hashlib.sha256(bytes(pwd)).digest()
         #query hashed pwd from database
-        output_hash = bytes(Database_operation(sql, conn, 1, "admin_usr"))
+        output_hash = bytes(Database_operation(sql, conn, 1).connect())
         #compare hashes
         return secrets.compare_digest(input_hash, output_hash)
     def admin_gen_token():
@@ -212,4 +216,6 @@ class admin():
         return token
             
     def admin_token_auth(token):
+        token = str(Database_operation(str(concatenate_sql.token_operation(token)), init(), 1).connect())
+        
         pass
