@@ -13,7 +13,8 @@ import logging
 path = "/root/HMC_Backend" 
 
 #dictionary for site
-
+logger = logging.getLogger()
+logger.setLevel(level=logging.DEBUG)
 #connection object
 p = ProcessPoolExecutor(3) 
 #Search Method hash table
