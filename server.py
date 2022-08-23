@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.DEBUG)
 #current datetime for logging
 cur_datetime = methods.datetimenow()
 async def handler(websocket):
-    print("Got request")
+    logging.debug("Got request")
     #client's ip address
     remote_ip = websocket.remote_address
     print(remote_ip)
