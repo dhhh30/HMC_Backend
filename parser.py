@@ -233,12 +233,12 @@ async def parse_all(data):
     parsed_json = json.loads(data)
     #mainList method
     if parsed_json['request'] ==  "mainList":
-        return await  mainList(parsed_json)
+        return mainList(parsed_json)
     #handle uploading request
     elif parsed_json['request'] == "uploading":
-        return await uploading(parsed_json)
+        return uploading(parsed_json)
     elif parsed_json['request'] == "adminAuthentaication":
-        return await adminAuthentication(parsed_json)
+        return adminAuthentication(parsed_json)
     elif parsed_json['request'] == "adminList":
-        return await admin_list(parsed_json)
+        return admin_list(parsed_json)
         
