@@ -44,10 +44,9 @@ class Database_operation():
             return data
         elif op_type == 2:
             #returns last row id on insert
-            last_id =  cursor.fetchone()
             conn.commit()
             cursor.close()
-            return last_id
+            return
     def conn(self):
         result = self.connect()
         return result
