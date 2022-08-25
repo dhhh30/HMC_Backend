@@ -155,7 +155,7 @@ def admin_list(parsed_json):
     query_sql_hmc = methods.concatenate_sql().query_main_List(int(parsed_json['page']))
     #concatenate sql for query main_hmc total row for pagination
     query_sql_hmc_trow = methods.concatenate_sql().get_total_row("main_HMC")
-    total_row = methods.Database_operation(query_sql_hmc_trow, conn_mem,1, "").conn()
+    total_row = methods.Database_operation(query_sql_hmc_trow, conn_mem,1).conn()
     #concatenate sql for query tulpa
     #query hmc
     dat_hmc = methods.Database_operation(query_sql_hmc, conn_mem,1).conn()
@@ -178,11 +178,11 @@ def admin_list(parsed_json):
         site_dict["v_status"] = v_status
         sql_asset = methods.concatenate_sql().query_file(str(details[3]), "webinput")
         print(sql_asset)
-        query_asset = methods.Database_operation(sql_asset, conn_mem, 1, "assets").conn()
+        query_asset = methods.Database_operation(sql_asset, conn_mem, 1).conn()
         #print(query_asset)
         site_dict["url"] = str(details[0]) +"/"+query_asset[0][0]
         query_tulpa = methods.concatenate_sql().query_tulpa_main_List(details[3])
-        dat_tulpa = methods.Database_operation(query_tulpa, conn_mem, 1, "tulpas").conn()
+        dat_tulpa = methods.Database_operation(query_tulpa, conn_mem, 1).conn()
         list_tulpa = []
         for tulpas in dat_tulpa:
             list_tulpa.append(tulpas[0])
