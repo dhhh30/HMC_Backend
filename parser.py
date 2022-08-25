@@ -92,7 +92,7 @@ def uploading(parsed_json):
     print (h_name)
     query_hmc_sql = methods.concatenate_sql.get_host_id(h_name)
     print (query_hmc_sql)
-    methods.Database_operation(query_hmc_sql, conn_mem, 1).connect()
+    query_hmc = methods.Database_operation(query_hmc_sql, conn_mem, 1).connect()
     query_hmc_cover = threading.Thread(target=methods.cover_database, args=(c_name,query_hmc,conn_mem,))
     query_hmc_cover.start()
     #loop through tulpa list from json and perform Database INSERTs, spawning child process to speed up

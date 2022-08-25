@@ -73,14 +73,14 @@ class concatenate_sql:
         return (sql)
     #concatenate sql for inserting into tulpa
     def insert_tulpa(self,i,  t_name, hID):
-        sql = ("""INSERT INTO tulpas (id, tulpaName, hID) VALUES (NULL, "{}",{})""".format(t_name['tulpas_name'][i], hID[0]))
+        sql = ("""INSERT INTO tulpas (id, tulpaName, hID) VALUES (NULL, "{}",{})""".format(t_name['tulpas_name'][i], hID))
         return (sql)
     #concatenate sql for querying tulpa
     def query_tulpa_main_List(self, hID):
         sql = ("""SELECT tulpaName FROM tulpas WHERE hID={}""".format(hID))
         return(sql) 
     def insert_doc(self, type , path, hID):
-        sql = ("""INSERT INTO assets (id, assetPath, type, hID) VALUES (NULL,"{}","{}",{})""".format(path, type, hID[0]))
+        sql = ("""INSERT INTO assets (id, assetPath, type, hID) VALUES (NULL,"{}","{}",{})""".format(path, type, hID))
         return sql
     #get total amount of row from table for pagination
     def get_total_row(self, table):
@@ -88,7 +88,7 @@ class concatenate_sql:
         return (sql)
     #concatenate sql query for inserting files into database
     def query_file(self, hID, type):
-        sql = ("""SELECT assetPath FROM assets WHERE hID='{}' AND type='{}'""".format(hID[0],type))
+        sql = ("""SELECT assetPath FROM assets WHERE hID='{}' AND type='{}'""".format(hID,type))
         return sql
     def query_approve_hmc(self, hID):
         sql = ("""UPDATE * FROM main_HMC WHERE id='{}'""".format(hID))
