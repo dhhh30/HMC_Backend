@@ -38,10 +38,16 @@ class Database_operation():
         #op_type 1 = select
         #op_type 2 = insert
         if op_type == 1:
-            data = cursor.fetchall()
-            #returns fetched data in list
-            cursor.close()
-            return data
+            if """LAST_INSERT_ID""" in sql:
+                data = cursor.fetchone()
+                #returns fetched data in list
+                cursor.close()
+                return data
+            else:
+                data = cursor.fetchall()
+                #returns fetched data in list
+                cursor.close()
+                return data
         elif op_type == 2:
             #returns last row id on insert
             conn.commit()
