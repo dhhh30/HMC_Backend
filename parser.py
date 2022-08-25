@@ -203,13 +203,14 @@ def admin_list(parsed_json):
 def adminAuthentication(parsed_json):
     conn_mem = init.init()
     compare_hash = methods.admin.admin_authentication(str(parsed_json["password"]), str(parsed_json["userName"]))
-    print(str(compare_hash))
+    print(compare_hash)
     if compare_hash == True:
         token =  methods.admin.admin_gen_token()   
         token_sql = methods.concatenate_sql.token_operation(token, 1)    
         methods.Database_operation(token_sql, conn_mem, 2)
         return_dict = {
-            "authenticationSuccess" :  True,
+            "request" : "adminAuthentication",
+            "Success" :  True,
             "token": token
         }
         return_json = json.dumps(return_dict, indent=4)
@@ -218,7 +219,8 @@ def adminAuthentication(parsed_json):
         return return_json
     else:
         return_dict= {
-            "authenticationSuccess" :  False
+            "request" : "adminAuthentication",
+            "Success" :  False
         }
         return_json = json.dump(return_dict, indent=4)
         return return_json
