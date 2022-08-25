@@ -91,10 +91,10 @@ class concatenate_sql:
         sql = ("""SELECT assetPath FROM assets WHERE hID='{}' AND type='{}'""".format(hID[0],type))
         return sql
     def query_approve_hmc(self, hID):
-        sql = ("""UPDATE * FROM Main_HMC WHERE hID='{}'""".format(hID))
+        sql = ("""UPDATE * FROM main_HMC WHERE hID='{}'""".format(hID))
         return (sql)
     def get_host_id(h_name):
-        sql =  """SELECT hID from Main_HMC WHERE h_name = '{}' """.format(h_name)
+        sql =  """SELECT hID from main_HMC WHERE h_name = '{}' """.format(h_name)
         return sql
     
     def query_admin_list(self, pg_num, v_status):
