@@ -94,7 +94,7 @@ class concatenate_sql:
         sql = ("""UPDATE * FROM main_HMC WHERE id='{}'""".format(hID))
         return (sql)
     def get_host_id(h_name):
-        sql =  """SELECT id from main_HMC WHERE h_name = '{}' """.format(h_name)
+        sql =  """SELECT LAST_INSERT_ID() FROM main_HMC;""".format(h_name)
         return sql
     
     def query_admin_list(self, pg_num, v_status):
