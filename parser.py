@@ -133,7 +133,7 @@ def uploading(parsed_json):
     #query_hmc_cover.join()
     #sql_hmc_webinput.join()
     #cover_thread.join()
-    print("Record for host {} have been created with a host id of {}".format(parsed_json["host_name"],query_hmc[0]))
+    print("Record for host {} have been created with a host id of {}".format(parsed_json["host_name"],query_hmc))
 
     return_dict = {
         "request" : "uploading",
