@@ -9,10 +9,11 @@ import websockets
 # print(ws.recv())
 # ws.close()
 import time
-
+import logging
+from time import sleep
 start = time.time()
 
-
+logging.basicConfig(level=logging.DEBUG)
 # input_int = input("input page number:")
 # json = ("""{
 #     "request":"uploading",
@@ -45,8 +46,13 @@ async def test():
     async with websockets.connect("ws://english-poetry.com:2186") as websocket:
         await websocket.send(json)
         retur_msg = await websocket.recv()
-        return retur_msg
+
+    return retur_msg
 for i in range(1000):
+    print(i)
     print(asyncio.run(test()))
+    # except asyncio.exceptions.TimeoutError:
+    #     print(asyncio.run(test()))
+    # sleep(0.1)
 end = time.time()
 print("1000 queries completed in:"+ str(end - start))

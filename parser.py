@@ -207,7 +207,7 @@ def adminAuthentication(parsed_json):
         print(str(compare_hash))
         if compare_hash == True:
             token =  methods.admin.admin_gen_token()   
-            token_sql = methods.concatenate_sql.token_operation()    
+            token_sql = methods.concatenate_sql.token_operation(token, 1)    
             methods.Database_operation(token_sql, conn_mem, 2)
             return_dict = {
                 "authenticationSuccess" :  True,
