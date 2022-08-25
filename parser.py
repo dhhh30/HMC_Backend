@@ -89,7 +89,7 @@ def uploading(parsed_json):
     #print(type(query_hmc))
     #spawn child process for querying cover
     
-    query_hmc_sql = methods.concatenate_sql().get_last_id(str(parsed_json["host_name"]))
+    query_hmc_sql = methods.concatenate_sql().get_host_id(str(parsed_json["host_name"]))
     methods.Database_operation(query_hmc_sql, conn_mem).connect()
     query_hmc_cover = threading.Thread(target=methods.cover_database, args=(c_name,query_hmc,conn_mem,))
     query_hmc_cover.start()
