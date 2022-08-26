@@ -15,7 +15,7 @@ def datetimenow():
     return str("["+dt_string+"]")
 
 #class for operating with DB
-class Database_operation():
+class database():
     def __init__(self):
         pass
     #connect database for operation
@@ -36,10 +36,7 @@ class Database_operation():
             cursor.close()
             return
 #SQL concaatenation
-class concatenate_sql:
-    def __init__(self):
-        pass
-        # self.parsed_dict = parsed_dict
+class sql_operation(database):
     #concatenate sql for inserting into HMC
     def insert_HMC(self, parsed_dict, host_path):
         sql = ("""INSERT INTO main_HMC (id, h_name, h_age, email, description, path, v_status, creation_time)
@@ -110,3 +107,81 @@ class concatenate_sql:
             sql = ("""SELECT EXISTS(SELECT * from admin_token WHERE token = '{}')""".format(token))
         return sql
     
+#file processing objects, RW
+class file_operation(database):   
+    def cover_database(c_name, query_hmc, conn_mem):
+        sema.acquire()
+        #sql for INSERTING into assets for HMC cover
+        sql_hmc_cover = sql_operation.insert_doc("cover", c_name, query_hmc)
+        #query for executing code for hmc cover
+        database(sql_hmc_cover,conn_mem, 2).conn()
+        sema.release()
+        return
+    def uploading_tulpa(i, parsed_json, query_hmc, conn_mem):
+        sema.acquire()
+        sql_tulpa = concatenate_sql().insert_tulpa(i, parsed_json, query_hmc)
+        print(sql_tulpa)
+        super.connect(sql_tulpa, conn_mem, 2).conn()
+        sema.release()
+        return
+    def uploading_webinput(f_name, query_hmc, conn_mem):
+        sema.acquire()
+        #concatenate sql for storing webinput records in asset table
+        sql_hmc_webinput = concatenate_sql().insert_doc("webinput", f_name+".html", query_hmc)
+        database_operation(sql_hmc_webinput, conn_mem, 2).conn()
+        sema.release()
+        return
+    def writing_image(host_path, parsed_json, i):
+        sema.acquire()
+        #decoding image from base64 and write them into perspective files
+        image_file = open(os.path.join(host_path, str(parsed_json["imgs_names"])[i]), 'wb')
+        image_file.write(base64.b64decode(str(parsed_json["imgs"][i])))
+        image_file.close()
+        sema.release()
+        return
+    #write cover to disk
+    def writing_cover(host_path, parsed_json, cover_name):
+        sema.acquire()
+        cover_file = open(os.path.join(host_path, cover_name), 'wb')
+        cover_file.write(base64.b64decode(parsed_json["cover"]))
+        cover_file.close()
+        sema.release()
+        return
+#Admin sepecific methods & generation
+class admin(database_operation):
+    def __init__(self):
+        pass
+    def admin_authentication(pwd, uname):
+        conn = init()
+        #Detect if uname = email
+        if "@" in uname == True:
+            sql = """SELECT pwd_hash FROM admin_usr WHERE {} = '{}'""".format("email",uname)
+        else:
+            sql = """SELECT pwd_hash FROM admin_usr WHERE {} = '{}'""".format("uname",uname)
+        #hash the input plain text pwd
+        input_hash = hashlib.sha256(bytes(pwd)).digest()
+        #query hashed pwd from database
+        output_hash = bytes(super.connect(sql, conn, 1).connect())
+        #compare hashes
+        return secrets.compare_digest(input_hash, output_hash)
+    def admin_gen_token():
+        #random sha256 generation function
+        ms = int(round(time.time() * 1000))
+        rand_num = randrange(100)
+        token = hashlib.sha256(bytes(str(ms), "utf-8")).digest()
+        token = hashlib.sha256(bytes(str(token)+str(rand_num) , "utf-8"))
+        #encode sha256 into base64
+        token = base64.encodebytes(token)
+        return str(token)
+            
+    def admin_token_auth(token):
+        token = str(super.connect(str(concatenate_sql.token_operation(token)), init(), 1).connect())
+#general public requests objects
+class general_request(concatenate_sql, file_operation, database_operation):
+    def mainList():
+        pass
+
+#admin requests objects
+class admin_request(concatenate_sql, file_operation):
+    def adminList():
+        pass
