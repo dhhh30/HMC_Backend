@@ -1,11 +1,7 @@
-from select import select
-from os import path
-from unittest import result
 import time
 from random import randrange
 import base64
 import os
-import sys
 import threading
 import hashlib, secrets
 from init import init
