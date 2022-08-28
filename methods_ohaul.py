@@ -243,7 +243,7 @@ class general_request(database):
             print (details[3])
             site_dict["h_name"] = details[2]
             site_dict["createdDate"] = str(details[1])
-            sql_asset = sql_operation.query_file(details[3], "webinput")
+            sql_asset = sql_operation.query_file(str(details[3]), "webinput")
             print(sql_asset)
             query_asset = database.connect(sql_asset, conn_mem, 1)
             print(query_asset)
