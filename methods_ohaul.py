@@ -286,14 +286,14 @@ class general_request(database):
         query_hmc_cover.start()
         #loop through tulpa list from json and perform Database INSERTs, spawning child process to speed up
         threads = []
-        # for i in range(len(parsed_json['tulpas_name'])):
-        #     threads.append(threading.Thread(target=file_operation.uploading_tulpa, args=(i, parsed_json, query_hmc, conn_mem,)))
-        #     threads[-1].start()
-        # print (threads)
-        # for thread in threads:
-        #         thread.join()
         for i in range(len(parsed_json['tulpas_name'])):
-            file_operation.uploading_tulpa(i, parsed_json, query_hmc, conn_mem)
+            threads.append(threading.Thread(target=file_operation.uploading_tulpa, args=(i, parsed_json, query_hmc, conn_mem,)))
+            threads[-1].start()
+        print (threads)
+        for thread in threads:
+                thread.join()
+        # for i in range(len(parsed_json['tulpas_name'])):
+        #     file_operation.uploading_tulpa(i, parsed_json, query_hmc, conn_mem)
         #Writing webinput to asset
         sql_hmc_webinput = threading.Thread(target=file_operation.uploading_webinput, args=(f_name,query_hmc,conn_mem))
         sql_hmc_webinput.start()
@@ -311,13 +311,13 @@ class general_request(database):
         
         #loop through images for writing
         threads = []
-        # for i in range(len(parsed_json["imgs"])):
-        #     threads.append(threading.Thread(target= file_operation.writing_image, args=(host_path,parsed_json,i)))
-        #     threads[-1].start()
-        # for thread in threads:
-        #     thread.join()
         for i in range(len(parsed_json["imgs"])):
-            file_operation.writing_image(host_path,parsed_json,i)
+            threads.append(threading.Thread(target= file_operation.writing_image, args=(host_path,parsed_json,i)))
+            threads[-1].start()
+        for thread in threads:
+            thread.join()
+        # for i in range(len(parsed_json["imgs"])):
+        #     file_operation.writing_image(host_path,parsed_json,i)
         #decode base64 and write to folders
         
         cover_thread = threading.Thread(target=file_operation.writing_cover, args=(host_path,parsed_json, c_name,))
