@@ -3,3 +3,4 @@ examples.json
 sakura.html
 *.pyc
 *.pyc
+__pycache__/init.cpython-310.pyc

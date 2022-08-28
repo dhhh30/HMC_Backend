@@ -345,7 +345,8 @@ class admin(database):
         token = hashlib.sha256(bytes(str(ms), "utf-8")).digest()
         token = hashlib.sha256(bytes(str(token)+str(rand_num) , "utf-8"))
         #encode sha256 into base64
-        token = base64.b64encode(str(token).encode('utf-8'))
+        token = base64.b64encode(str(token).encode('utf-8')).decode("utf-8")
+
         return str(token)
             
     def admin_token_auth(token):
@@ -359,6 +360,7 @@ class admin_request(database, sql_operation):
         conn_mem = init.init()
         #site dictionary
         site_dict = {}
+        
         #concatenate sql for query hmc
         query_sql_hmc = sql_operation.query_main_List(int(parsed_json['page']))
         #concatenate sql for query main_hmc total row for pagination
@@ -433,3 +435,8 @@ class admin_request(database, sql_operation):
             }
             return_json = json.dump(return_dict, indent=4) 
             return return_json
+    
+    def adminApproval(parsed_json):
+        pass
+    def adminDenial(parsed_json):
+        pass
