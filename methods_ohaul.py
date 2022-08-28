@@ -4,7 +4,7 @@ import base64
 import os
 import threading
 import hashlib, secrets
-from init import init
+import init
 from datetime import datetime
 import logging
 import json
