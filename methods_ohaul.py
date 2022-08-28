@@ -28,6 +28,7 @@ class database():
     #connect database for operation
     def connect(sql, conn, op_type):   
         #Cursor for above apsw connection object
+        conn.reconnect()
         cursor = conn.cursor()
         cursor.execute(sql)
         #op_type 1 = select
