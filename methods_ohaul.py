@@ -209,7 +209,7 @@ class admin(database):
     def admin_token_auth(self, token):
         token = str(super(admin).connect(str(sql_operation.token_operation(token)), init(), 1).connect())
 #general public requests objects
-class general_request(database, sql_operation):
+class general_request(database):
     def __init__(self):
         super().__init__()
     def mainList(self, parsed_json):
