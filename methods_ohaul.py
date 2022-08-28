@@ -4,6 +4,7 @@ import base64
 import os
 import threading
 import hashlib, secrets
+from typing_extensions import Self
 import init
 from datetime import datetime
 import logging
@@ -139,7 +140,7 @@ class gen_file_name:
             return final_file
     
 #file processing objects, RW
-class file_operation(database, sql_operation):   
+class file_operation(database):   
     def cover_database(c_name, query_hmc, conn_mem):
         sema.acquire()
         #sql for INSERTING into assets for HMC cover
@@ -148,7 +149,7 @@ class file_operation(database, sql_operation):
         database(sql_hmc_cover,conn_mem, 2).conn()
         sema.release()
         return
-    def uploading_tulpa(i, parsed_json, query_hmc, conn_mem):
+    def uploading_tulpa(self, i, parsed_json, query_hmc, conn_mem):
         sema.acquire()
         sql_tulpa = ().insert_tulpa(i, parsed_json, query_hmc)
         print(sql_tulpa)
@@ -158,7 +159,7 @@ class file_operation(database, sql_operation):
     def uploading_webinput(f_name, query_hmc, conn_mem):
         sema.acquire()
         #concatenate sql for storing webinput records in asset table
-        sql_hmc_webinput = super().insert_doc("webinput", f_name+".html", query_hmc)
+        sql_hmc_webinput = sql_operation.insert_doc("webinput", f_name+".html", query_hmc)
         super().connect(sql_hmc_webinput, conn_mem, 2)
         sema.release()
         return
@@ -179,7 +180,7 @@ class file_operation(database, sql_operation):
         sema.release()
         return
 #Admin sepecific methods & generation
-class admin(database, sql_operation):
+class admin(database):
     def __init__(self):
         pass
     def admin_authentication(pwd, uname):
@@ -214,7 +215,7 @@ class general_request(database, sql_operation):
         #site dictionary
         site_dict = {}
         #concatenate sql for query hmc
-        query_sql_hmc = super().query_main_List(int(parsed_json['page']))
+        query_sql_hmc = sql_operation.query_main_List(int(parsed_json['page']))
         #concatenate sql for query main_hmc total row for pagination
         query_sql_hmc_trow = sql_operation().get_total_row("main_HMC")
         total_row = super().connect(query_sql_hmc_trow, conn_mem,1)
@@ -238,12 +239,12 @@ class general_request(database, sql_operation):
         for details in dat_hmc:
             site_dict["h_name"] = details[2]
             site_dict["createdDate"] = str(details[1])
-            sql_asset = super().query_file(str(details[3]), "webinput")
+            sql_asset = sql_operation.query_file(str(details[3]), "webinput")
             print(sql_asset)
             query_asset = super().connect(sql_asset, conn_mem, 1)
             #print(query_asset)
             site_dict["url"] = str(details[0]) +"/"+query_asset[0][0]
-            query_tulpa = super().query_tulpa_main_List(details[3])
+            query_tulpa = sql_operation.query_tulpa_main_List(details[3])
             dat_tulpa = super().connect(query_tulpa, conn_mem, 1)
             list_tulpa = []
             for tulpas in dat_tulpa:
@@ -273,13 +274,13 @@ class general_request(database, sql_operation):
         #create host path
         os.mkdir(host_path)
         #concatenate sql for db operation
-        sql_hmc = super().insert_HMC(parsed_json, host_path)
+        sql_hmc = sql_operation.insert_HMC(parsed_json, host_path)
         query_hmc = super().connect(sql_hmc, conn_mem, 2)
         #print(type(query_hmc))
         #spawn child process for querying cover
         h_name = str(parsed_json["host_name"])
         print (h_name)
-        query_hmc_sql = super().get_host_id(h_name)
+        query_hmc_sql = sql_operation.get_host_id(h_name)
         print (query_hmc_sql)
         query_hmc = super().connect(query_hmc_sql, conn_mem, 3)
         query_hmc_cover = threading.Thread(target=file_operation.cover_database, args=(c_name,query_hmc,conn_mem,))
@@ -337,7 +338,7 @@ class general_request(database, sql_operation):
         conn_mem.close()
         return (return_json)
 #Admin operations
-class admin(database, sql_operation):
+class admin(database):
     def __init__(self):
         pass
     def admin_authentication(pwd, uname):
@@ -364,7 +365,7 @@ class admin(database, sql_operation):
         return str(token)
             
     def admin_token_auth(token):
-        token = str(super().connect(str(super().token_operation(token)), init(), 1).connect())
+        token = str(super().connect(str(sql_operation.token_operation(token)), init(), 1).connect())
         
         pass
 
@@ -375,7 +376,7 @@ class admin_request(database, sql_operation):
         #site dictionary
         site_dict = {}
         #concatenate sql for query hmc
-        query_sql_hmc = super().query_main_List(int(parsed_json['page']))
+        query_sql_hmc = sql_operation.query_main_List(int(parsed_json['page']))
         #concatenate sql for query main_hmc total row for pagination
         query_sql_hmc_trow = super().get_total_row("main_HMC")
         total_row =super().connect(query_sql_hmc_trow, conn_mem,1)
@@ -399,12 +400,12 @@ class admin_request(database, sql_operation):
             if details[5] == 1:
                 v_status = True
             site_dict["v_status"] = v_status
-            sql_asset = super().query_file(str(details[3]), "webinput")
+            sql_asset = sql_operation.query_file(str(details[3]), "webinput")
             print(sql_asset)
             query_asset = super().connect(sql_asset, conn_mem, 1)
             #print(query_asset)
             site_dict["url"] = str(details[0]) +"/"+query_asset[0][0]
-            query_tulpa = super().query_tulpa_main_List(details[3])
+            query_tulpa = sql_operation.query_tulpa_main_List(details[3])
             dat_tulpa =super().connect(query_tulpa, conn_mem, 1)
             list_tulpa = []
             for tulpas in dat_tulpa:
@@ -430,7 +431,7 @@ class admin_request(database, sql_operation):
         print(compare_hash)
         if compare_hash == True:
             token =  admin.admin_gen_token()   
-            token_sql = super().token_operation(token, 1)    
+            token_sql = sql_operation.token_operation(token, 1)    
             super().conn(token_sql, conn_mem, 2)
             return_dict = {
                 "request" : "adminAuthentication",
