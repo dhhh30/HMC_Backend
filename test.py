@@ -6,4 +6,4 @@ json = """{
             "userName":"test",
             "password":"test"
            }"""
-print (parser_ohaul(json))
+print (parser_ohaul.parse_all(json))
