@@ -39,7 +39,7 @@ logging.basicConfig(level=logging.DEBUG)
 #            }""")
 json = ("""
 {"request":"mainList",
-"page": 1
+"page": 10
 }""")
 
 async def test():
