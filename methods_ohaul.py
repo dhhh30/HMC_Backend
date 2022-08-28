@@ -180,7 +180,7 @@ class file_operation(database):
         sema.release()
         return
 #Admin sepecific methods & generation
-class admin(admin):
+class admin(database):
     def __init__(self):
         pass
     def admin_authentication(pwd, uname):
