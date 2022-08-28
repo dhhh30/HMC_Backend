@@ -4,7 +4,7 @@ import signal
 from parser_ohaul import parse_all
 import logging
 import methods
-logging.basicConfig(level=logging.WARNING)
+logging.basicConfig(level=logging.DEBUG)
 from parser_ohaul import parse_all
 #current datetime for logging
 cur_datetime = methods.datetimenow()
