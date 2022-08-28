@@ -337,7 +337,7 @@ class admin(database):
         #query hashed pwd from database
         output_hash = database.connect(sql, conn, 1)
         #compare hashes
-        return secrets.compare_digest(input_hash, output_hash)
+        return secrets.compare_digest(input_hash, output_hash[0])
     def admin_gen_token():
         #random sha256 generation function
         ms = int(round(time.time() * 1000))
