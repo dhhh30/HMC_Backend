@@ -13,7 +13,7 @@ import logging
 from time import sleep
 start = time.time()
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 # input_int = input("input page number:")
 # json = ("""{
 #     "request":"uploading",
@@ -31,16 +31,16 @@ logging.basicConfig(level=logging.DEBUG)
 #     "file": "PGgxPuWXqOWXqOWXqDwvaDE+"
 
 # }""")
-# json = ("""
-#         {
-#             "request":"adminAuthentication",
-#             "userName":"test",
-#             "password":"test"
-#            }""")
 json = ("""
-{"request":"mainList",
-"page": 10
-}""")
+        {
+            "request":"adminAuthentication",
+            "userName":"test",
+            "password":"test"
+           }""")
+# json = ("""
+# {"request":"mainList",
+# "page": 10
+# }""")
 
 async def test():
     async with websockets.connect("ws://english-poetry.com:2186") as websocket:

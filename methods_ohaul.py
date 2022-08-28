@@ -437,7 +437,7 @@ class admin_request(database, sql_operation):
     def adminAuthentication(parsed_json):
         conn_mem = init.init()
         compare_hash = admin.admin_authentication(str(parsed_json["password"]), str(parsed_json["userName"]))
-        print(compare_hash)
+        print(compare_hash, flush=True)
         if compare_hash == True:
             token =  admin.admin_gen_token()   
             token_sql = sql_operation.token_operation(token, 1)    
