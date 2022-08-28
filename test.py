@@ -9,7 +9,7 @@ import asyncio
 #            }"""
 json = ("""
 {"request":"mainList",
-"page": 10
+"page": 100
 }""")
 async def main():
   print (await parser_ohaul.parse_all(json))
