@@ -355,7 +355,7 @@ class admin(database):
         pass
 
 #admin requests objects
-class admin_request(database, sql_operation):
+class admin_request(database):
     def adminList(parsed_json):
         conn_mem = init.init()
         #site dictionary
