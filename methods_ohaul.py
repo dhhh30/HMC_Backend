@@ -427,7 +427,6 @@ class admin_request(database):
                 "token": token
             }
             return_json = json.dumps(return_dict, indent=4)
-            self.return_json = return_json
             return (return_json)
         else:
             return_dict= {
