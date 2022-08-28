@@ -421,6 +421,7 @@ class admin_request(database):
             token =  admin.admin_gen_token()   
             token_sql = sql_operation.token_operation(token, 1)    
             database.connect(token_sql, conn_mem, 2)
+            print(token)
             return_dict = {
                 "request" : "adminAuthentication",
                 "Success" :  "true",
