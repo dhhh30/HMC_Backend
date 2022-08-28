@@ -71,7 +71,7 @@ class sql_operation():
         return (sql)
     #concatenate sql for querying tulpa
     def query_tulpa_main_List(hID):
-        sql = ("""SELECT tulpaName FROM tulpas WHERE hID={}""".format(hID[0]))
+        sql = ("""SELECT tulpaName FROM tulpas WHERE hID={}""".format(hID))
         return(sql) 
     def insert_doc(type , path, hID):
         sql = ("""INSERT INTO assets (id, assetPath, type, hID) VALUES (NULL,"{}","{}",{})""".format(path, type, hID))
