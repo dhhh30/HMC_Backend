@@ -425,14 +425,14 @@ class admin_request(database):
                 "token": token
             }
             return_json = json.dumps(return_dict, indent=4)
-            return return_json
+            return str(return_json)
         else:
             return_dict= {
                 "request" : "adminAuthentication",
                 "Success" :  False
             }
             return_json = json.dump(return_dict, indent=4) 
-            return return_json
+            return str(return_json)
     
     def adminApproval(parsed_json):
         pass
