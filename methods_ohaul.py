@@ -425,8 +425,6 @@ class admin_request(database, sql_operation):
                 "token": token
             }
             return_json = json.dumps(return_dict, indent=4)
-            logging.info(datetimenow()+"User with username"+str(parsed_json["userName"])+"Obtained token")
-            logging.debug(datetimenow()+" Function adminAuthentication returned"+return_json)
             return return_json
         else:
             return_dict= {
