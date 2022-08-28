@@ -14,7 +14,7 @@ async def parse_all(data):
     elif parsed_json['request'] == "uploading":
         return methods.general_request.uploading(parsed_json)
     elif parsed_json['request'] == "adminAuthentaication":
-        return methods.admin_request.adminAuthentication(parsed_json).return_json
+        return methods.admin_request.adminAuthentication(parsed_json)
     elif parsed_json['request'] == "adminList":
         return methods.admin_request.adminList(parsed_json)
     # elif parsed_json['request'] == "adminApprove":
