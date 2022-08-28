@@ -57,20 +57,20 @@ class sql_operation():
          """.format(parsed_dict['host_name'], parsed_dict['host_age'], parsed_dict['email'], parsed_dict['introduce'], host_path , 0))
         return sql
     #concatenate sql for querying main HMC
-    def query_main_List(self, pg_num):
+    def query_main_List(pg_num):
         if pg_num == 1:
             row_num = pg_num-1
         else:
             pg_num -= 1
             row_num = pg_num*10
-        self.sql = ("""SELECT path, creation_time, h_name, id FROM main_HMC LIMIT {}, 4;""".format(row_num))
-        return self.sql
+        sql = ("""SELECT path, creation_time, h_name, id FROM main_HMC LIMIT {}, 4;""".format(row_num))
+        return sql
     #concatenate sql for inserting into tulpa
-    def insert_tulpa(self,i,  t_name, hID):
+    def insert_tulpa(i,  t_name, hID):
         sql = ("""INSERT INTO tulpas (id, tulpaName, hID) VALUES (NULL, "{}",{})""".format(t_name['tulpas_name'][i], hID[0]))
         return (sql)
     #concatenate sql for querying tulpa
-    def query_tulpa_main_List(self, hID):
+    def query_tulpa_main_List(hID):
         sql = ("""SELECT tulpaName FROM tulpas WHERE hID={}""".format(hID[0]))
         return(sql) 
     def insert_doc(self, type , path, hID):
