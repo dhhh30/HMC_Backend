@@ -8,7 +8,7 @@ import init
 from datetime import datetime
 import logging
 import json
-from init import init
+import init
 import math
 
 
@@ -29,7 +29,7 @@ class database():
     #connect database for operation
     def connect(sql, conn, op_type):   
         #Cursor for above apsw connection object
-        conn = init()
+        conn = init.init()
         cursor = conn.cursor()
         cursor.execute(sql)
         #op_type 1 = select
