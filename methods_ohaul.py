@@ -37,12 +37,10 @@ class database():
         if op_type == 1:
             data = cursor.fetchall()
             #returns fetched data in list
-            cursor.close()
             return data
         elif op_type == 2:
             #returns last row id on insert
             conn.commit()
-            cursor.close()
             return
         # elif op_type == 3:
         #     data = cursor.fetchone()
