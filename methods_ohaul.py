@@ -356,6 +356,8 @@ class admin(database):
 
 #admin requests objects
 class admin_request(database):
+    def __init__(self):
+        pass
     def adminList(parsed_json):
         conn_mem = init.init()
         #site dictionary
@@ -411,7 +413,7 @@ class admin_request(database):
         #serialize return_dict to json
         data = json.dumps(return_dict, indent=4)
         return (data)
-    def adminAuthentication(parsed_json):
+    def adminAuthentication(self, parsed_json):
         conn_mem = init.init()
         compare_hash = admin.admin_authentication(parsed_json["password"], parsed_json["userName"])
         print(compare_hash, flush=True)
@@ -425,6 +427,7 @@ class admin_request(database):
                 "token": token
             }
             return_json = json.dumps(return_dict, indent=4)
+            self.return_json = return_json
             return str(return_json)
         else:
             return_dict= {

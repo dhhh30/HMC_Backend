@@ -20,7 +20,7 @@ async def handler(websocket):
             response = await parse_all(message)
             logging.debug(str(cur_datetime)+"Response to client at "+str(remote_ip)+"is"+str(response))
             print(type(response))
-            await websocket.send(response)
+            await websocket.send(str(response))
         #on proper exit
     except websockets.ConnectionClosedOK:
         logging.info(str(cur_datetime)+"Client Disconnected with IP:"+str(remote_ip))
