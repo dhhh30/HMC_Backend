@@ -415,7 +415,7 @@ class admin_request(database, sql_operation):
         print(compare_hash, flush=True)
         if compare_hash == True:
             token =  admin.admin_gen_token()   
-            token_sql = sql_operation.token_operation(token, 1)    
+            token_sql = sql_operation.token_operation(token.replace("'",' '), 1)    
             database.connect(token_sql, conn_mem, 2)
             return_dict = {
                 "request" : "adminAuthentication",
