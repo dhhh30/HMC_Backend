@@ -240,6 +240,7 @@ class general_request(database):
         #print (dat_hmc)
         #Create Site list by looping through hmc query and tulpas query
         for details in dat_hmc:
+            print (details[3])
             site_dict["h_name"] = details[2]
             site_dict["createdDate"] = str(details[1])
             sql_asset = sql_operation.query_file(str(details[3]), "webinput")
