@@ -4,7 +4,6 @@ import base64
 import os
 import threading
 import hashlib, secrets
-from typing_extensions import Self
 import init
 from datetime import datetime
 import logging
