@@ -183,19 +183,22 @@ class file_operation(database):
 class admin(database):
     def __init__(self):
         pass
+    # }""")
     def admin_authentication(pwd, uname):
-        conn = init()
+        # conn = init()
         #Detect if uname = email
         if "@" in uname == True:
             sql = """SELECT pwd_hash FROM admin_usr WHERE {} = '{}'""".format("email",uname)
         else:
             sql = """SELECT pwd_hash FROM admin_usr WHERE {} = '{}'""".format("uname",uname)
         #hash the input plain text pwd
-        input_hash = hashlib.sha256(bytes(pwd)).digest()
+        input_hash = hashlib.sha256(pwd.encode('utf-8'))
         #query hashed pwd from database
-        output_hash = bytes(database.connect(sql, conn, 1).connect())
+        #print (h.hexdigest())
+        output_hash = database.connect(sql, init.init(), 1).connect()
         #compare hashes
-        return secrets.compare_digest(input_hash, output_hash)
+        print(str(input_hash.hexdigest()))
+        return str(input_hash.hexdigest()) == output_hash
     def admin_gen_token():
         #random sha256 generation function
         ms = int(round(time.time() * 1000))
