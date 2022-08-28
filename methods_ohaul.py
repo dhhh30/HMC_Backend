@@ -63,7 +63,7 @@ class sql_operation():
         else:
             pg_num -= 1
             row_num = pg_num*10
-        sql = ("""SELECT path, creation_time, h_name, id FROM main_HMC LIMIT {}, 4;""".format(row_num))
+        sql = ("""SELECT path, creation_time, h_name, id FROM main_HMC LIMIT {}, 4""".format(row_num))
         return sql
     #concatenate sql for inserting into tulpa
     def insert_tulpa(i,  t_name, hID):
@@ -88,7 +88,7 @@ class sql_operation():
         sql = ("""UPDATE * FROM main_HMC WHERE id='{}'""".format(hID[0]))
         return (sql)
     def get_host_id(h_name):
-        sql =  """SELECT MAX(id) FROM main_HMC WHERE h_name = "{}";""".format(h_name)
+        sql =  """SELECT MAX(id) FROM main_HMC WHERE h_name = "{}" """.format(h_name)
         return sql
     
     def query_admin_list(pg_num, v_status):
@@ -103,7 +103,7 @@ class sql_operation():
                 v_status = 1
             if v_status == False:
                 v_status = 0
-            sql = ("""SELECT * FROM main_HMC WHERE v_status='{}' LIMIT {}, 4;""".format(str(v_status), row_num))
+            sql = ("""SELECT * FROM main_HMC WHERE v_status='{}' LIMIT {}, 4""".format(str(v_status), row_num))
         else:
             sql = ("""SELECT * FROM mainHMC LIMIT {}, 4""".format(row_num))
 
