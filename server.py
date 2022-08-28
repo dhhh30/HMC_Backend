@@ -1,10 +1,11 @@
 import asyncio
 import websockets
 import signal
-from parser import parse_all
+from parser_ohaul import parse_all
 import logging
 import methods
 logging.basicConfig(level=logging.WARNING)
+from parser_ohaul import parse_all
 #current datetime for logging
 cur_datetime = methods.datetimenow()
 async def handler(websocket):

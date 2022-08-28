@@ -1,7 +1,5 @@
-import json
 import methods
 import os
-import json
 import math
 import threading
 from concurrent.futures import ProcessPoolExecutor
