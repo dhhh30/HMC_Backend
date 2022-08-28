@@ -82,7 +82,7 @@ class sql_operation():
         return (sql)
     #concatenate sql query for inserting files into database
     def query_file(hID, type):
-        sql = ("""SELECT assetPath FROM assets WHERE hID='{}' AND type='{}'""".format(hID[0],type))
+        sql = ("""SELECT assetPath FROM assets WHERE hID='{}' AND type='{}'""".format(hID,type))
         return sql
     def query_approve_hmc(hID):
         sql = ("""UPDATE * FROM main_HMC WHERE id='{}'""".format(hID[0]))
