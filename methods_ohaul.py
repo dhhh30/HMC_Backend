@@ -211,7 +211,7 @@ class admin(database):
 #general public requests objects
 class general_request(database):
     def __init__(self):
-        database.__init__()
+        super().__init__()
     def mainList(self, parsed_json):
         conn_mem = init.init()
         #site dictionary
