@@ -333,7 +333,7 @@ class admin(database):
         else:
             sql = """SELECT pwd_hash FROM admin_usr WHERE {} = '{}'""".format("uname",uname)
         #hash the input plain text pwd
-        input_hash = hashlib.sha256(bytes(pwd)).digest()
+        input_hash = hashlib.sha256(bytes(pwd, 'utf-8')).digest()
         #query hashed pwd from database
         output_hash = database.connect(sql, conn, 1)
         #compare hashes
