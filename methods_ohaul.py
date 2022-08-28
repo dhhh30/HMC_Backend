@@ -277,6 +277,7 @@ class general_request(database):
         os.mkdir(host_path)
         #concatenate sql for db operation
         sql_hmc = sql_operation.insert_HMC(parsed_json, host_path)
+        print(sql_hmc)
         query_hmc = database.connect(sql_hmc, conn_mem, 2)
         #print(type(query_hmc))
         #spawn child process for querying cover
