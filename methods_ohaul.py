@@ -333,11 +333,11 @@ class admin(database):
         else:
             sql = """SELECT pwd_hash FROM admin_usr WHERE {} = '{}'""".format("uname",uname)
         #hash the input plain text pwd
-        input_hash = hashlib.sha256(bytes(pwd, 'utf-8')).digest()
+        input_hash = hashlib.sha256(bytes(pwd, 'utf-8')).hexdigest()
         #query hashed pwd from database
         output_hash = database.connect(sql, conn, 1)
         #compare hashes
-        return secrets.compare_digest(input_hash, output_hash[0][0])
+        return input_hash == output_hash[0][0]
     def admin_gen_token():
         #random sha256 generation function
         ms = int(round(time.time() * 1000))
