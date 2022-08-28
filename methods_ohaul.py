@@ -112,7 +112,7 @@ class sql_operation():
     def token_operation(token, op_code):
         #if the operation is to insert token into admin_token
         if op_code == 1:
-            sql = ("""INSERT INTO admin_token (token, issued_time) VALUES('{}', curren_timestamp())""".format(token))
+            sql = ("""INSERT INTO admin_token (token, issued_time) VALUES('{}', CURRENT_TIMESTAMP())""".format(token))
             return sql
         #if the operation is to query token from admin_token
         if op_code == 2:
