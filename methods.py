@@ -27,7 +27,7 @@ class Database_operation():
         #Operation Type
         op_type = self.op_type
         #Connection object for both memDB and HDDB
-        conn = self.conn_obj
+        conn = init()
         #Cursor for above apsw connection object
         cursor = conn.cursor()
         cursor.execute(sql)
