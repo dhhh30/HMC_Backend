@@ -19,6 +19,7 @@ async def handler(websocket):
             logging.debug(str(cur_datetime)+"The client at "+str(remote_ip)+"sent"+str(message))
             response = await parse_all(message)
             logging.debug(str(cur_datetime)+"Response to client at "+str(remote_ip)+"is"+str(response))
+            print(type(response))
             await websocket.send(response)
         #on proper exit
     except websockets.ConnectionClosedOK:
