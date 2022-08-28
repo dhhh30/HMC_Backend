@@ -179,38 +179,7 @@ class file_operation(database):
         cover_file.close()
         sema.release()
         return
-#Admin sepecific methods & generation
-class admin(database):
-    def __init__(self):
-        pass
-    # }""")
-    def admin_authentication(pwd, uname):
-        # conn = init()
-        #Detect if uname = email
-        if "@" in uname == True:
-            sql = """SELECT pwd_hash FROM admin_usr WHERE {} = '{}'""".format("email",uname)
-        else:
-            sql = """SELECT pwd_hash FROM admin_usr WHERE {} = '{}'""".format("uname",uname)
-        #hash the input plain text pwd
-        input_hash = hashlib.sha256(pwd.encode('utf-8'))
-        #query hashed pwd from database
-        #print (h.hexdigest())
-        output_hash = database.connect(sql, init.init(), 1).connect()
-        #compare hashes
-        print(str(input_hash.hexdigest()))
-        return str(input_hash.hexdigest()) == output_hash
-    def admin_gen_token():
-        #random sha256 generation function
-        ms = int(round(time.time() * 1000))
-        rand_num = randrange(100)
-        token = hashlib.sha256(bytes(str(ms), "utf-8")).digest()
-        token = hashlib.sha256(bytes(str(token)+str(rand_num) , "utf-8"))
-        #encode sha256 into base64
-        token = base64.encodebytes(token)
-        return str(token)
-            
-    def admin_token_auth(token):
-        token = str(database.connect(str(sql_operation.token_operation(token)), init(), 1).connect())
+
 #general public requests objects
 class general_request(database):
     def __init__(self):
@@ -459,5 +428,5 @@ class admin_request(database, sql_operation):
                 "request" : "adminAuthentication",
                 "Success" :  False
             }
-            return_json = json.dump(return_dict, indent=4)
+            return_json = json.dump(return_dict, indent=4) 
             return return_json
