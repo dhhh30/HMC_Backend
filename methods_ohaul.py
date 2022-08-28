@@ -28,7 +28,7 @@ class database():
     def __init__(self):
         pass
     #connect database for operation
-    def connect(self, sql, conn, op_type):   
+    def connect(sql, conn, op_type):   
         #Cursor for above apsw connection object
         cursor = conn.cursor()
         cursor.execute(sql)
