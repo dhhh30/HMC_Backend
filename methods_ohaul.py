@@ -363,7 +363,7 @@ class admin(database):
         #hash the input plain text pwd
         input_hash = hashlib.sha256(bytes(pwd)).digest()
         #query hashed pwd from database
-        output_hash = bytes(database.connect(sql, conn, 1))
+        output_hash = database.connect(sql, conn, 1)
         #compare hashes
         return secrets.compare_digest(input_hash, output_hash)
     def admin_gen_token():
