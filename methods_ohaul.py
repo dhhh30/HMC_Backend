@@ -146,14 +146,14 @@ class file_operation(database):
         #sql for INSERTING into assets for HMC cover
         sql_hmc_cover = sql_operation.insert_doc("cover", c_name, query_hmc)
         #query for executing code for hmc cover
-        database(sql_hmc_cover,conn_mem, 2).conn()
+        database(sql_hmc_cover,conn_mem, 2) 
         sema.release()
         return
     def uploading_tulpa( i, parsed_json, query_hmc, conn_mem):
         sema.acquire()
         sql_tulpa = sql_operation.insert_tulpa(i, parsed_json, query_hmc)
         print(sql_tulpa)
-        database.connect(sql_tulpa, conn_mem, 2).conn()
+        database.connect(sql_tulpa, conn_mem, 2) 
         sema.release()
         return
     def uploading_webinput(f_name, query_hmc, conn_mem):
