@@ -104,20 +104,23 @@ class sql_operation():
             if v_status == False:
                 v_status = 0
             sql = ("""SELECT * FROM main_HMC WHERE v_status='{}' LIMIT {}, 4""".format(str(v_status), row_num))
+            return sql
         else:
             sql = ("""SELECT * FROM mainHMC LIMIT {}, 4""".format(row_num))
 
-        return (sql)
+            return sql
     def token_operation(token, op_code):
         #if the operation is to insert token into admin_token
         if op_code == 1:
             sql = ("""INSERT INTO admin_token (token, issued_time) VALUES('{}', NULL)""".format(token))
+            return sql
         #if the operation is to query token from admin_token
         if op_code == 2:
             sql = ("""SELECT token FROM admin_token WHERE token = '{}'""".format(token))
+            return sql
         if op_code == 3:
             sql = ("""SELECT EXISTS(SELECT * from admin_token WHERE token = '{}')""".format(token))
-        return sql
+            return sql
 class gen_file_name:
     def __init__(self, parsed_json, op_num):
         self.parsed_json = parsed_json
@@ -323,7 +326,7 @@ class admin(database):
     def __init__(self):
         database.__init__()
     def admin_authentication(pwd, uname):
-        conn = init()
+        conn = init.init()
         #Detect if uname = email
         if "@" in uname == True:
             sql = """SELECT pwd_hash FROM admin_usr WHERE {} = '{}'""".format("email",uname)

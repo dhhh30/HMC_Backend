@@ -46,7 +46,7 @@ json = ("""
 
 # print (admin_gen_token())
 async def test():
-    async with websockets.connect("ws://english-poetry.com:2186") as websocket:
+    async with websockets.connect("ws://localhost:2186") as websocket:
         await websocket.send(json)
         retur_msg = await websocket.recv()
 
