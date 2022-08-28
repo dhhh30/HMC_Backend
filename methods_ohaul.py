@@ -324,7 +324,7 @@ class general_request(database):
 #Admin operations
 class admin(database):
     def __init__(self):
-        database.__init__()
+        super().__init__()
     def admin_authentication(pwd, uname):
         conn = init.init()
         #Detect if uname = email
@@ -357,7 +357,7 @@ class admin(database):
 #admin requests objects
 class admin_request(database):
     def __init__(self):
-        pass
+        super().__init__()
     def adminList(parsed_json):
         conn_mem = init.init()
         #site dictionary
