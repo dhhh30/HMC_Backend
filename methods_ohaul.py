@@ -50,11 +50,11 @@ class database():
 #SQL concaatenation
 class sql_operation():
     #concatenate sql for inserting into HMC
-    def insert_HMC(self, parsed_dict, host_path):
-        self.sql = ("""INSERT INTO main_HMC (id, h_name, h_age, email, description, path, v_status, creation_time)
+    def insert_HMC(parsed_dict, host_path):
+        sql = ("""INSERT INTO main_HMC (id, h_name, h_age, email, description, path, v_status, creation_time)
          VALUES (NULL, "{}","{}","{}","{}","{}","0",NULL)
          """.format(parsed_dict['host_name'], parsed_dict['host_age'], parsed_dict['email'], parsed_dict['introduce'], host_path , 0))
-        return self.sql
+        return sql
     #concatenate sql for querying main HMC
     def query_main_List(self, pg_num):
         if pg_num == 1:
