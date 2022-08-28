@@ -10,7 +10,6 @@ import logging
 import json
 import math
 
-from methods import Database_operation
 
 #paths
 path = "/home/wwwroot/tulpa" 
@@ -154,14 +153,14 @@ class file_operation(database):
         sema.acquire()
         sql_tulpa = ().insert_tulpa(i, parsed_json, query_hmc)
         print(sql_tulpa)
-        super(database).connect(sql_tulpa, conn_mem, 2).conn()
+        super(file_operation).connect(sql_tulpa, conn_mem, 2).conn()
         sema.release()
         return
     def uploading_webinput(f_name, query_hmc, conn_mem):
         sema.acquire()
         #concatenate sql for storing webinput records in asset table
         sql_hmc_webinput = sql_operation.insert_doc("webinput", f_name+".html", query_hmc)
-        super(database).connect(sql_hmc_webinput, conn_mem, 2)
+        super(file_operation).connect(sql_hmc_webinput, conn_mem, 2)
         sema.release()
         return
     def writing_image(host_path, parsed_json, i):
@@ -181,7 +180,7 @@ class file_operation(database):
         sema.release()
         return
 #Admin sepecific methods & generation
-class admin(database):
+class admin(admin):
     def __init__(self):
         pass
     def admin_authentication(pwd, uname):
@@ -194,7 +193,7 @@ class admin(database):
         #hash the input plain text pwd
         input_hash = hashlib.sha256(bytes(pwd)).digest()
         #query hashed pwd from database
-        output_hash = bytes(super(database).connect(sql, conn, 1).connect())
+        output_hash = bytes(super(admin).connect(sql, conn, 1).connect())
         #compare hashes
         return secrets.compare_digest(input_hash, output_hash)
     def admin_gen_token():
@@ -208,7 +207,7 @@ class admin(database):
         return str(token)
             
     def admin_token_auth(token):
-        token = str(super(database).connect(str(sql_operation.token_operation(token)), init(), 1).connect())
+        token = str(super(admin).connect(str(sql_operation.token_operation(token)), init(), 1).connect())
 #general public requests objects
 class general_request(database, sql_operation):
     def mainList(parsed_json):
@@ -219,10 +218,10 @@ class general_request(database, sql_operation):
         query_sql_hmc = sql_operation.query_main_List(int(parsed_json['page']))
         #concatenate sql for query main_hmc total row for pagination
         query_sql_hmc_trow = sql_operation().get_total_row("main_HMC")
-        total_row = super(database).connect(query_sql_hmc_trow, conn_mem,1)
+        total_row = super(general_request).connect(query_sql_hmc_trow, conn_mem,1)
         #concatenate sql for query tulpa
         #query hmc
-        dat_hmc = super(database).connect(query_sql_hmc, conn_mem,1)
+        dat_hmc = super(general_request).connect(query_sql_hmc, conn_mem,1)
         page_num = (total_row[0][0]/4)
         logging.debug(str(datetimenow())+"mainList total page number is: " + str(page_num))
         page_num = math.ceil(page_num)
@@ -242,11 +241,11 @@ class general_request(database, sql_operation):
             site_dict["createdDate"] = str(details[1])
             sql_asset = sql_operation.query_file(str(details[3]), "webinput")
             print(sql_asset)
-            query_asset = super(database).connect(sql_asset, conn_mem, 1)
+            query_asset = super(general_request).connect(sql_asset, conn_mem, 1)
             #print(query_asset)
             site_dict["url"] = str(details[0]) +"/"+query_asset[0][0]
             query_tulpa = sql_operation.query_tulpa_main_List(details[3])
-            dat_tulpa = super(database).connect(query_tulpa, conn_mem, 1)
+            dat_tulpa = super(general_request).connect(query_tulpa, conn_mem, 1)
             list_tulpa = []
             for tulpas in dat_tulpa:
                 list_tulpa.append(tulpas[0])
@@ -276,14 +275,14 @@ class general_request(database, sql_operation):
         os.mkdir(host_path)
         #concatenate sql for db operation
         sql_hmc = sql_operation.insert_HMC(parsed_json, host_path)
-        query_hmc = super(database).connect(sql_hmc, conn_mem, 2)
+        query_hmc = super(general_request).connect(sql_hmc, conn_mem, 2)
         #print(type(query_hmc))
         #spawn child process for querying cover
         h_name = str(parsed_json["host_name"])
         print (h_name)
         query_hmc_sql = sql_operation.get_host_id(h_name)
         print (query_hmc_sql)
-        query_hmc = super(database).connect(query_hmc_sql, conn_mem, 3)
+        query_hmc = super(general_request).connect(query_hmc_sql, conn_mem, 3)
         query_hmc_cover = threading.Thread(target=file_operation.cover_database, args=(c_name,query_hmc,conn_mem,))
         query_hmc_cover.start()
         #loop through tulpa list from json and perform Database INSERTs, spawning child process to speed up
@@ -352,7 +351,7 @@ class admin(database):
         #hash the input plain text pwd
         input_hash = hashlib.sha256(bytes(pwd)).digest()
         #query hashed pwd from database
-        output_hash = bytes(super(database).connect(sql, conn, 1))
+        output_hash = bytes(super(admin).connect(sql, conn, 1))
         #compare hashes
         return secrets.compare_digest(input_hash, output_hash)
     def admin_gen_token():
@@ -366,7 +365,7 @@ class admin(database):
         return str(token)
             
     def admin_token_auth(token):
-        token = str(super(database).connect(str(sql_operation.token_operation(token)), init(), 1).connect())
+        token = str(super(admin).connect(str(sql_operation.token_operation(token)), init(), 1).connect())
         
         pass
 
@@ -379,8 +378,8 @@ class admin_request(database, sql_operation):
         #concatenate sql for query hmc
         query_sql_hmc = sql_operation.query_main_List(int(parsed_json['page']))
         #concatenate sql for query main_hmc total row for pagination
-        query_sql_hmc_trow = super(database).get_total_row("main_HMC")
-        total_row =super(database).connect(query_sql_hmc_trow, conn_mem,1)
+        query_sql_hmc_trow = super(admin_request).get_total_row("main_HMC")
+        total_row =super(admin_request).connect(query_sql_hmc_trow, conn_mem,1)
         #concatenate sql for query tulpa
         #query hmc
         dat_hmc =super().connect(query_sql_hmc, conn_mem,1)
@@ -403,11 +402,11 @@ class admin_request(database, sql_operation):
             site_dict["v_status"] = v_status
             sql_asset = sql_operation.query_file(str(details[3]), "webinput")
             print(sql_asset)
-            query_asset = super(database).connect(sql_asset, conn_mem, 1)
+            query_asset = super(admin_request).connect(sql_asset, conn_mem, 1)
             #print(query_asset)
             site_dict["url"] = str(details[0]) +"/"+query_asset[0][0]
             query_tulpa = sql_operation.query_tulpa_main_List(details[3])
-            dat_tulpa =super(database).connect(query_tulpa, conn_mem, 1)
+            dat_tulpa =super(admin_request).connect(query_tulpa, conn_mem, 1)
             list_tulpa = []
             for tulpas in dat_tulpa:
                 list_tulpa.append(tulpas[0])
@@ -433,7 +432,7 @@ class admin_request(database, sql_operation):
         if compare_hash == True:
             token =  admin.admin_gen_token()   
             token_sql = sql_operation.token_operation(token, 1)    
-            super(database).conn(token_sql, conn_mem, 2)
+            super(admin_request).conn(token_sql, conn_mem, 2)
             return_dict = {
                 "request" : "adminAuthentication",
                 "Success" :  True,
