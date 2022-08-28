@@ -211,7 +211,7 @@ class admin(database):
 #general public requests objects
 class general_request(database, sql_operation):
     def __init__(self):
-        super.__init__()
+        super().__init__()
     def mainList(self, parsed_json):
         conn_mem = init.init()
         #site dictionary
@@ -342,7 +342,7 @@ class general_request(database, sql_operation):
 #Admin operations
 class admin(database):
     def __init__(self):
-        pass
+        super().__init__()
     def admin_authentication(self, pwd, uname):
         conn = init()
         #Detect if uname = email
