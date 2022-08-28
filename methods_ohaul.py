@@ -413,7 +413,7 @@ class admin_request(database):
         #serialize return_dict to json
         data = json.dumps(return_dict, indent=4)
         return (data)
-    def adminAuthentication(self, parsed_json):
+    def adminAuthentication(parsed_json):
         conn_mem = init.init()
         compare_hash = admin.admin_authentication(parsed_json["password"] , parsed_json["userName"])
         print(compare_hash, flush=True)
