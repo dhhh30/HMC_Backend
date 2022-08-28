@@ -28,7 +28,7 @@ class database():
     def __init__(self):
         pass
     #connect database for operation
-    def connect(sql, conn, op_type):   
+    def connect(self, sql, conn, op_type):   
         #Cursor for above apsw connection object
         cursor = conn.cursor()
         cursor.execute(sql)
@@ -156,7 +156,7 @@ class file_operation(database):
         super(file_operation).connect(sql_tulpa, conn_mem, 2).conn()
         sema.release()
         return
-    def uploading_webinput(f_name, query_hmc, conn_mem):
+    def uploading_webinput(self, f_name, query_hmc, conn_mem):
         sema.acquire()
         #concatenate sql for storing webinput records in asset table
         sql_hmc_webinput = sql_operation.insert_doc("webinput", f_name+".html", query_hmc)
@@ -183,7 +183,7 @@ class file_operation(database):
 class admin(database):
     def __init__(self):
         pass
-    def admin_authentication(pwd, uname):
+    def admin_authentication(self, pwd, uname):
         conn = init()
         #Detect if uname = email
         if "@" in uname == True:
@@ -206,11 +206,13 @@ class admin(database):
         token = base64.encodebytes(token)
         return str(token)
             
-    def admin_token_auth(token):
+    def admin_token_auth(self, token):
         token = str(super(admin).connect(str(sql_operation.token_operation(token)), init(), 1).connect())
 #general public requests objects
 class general_request(database, sql_operation):
-    def mainList(parsed_json):
+    def __init__(self):
+        super.__init__()
+    def mainList(self, parsed_json):
         conn_mem = init.init()
         #site dictionary
         site_dict = {}
@@ -264,7 +266,7 @@ class general_request(database, sql_operation):
         #serialize return_dict to json
         data = json.dumps(return_dict, indent=4)
         return (data)
-    def uploading(parsed_json):
+    def uploading(self, parsed_json):
         conn_mem = init.init()
             #generate file names and path
         h_path = gen_file_name(parsed_json, 2).fname()
@@ -341,7 +343,7 @@ class general_request(database, sql_operation):
 class admin(database):
     def __init__(self):
         pass
-    def admin_authentication(pwd, uname):
+    def admin_authentication(self, pwd, uname):
         conn = init()
         #Detect if uname = email
         if "@" in uname == True:
@@ -371,7 +373,7 @@ class admin(database):
 
 #admin requests objects
 class admin_request(database, sql_operation):
-    def adminList(parsed_json):
+    def adminList(self, parsed_json):
         conn_mem = init.init()
         #site dictionary
         site_dict = {}
@@ -425,7 +427,7 @@ class admin_request(database, sql_operation):
         #serialize return_dict to json
         data = json.dumps(return_dict, indent=4)
         return (data)
-    def adminAuthentication(parsed_json):
+    def adminAuthentication(self, parsed_json):
         conn_mem = init.init()
         compare_hash = admin.admin_authentication(str(parsed_json["password"]), str(parsed_json["userName"]))
         print(compare_hash)
