@@ -9,4 +9,4 @@ json = """{
            }"""
 async def main():
   print (await parser_ohaul.parse_all(json))
-main()
+asyncio.run(main())
