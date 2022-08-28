@@ -1,4 +1,4 @@
-from mariadb import connect
+from mysql.connector import connect
 import os
 #10.8.0.1:3306
 def init():
