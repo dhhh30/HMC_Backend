@@ -315,11 +315,13 @@ class general_request(database):
         
         #loop through images for writing
         threads = []
+        # for i in range(len(parsed_json["imgs"])):
+        #     threads.append(threading.Thread(target= file_operation.writing_image, args=(host_path,parsed_json,i)))
+        #     threads[-1].start()
+        # for thread in threads:
+        #     thread.join()
         for i in range(len(parsed_json["imgs"])):
-            threads.append(threading.Thread(target= file_operation.writing_image, args=(host_path,parsed_json,i)))
-            threads[-1].start()
-        for thread in threads:
-            thread.join()
+            file_operation.writing_image(host_path,parsed_json,i)
         #decode base64 and write to folders
         
         cover_thread = threading.Thread(target=file_operation.writing_cover, args=(host_path,parsed_json, c_name,))
