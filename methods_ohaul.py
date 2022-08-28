@@ -25,8 +25,6 @@ def datetimenow():
 
 #class for operating with DB
 class database():
-    def __init__(self):
-        pass
     #connect database for operation
     def connect(sql, conn, op_type):   
         #Cursor for above apsw connection object
