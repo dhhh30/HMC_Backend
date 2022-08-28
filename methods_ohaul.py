@@ -423,7 +423,7 @@ class admin_request(database):
             database.connect(token_sql, conn_mem, 2)
             return_dict = {
                 "request" : "adminAuthentication",
-                "Success" :  compare_hash,
+                "Success" :  "true",
                 "token": token
             }
             return_json = json.dumps(return_dict, indent=4)
@@ -432,7 +432,7 @@ class admin_request(database):
         else:
             return_dict= {
                 "request" : "adminAuthentication",
-                "Success" :  False
+                "Success" :  "false"
             }
             return_json = json.dumps(return_dict, indent=4) 
             return (return_json)
