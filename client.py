@@ -12,7 +12,9 @@ import time
 import logging
 from time import sleep
 start = time.time()
-
+import hashlib
+from random import randrange
+import base64
 logging.basicConfig(level=logging.INFO)
 # input_int = input("input page number:")
 # json = ("""{
@@ -42,6 +44,7 @@ json = ("""
 # "page": 10
 # }""")
 
+print (admin_gen_token())
 async def test():
     async with websockets.connect("ws://english-poetry.com:2186") as websocket:
         await websocket.send(json)

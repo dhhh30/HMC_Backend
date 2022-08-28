@@ -370,7 +370,7 @@ class admin(database):
         token = hashlib.sha256(bytes(str(ms), "utf-8")).digest()
         token = hashlib.sha256(bytes(str(token)+str(rand_num) , "utf-8"))
         #encode sha256 into base64
-        token = base64.encodebytes(token)
+        token = base64.b64encode(str(token).encode('utf-8'))
         return str(token)
             
     def admin_token_auth(token):
