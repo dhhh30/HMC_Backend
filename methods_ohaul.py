@@ -377,7 +377,7 @@ class admin(database):
         return str(token)
             
     def admin_token_auth(token):
-        token = str(database.connect(str(sql_operation.token_operation(token)), init(), 1).connect())
+        token = str(database.connect(str(sql_operation.token_operation(token)), init.init(), 1).connect())
         
         pass
 
