@@ -429,7 +429,7 @@ class admin_request(database):
             }
             return_json = json.dumps(return_dict, indent=4)
             return (return_json)
-        else:
+        elif compare_hash == False:
             return_dict= {
                 "request" : "adminAuthentication",
                 "Success" :  "false"
