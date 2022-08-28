@@ -73,25 +73,25 @@ class sql_operation():
     def query_tulpa_main_List(hID):
         sql = ("""SELECT tulpaName FROM tulpas WHERE hID={}""".format(hID[0]))
         return(sql) 
-    def insert_doc(self, type , path, hID):
+    def insert_doc(type , path, hID):
         sql = ("""INSERT INTO assets (id, assetPath, type, hID) VALUES (NULL,"{}","{}",{})""".format(path, type, hID[0]))
         return sql
     #get total amount of row from table for pagination
-    def get_total_row(self, table):
+    def get_total_row(table):
         sql = ("""SELECT COUNT(*) FROM {}""".format(table))
         return (sql)
     #concatenate sql query for inserting files into database
-    def query_file(self, hID, type):
+    def query_file(hID, type):
         sql = ("""SELECT assetPath FROM assets WHERE hID='{}' AND type='{}'""".format(hID[0],type))
         return sql
-    def query_approve_hmc(self, hID):
+    def query_approve_hmc(hID):
         sql = ("""UPDATE * FROM main_HMC WHERE id='{}'""".format(hID[0]))
         return (sql)
     def get_host_id(h_name):
         sql =  """SELECT MAX(id) FROM main_HMC WHERE h_name = "{}";""".format(h_name)
         return sql
     
-    def query_admin_list(self, pg_num, v_status):
+    def query_admin_list(pg_num, v_status):
         if pg_num == 1:
             row_num = pg_num-1
         else:
@@ -149,14 +149,14 @@ class file_operation(database):
         database(sql_hmc_cover,conn_mem, 2).conn()
         sema.release()
         return
-    def uploading_tulpa(self, i, parsed_json, query_hmc, conn_mem):
+    def uploading_tulpa( i, parsed_json, query_hmc, conn_mem):
         sema.acquire()
-        sql_tulpa = ().insert_tulpa(i, parsed_json, query_hmc)
+        sql_tulpa = sql_operation.insert_tulpa(i, parsed_json, query_hmc)
         print(sql_tulpa)
         database.connect(sql_tulpa, conn_mem, 2).conn()
         sema.release()
         return
-    def uploading_webinput(self, f_name, query_hmc, conn_mem):
+    def uploading_webinput(f_name, query_hmc, conn_mem):
         sema.acquire()
         #concatenate sql for storing webinput records in asset table
         sql_hmc_webinput = sql_operation.insert_doc("webinput", f_name+".html", query_hmc)
@@ -183,7 +183,7 @@ class file_operation(database):
 class admin(database):
     def __init__(self):
         pass
-    def admin_authentication(self, pwd, uname):
+    def admin_authentication(pwd, uname):
         conn = init()
         #Detect if uname = email
         if "@" in uname == True:
@@ -206,13 +206,13 @@ class admin(database):
         token = base64.encodebytes(token)
         return str(token)
             
-    def admin_token_auth(self, token):
+    def admin_token_auth(token):
         token = str(database.connect(str(sql_operation.token_operation(token)), init(), 1).connect())
 #general public requests objects
 class general_request(database):
     def __init__(self):
         super().__init__()
-    def mainList(self, parsed_json):
+    def mainList(parsed_json):
         conn_mem = init.init()
         #site dictionary
         site_dict = {}
@@ -266,7 +266,7 @@ class general_request(database):
         #serialize return_dict to json
         data = json.dumps(return_dict, indent=4)
         return (data)
-    def uploading(self, parsed_json):
+    def uploading(parsed_json):
         conn_mem = init.init()
             #generate file names and path
         h_path = gen_file_name(parsed_json, 2).fname()
@@ -344,7 +344,7 @@ class general_request(database):
 class admin(database):
     def __init__(self):
         database.__init__()
-    def admin_authentication(self, pwd, uname):
+    def admin_authentication(pwd, uname):
         conn = init()
         #Detect if uname = email
         if "@" in uname == True:
@@ -374,7 +374,7 @@ class admin(database):
 
 #admin requests objects
 class admin_request(database, sql_operation):
-    def adminList(self, parsed_json):
+    def adminList(parsed_json):
         conn_mem = init.init()
         #site dictionary
         site_dict = {}
@@ -428,7 +428,7 @@ class admin_request(database, sql_operation):
         #serialize return_dict to json
         data = json.dumps(return_dict, indent=4)
         return (data)
-    def adminAuthentication(self, parsed_json):
+    def adminAuthentication(parsed_json):
         conn_mem = init.init()
         compare_hash = admin.admin_authentication(str(parsed_json["password"]), str(parsed_json["userName"]))
         print(compare_hash)
