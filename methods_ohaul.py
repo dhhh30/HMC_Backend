@@ -44,10 +44,10 @@ class database():
             conn.commit()
             cursor.close()
             return
-        elif op_type == 3:
-            data = cursor.fetchone()
-            cursor.close()
-            return data
+        # elif op_type == 3:
+        #     data = cursor.fetchone()
+        #     cursor.close()
+        #     return data
 #SQL concaatenation
 class sql_operation():
     #concatenate sql for inserting into HMC
@@ -285,7 +285,7 @@ class general_request(database):
         print (h_name)
         query_hmc_sql = sql_operation.get_host_id(h_name)
         print (query_hmc_sql)
-        query_hmc = database.connect(query_hmc_sql, conn_mem, 3)
+        query_hmc = database.connect(query_hmc_sql, conn_mem, 1)[0]
         query_hmc_cover = threading.Thread(target=file_operation.cover_database, args=(c_name,query_hmc,conn_mem,))
         query_hmc_cover.start()
         #loop through tulpa list from json and perform Database INSERTs, spawning child process to speed up
