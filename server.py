@@ -17,7 +17,7 @@ async def handler(websocket):
         #loop through messages sent by client
         async for message in websocket:       
             logging.debug(str(cur_datetime)+"The client at "+str(remote_ip)+"sent"+str(message))
-            response = await parse_all(message)
+            response = parse_all(message)
             logging.debug(str(cur_datetime)+"Response to client at "+str(remote_ip)+"is"+str(response))
             print(type(response))
             await websocket.send(str(response))
