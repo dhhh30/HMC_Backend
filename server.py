@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.DEBUG)
 from parser_ohaul import parse_all
 #current datetime for logging
 cur_datetime = methods.datetimenow()
-breakpoint()
+# breakpoint()
 async def handler(websocket):
     logging.debug("Got request")
     #client's ip address
