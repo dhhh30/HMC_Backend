@@ -10,12 +10,12 @@ import logging
 import json
 import init
 import math
-
+import shutil
 
 #paths
 path = "/home/wwwroot/tulpa" 
 public_htpath = "/home/wwwroot/tulpa"
-special_auth_pass = "/home/wwwroot/tulpa/unverified"
+special_auth_pass = "/unverified"
 #max concurrent thread
 sema = threading.Semaphore(value=16)
 #logging time function
@@ -78,7 +78,7 @@ class sql_operation():
         return sql
     #get total amount of row from table for pagination
     def get_total_row(table):
-        sql = ("""SELECT COUNT(*)  FROM {} WHERE v_status = '0'""".format(table))
+        sql = ("""SELECT COUNT(*)  FROM {} WHERE v_status = '1'""".format(table))
         return (sql)
     #concatenate sql query for inserting files into database
     def query_file(hID, type):
@@ -191,8 +191,19 @@ class file_operation(database):
         cover_file.close()
         sema.release()
         return
-
-#general public requests objects
+    def move_host(path_unv):
+        for file_name in os.listdir(path+path_unv):
+            # construct full file path
+            source = path + file_name
+            destination = public_htpath + file_name
+            # move only files
+            if os.path.isfile(source):
+                shutil.move(source, destination)
+                print('Moved:', file_name)
+        #general public requests objects
+    def remove_host(path_unv):
+        os.rmdir(path+path_unv)
+        return True
 class general_request(database):
     def __init__(self):
         super().__init__()
@@ -378,6 +389,9 @@ class admin(database):
 class admin_request(database):
     def __init__(self):
         super().__init__()
+
+    def adminApprove(parsed_json):
+        parsed_json['uname']
     def adminList(parsed_json):
         verification = admin.admin_token_auth(str(parsed_json['token']))
         if verification == False:
