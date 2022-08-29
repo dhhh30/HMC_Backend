@@ -6,6 +6,7 @@ import threading
 import hashlib, secrets
 import init
 import datetime
+from datetime import timezone
 import logging
 import json
 import init
@@ -115,7 +116,7 @@ class sql_operation():
     def token_operation(token, op_code):
         #if the operation is to insert token into admin_token
         if op_code == 1:
-            sql = ("""INSERT INTO admin_token (token, issued_time) VALUES('{}', CURRENT_TIMESTAMP())""".format(token))
+            sql = ("""INSERT INTO admin_token (token, issued_time) VALUES('{}', UTC_TIMESTAMP())""".format(token))
             return sql
         #if the operation is to query token from admin_token
         if op_code == 2:
@@ -384,7 +385,7 @@ class admin(database):
             token = database.connect(str(sql_operation.token_operation(token_i, 2)), init.init(), 1)
             print (token)
             creation_time = token[0][0]
-            now_time = datetime.datetime.now()
+            now_time = datetime.datetime.now(timezone.utc)
             difference = now_time - creation_time
             if int(difference.total_seconds()) >= 900:
                 database.connect(str(sql_operation.token_operation(token_i, 4)), init.init(), 2)
