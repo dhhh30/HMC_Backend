@@ -260,6 +260,7 @@ class general_request(database):
             query_tulpa = sql_operation.query_tulpa_main_List(details[3])
             dat_tulpa =database.connect(query_tulpa, conn_mem, 1)
             sql_asset = sql_operation.query_file(str(details[3]), "cover")
+            query_asset = database.connect(sql_asset, conn_mem, 1)
             site_dict["cover"] = str(details[0]+"/"+query_asset[0][0])
             list_tulpa = []
             for tulpas in dat_tulpa:
@@ -285,7 +286,7 @@ class general_request(database):
         h_path = gen_file_name(parsed_json, 2).fname()
         f_name = gen_file_name(parsed_json, 1).fname()
         c_name = gen_file_name(parsed_json, 3).fname()
-        host_path = str(special_auth_pass+"/"+ h_path)
+        host_path = str(special_auth_pass+"/"+ h_path).replace(" ", "")
         #create host path
         os.mkdir(public_htpath+host_path)
         #concatenate sql for db operation
