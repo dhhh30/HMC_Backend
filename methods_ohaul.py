@@ -381,10 +381,11 @@ class admin_request(database):
     def adminList(parsed_json):
         verification = admin.admin_token_auth(str(parsed_json['token']))
         if verification == False:
-            return """{
+            return_json =  """{
                 "request" : "adminList",
                 "error" : "token_invalid"
             }"""
+            return return_json
 
         conn_mem = init.init()
         #site dictionary
