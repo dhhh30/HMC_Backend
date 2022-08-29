@@ -356,7 +356,7 @@ class admin(database):
         if token[0] == 0:
             return False
         else:
-            token = database.connect(str(sql_operation.token_operation(token_i)))
+            token = database.connect(str(sql_operation.token_operation(token_i, 2)), init.init(), 1)
             print (token[1])
             return True
         pass
