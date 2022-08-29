@@ -436,7 +436,7 @@ class admin_request(database):
         sql = sql_operation.select_sep_host(str(parsed_json['id']))
         host = database.connect(sql, init.init(), 1)
         file_operation.move_host(host[0][7])
-        path_update = str(host[0][6]).replace(special_auth_pass, "")
+        path_update = str(host[0][7]).replace(special_auth_pass, "")
         path_update = "/"+path_update
         sql = sql_operation.query_approve_hmc(str(parsed_json['id']), path_update)
         database.connect(sql, init.init(), 2)
