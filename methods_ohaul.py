@@ -352,6 +352,7 @@ class admin(database):
             
     def admin_token_auth(token_i):
         token = database.connect(str(sql_operation.token_operation(token_i, 1)), init.init(), 3)
+        print(token)
         if token[0] == 0:
             return False
         else:
