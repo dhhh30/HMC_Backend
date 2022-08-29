@@ -36,7 +36,7 @@ logging.basicConfig(level=logging.INFO)
 json = ("""{"request":"adminAuthentication","userName":"test","password":"test"}""")
 # json = ("""
 # {"request":"adminList",
-# "page": 400
+# "page": 1
 # }""")
 
 # print (admin_gen_token())

@@ -362,7 +362,7 @@ class admin_request(database):
         site_dict = {}
         
         #concatenate sql for query hmc
-        query_sql_hmc = sql_operation.query_main_List(int(parsed_json['page']))
+        query_sql_hmc = sql_operation.query_admin_list(int(parsed_json['page']))
         #concatenate sql for query main_hmc total row for pagination
         query_sql_hmc_trow =sql_operation.get_total_row("main_HMC")
         total_row = database.connect(query_sql_hmc_trow, conn_mem,1)
@@ -414,26 +414,26 @@ class admin_request(database):
     def adminAuthentication(parsed_json):
         conn_mem = init.init()
         compare_hash = admin.admin_authentication(parsed_json["password"] , parsed_json["userName"])
-        print(compare_hash, flush=True)
-        if compare_hash == True:
-            token =  admin.admin_gen_token()   
-            token_sql = sql_operation.token_operation(token, 1)    
-            database.connect(token_sql, conn_mem, 2)
-            print(token)
-            return_dict = {
-                "request" : "adminAuthentication",
-                "Success" :  "true",
-                "token": str(token)
-            }
-            return_json = json.dumps(return_dict, indent=4)
-            return (return_json)
-        elif compare_hash == False:
-            return_dict= {
-                "request" : "adminAuthentication",
-                "Success" :  "false"
-            }
-            return_json = json.dumps(return_dict, indent=4) 
-            return (return_json)
+        # print(compare_hash, flush=True)
+        # if compare_hash == True:
+        token =  admin.admin_gen_token()   
+        token_sql = sql_operation.token_operation(token, 1)    
+        database.connect(token_sql, conn_mem, 2)
+        print(token)
+        return_dict = {
+            "request" : "adminAuthentication",
+            "Success" :  "true",
+            "token": str(token)
+        }
+        return_json = json.dumps(return_dict, indent=4)
+        return (return_json)
+        # elif compare_hash == False:
+        #     return_dict= {
+        #         "request" : "adminAuthentication",
+        #         "Success" :  "false"
+        #     }
+        #     return_json = json.dumps(return_dict, indent=4) 
+        #     return (return_json)
     
     def adminApproval(parsed_json):
         pass
