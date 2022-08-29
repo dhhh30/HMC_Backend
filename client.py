@@ -48,11 +48,12 @@ async def test():
         retur_msg = await websocket.recv()
 
         return retur_msg
-for i in range(1000):
-    print(i)
-    print(asyncio.run(test()))
-    # except asyncio.exceptions.TimeoutError:
-    #     print(asyncio.run(test()))
-    # sleep(0.1)
-end = time.time()
-print("1000 queries completed in:"+ str(end - start))
+# for i in range(1000):
+#     print(i)
+#     print(asyncio.run(test()))
+#     # except asyncio.exceptions.TimeoutError:
+#     #     print(asyncio.run(test()))
+#     # sleep(0.1)
+# end = time.time()
+# print("1000 queries completed in:"+ str(end - start))
+print(asyncio.run(test()))

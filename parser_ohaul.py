@@ -39,9 +39,10 @@ def parse_all(parsed_json):
 
     elif parsed_json['request'] == "adminList":
         return methods.admin_request.adminList(parsed_json)
-    elif parsed_json['request'] == "adminApprove":
-        return methods.admin_request.adminApprove(parsed_json)
-    elif parsed_json['request'] == "adminDeny":
-        return methods.admin_request.adminDeny(parsed_json)
+    elif parsed_json['request'] == "audit":
+        if parsed_json['audit'] == "pass":
+            return methods.admin_request.adminApprove(parsed_json)
+        elif parsed_json['audit'] == "reject":
+            return methods.admin_request.adminDeny(parsed_json)
 
     
