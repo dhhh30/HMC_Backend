@@ -89,7 +89,7 @@ class sql_operation():
         return (sql)
     
     def get_host_id(h_name):
-        sql =  """SELECT MAX(id) FROM main_HMC WHERE id = "{}" """.format(h_name)
+        sql =  """SELECT MAX(id) FROM main_HMC WHERE h_name = "{}" """.format(h_name)
         return sql
     def select_sep_host(h_name):
         sql = """SELECT * FROM main_HMC where id = '{}'""".format(h_name)
