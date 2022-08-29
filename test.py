@@ -16,4 +16,4 @@ json = {"request":"adminList",
 
 # print (methods_ohaul.admin_request.adminAuthentication(json))
 
-parser_ohaul.parse_all(json)
+print(parser_ohaul.parse_all(json))
