@@ -259,6 +259,8 @@ class general_request(database):
             site_dict["url"] = str(details[0]) +"/"+query_asset[0][0]
             query_tulpa = sql_operation.query_tulpa_main_List(details[3])
             dat_tulpa =database.connect(query_tulpa, conn_mem, 1)
+            sql_asset = sql_operation.query_file(str(details[3]), "cover")
+            site_dict["cover"] = str(details[0]+"/"+query_asset[0][0])
             list_tulpa = []
             for tulpas in dat_tulpa:
                 list_tulpa.append(tulpas[0])
