@@ -6,6 +6,7 @@ import logging
 import methods
 import pathlib
 import ssl
+import os
 logging.basicConfig(level=logging.INFO)
 from parser_ohaul import parse_all
 #current datetime for logging
@@ -38,10 +39,17 @@ async def handler(websocket):
         logging.info(str(cur_datetime)+"client at "+str(remote_ip)+"disconnected improperly")
 #main function
 async def main():
+    loop = asyncio.get_running_loop()
+    stop = loop.create_future()
+    loop.add_signal_handler(signal.SIGTERM, stop.set_result, None)
 
-    async with websockets.serve(handler,"",2186):
-        #run forever with asyncio
-        await asyncio.Future()
+    async with websockets.unix_serve(
+    handler,
+    path=f"{os.environ['SUPERVISOR_PROCESS_NAME']}.sock",):
+        await stop
+    # async with websockets.serve(handler,"",2186):
+    #     #run forever with asyncio
+    #     await asyncio.Future()
 #ping client
 #run main function
 
