@@ -423,7 +423,7 @@ class admin_request(database):
             return_dict = {
                 "request" : "adminAuthentication",
                 "Success" :  "true",
-                "token": token
+                "token": str(token)
             }
             return_json = json.dumps(return_dict, indent=4)
             return (return_json)
