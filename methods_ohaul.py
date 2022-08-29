@@ -383,7 +383,7 @@ class admin_request(database):
             site_dict["h_email"] = str(details[3])
             if details[5] == 0:
                 v_status = False
-            if details[5] == 1:
+            if details[5] == 1: 
                 v_status = True
             site_dict["v_status"] = v_status
             sql_asset = sql_operation.query_file(str(details[3]), "webinput")
