@@ -109,12 +109,13 @@ class sql_operation():
             pg_num -= 1
             row_num = pg_num*10
         
-        if v_status != None:
-            sql = ("""SELECT * FROM main_HMC WHERE v_status='{}' LIMIT {}, 4""".format(str(v_status), row_num))
+        if v_status == None:
+            sql = ("""SELECT * FROM main_HMC LIMIT {}, 4""".format(row_num))
             print(sql)
             return sql
+
         else:
-            sql = ("""SELECT * FROM main_HMC LIMIT {}, 4""".format(row_num))
+            sql = ("""SELECT * FROM main_HMC WHERE v_status='{}' LIMIT {}, 4""".format(str(v_status), row_num))
             print(sql)
             return sql
     def token_operation(token, op_code):
