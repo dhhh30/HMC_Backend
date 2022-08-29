@@ -323,8 +323,6 @@ class general_request(database):
         return (return_json)
 #Admin operations
 class admin(database):
-    def __init__(self):
-        super().__init__()
     def admin_authentication(pwd, uname):
         conn = init.init()
         #Detect if uname = email

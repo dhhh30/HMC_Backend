@@ -5,8 +5,8 @@ from concurrent.futures import ProcessPoolExecutor
 import pdb
 
 import asyncio
-
-async def parse_all(data):
+# pdb.set_trace()
+def parse_all(data):
     parsed_json = json.loads(data)
     #mainList method
     if parsed_json['request'] == "mainList":
@@ -15,9 +15,9 @@ async def parse_all(data):
     elif parsed_json['request'] == "uploading":
         return methods.general_request.uploading(parsed_json)
     elif parsed_json['request'] == "adminAuthentaication":
+        response = methods.admin_request.adminAuthentication(parsed_json)
 
-        response =methods.admin_request.adminAuthentication(parsed_json)
-        breakpoint()
+        # breakpoint()
         return response
     elif parsed_json['request'] == "adminList":
         return methods.admin_request.adminList(parsed_json)

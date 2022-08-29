@@ -15,5 +15,5 @@ print (type(methods_ohaul.admin_request.adminAuthentication(json)))
 
 print (methods_ohaul.admin_request.adminAuthentication(json))
 # async def main():
-#   print (await parser_ohaul.parse_all(json))
+#     return await(parser_ohaul.parse_all(json))
 # asyncio.run(main())
