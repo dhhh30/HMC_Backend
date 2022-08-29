@@ -17,31 +17,31 @@ from random import randrange
 import base64
 logging.basicConfig(level=logging.INFO)
 # input_int = input("input page number:")
-# json = ("""{
-#     "request":"uploading",
-#     "host_name":"Dylan",
-#     "tulpas_name" : ["veronica", "example"],
-#     "host_age": "15",
-#     "email": "chendylan680@gmail.com",
-#     "file_name": "dchen4",
-#     "cover_name": "cover",
-#     "imgs": ["imagebrurbub","image placeholder"],
-#     "imgs_names": ["random.jpg","placeholder.jpg"],
-#     "introduce": "Hello guys",
-#     "webInput": "<h1>This is dang intresting</h1>",
-#     "cover": "PGgxPuWXqOWXqOWXqDwvaDE+",
-#     "file": "PGgxPuWXqOWXqOWXqDwvaDE+"
+json = ("""{
+    "request":"uploading",
+    "host_name":"Dylan",
+    "tulpas_name" : ["veronica", "example"],
+    "host_age": "15",
+    "email": "chendylan680@gmail.com",
+    "file_name": "dchen4",
+    "cover_name": "cover",
+    "imgs": ["imagebrurbub","image placeholder"],
+    "imgs_names": ["random.jpg","placeholder.jpg"],
+    "introduce": "Hello guys",
+    "webInput": "<h1>This is dang intresting</h1>",
+    "cover": "PGgxPuWXqOWXqOWXqDwvaDE+",
+    "file": "PGgxPuWXqOWXqOWXqDwvaDE+"
 
-# }""")
-json = ("""
-        {
-            "request":"adminAuthentication",
-            "userName":"test",
-            "password":"test"
-           }""")
+}""")
 # json = ("""
-# {"request":"mainList",
-# "page": 500
+#         {
+#             "request":"adminAuthentication",
+#             "userName":"test",
+#             "password":"test"
+#            }""")
+# json = ("""
+# {"request":"adminList",
+# "page": 400
 # }""")
 
 # print (admin_gen_token())
