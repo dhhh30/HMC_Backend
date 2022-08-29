@@ -278,7 +278,7 @@ class general_request(database):
         c_name = gen_file_name(parsed_json, 3).fname()
         host_path = (special_auth_pass+"/"+ h_path)
         #create host path
-        os.mkdir(host_path)
+        os.mkdir(public_htpath+host_path)
         #concatenate sql for db operation
         sql_hmc = sql_operation.insert_HMC(parsed_json, host_path)
         print(sql_hmc)
@@ -306,7 +306,7 @@ class general_request(database):
         sql_hmc_webinput = threading.Thread(target=file_operation.uploading_webinput, args=(f_name,query_hmc,conn_mem))
         sql_hmc_webinput.start()
         # print(query_webinput)
-        webinput_file = open(host_path+"/"+ f_name+".html", 'w' )
+        webinput_file = open(public_htpath+host_path+"/"+ f_name+".html", 'w' )
         webinput_file.write(parsed_json['webInput'])
         #write image to file
         #if the image is more than 10MB then return error
@@ -320,7 +320,7 @@ class general_request(database):
         #loop through images for writing
         threads = []
         for i in range(len(parsed_json["imgs"])):
-            threads.append(threading.Thread(target= file_operation.writing_image, args=(host_path,parsed_json,i)))
+            threads.append(threading.Thread(target= file_operation.writing_image, args=(public_htpath+host_path,parsed_json,i)))
             threads[-1].start()
         for thread in threads:
             thread.join()
@@ -328,7 +328,7 @@ class general_request(database):
         #     file_operation.writing_image(host_path,parsed_json,i)
         #decode base64 and write to folders
         
-        cover_thread = threading.Thread(target=file_operation.writing_cover, args=(host_path,parsed_json, c_name,))
+        cover_thread = threading.Thread(target=file_operation.writing_cover, args=(public_htpath+host_path,parsed_json, c_name,))
         cover_thread.start()
         #wait for the subprocesses to complete
         #query_hmc_cover.join()
