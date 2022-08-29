@@ -63,7 +63,7 @@ class sql_operation():
             row_num = pg_num-1
         else:
             pg_num -= 1
-            row_num = pg_num*10
+            row_num = pg_num*4
         sql = ("""SELECT path, creation_time, h_name, id FROM main_HMC WHERE v_status = '1' LIMIT {}, 4""".format(row_num))
         return sql
     #concatenate sql for inserting into tulpa
@@ -107,7 +107,7 @@ class sql_operation():
             row_num = pg_num-1
         else:
             pg_num -= 1
-            row_num = pg_num*10
+            row_num = pg_num*4
         
         if v_status == None:
             sql = ("""SELECT * FROM main_HMC LIMIT {}, 4""".format(row_num))
