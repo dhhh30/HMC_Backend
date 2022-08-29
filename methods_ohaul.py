@@ -82,8 +82,12 @@ class sql_operation():
         sql = ("""SELECT COUNT(*)  FROM {} WHERE v_status = '1'""".format(table))
         return (sql)
     def get_admin_row(table, vstatus):
-        sql = ("""SELECT COUNT(*)  FROM {} WHERE v_status = '{}'""".format(table, vstatus))
-        return (sql)
+        if vstatus == None:
+            sql = ("""SELECT COUNT(*) FROM {}""".format(table))
+            return sql
+        else:
+            sql = ("""SELECT COUNT(*)  FROM {} WHERE v_status = '{}'""".format(table, vstatus))
+            return (sql)
     #concatenate sql query for inserting files into database
     def query_file(hID, type):
         sql = ("""SELECT assetPath FROM assets WHERE hID='{}' AND type='{}'""".format(hID,type))
@@ -457,7 +461,7 @@ class admin_request(database):
         #concatenate sql for query hmc
         query_sql_hmc = sql_operation.query_admin_list(int(parsed_json['page']), parsed_json["vStatus"])
         #concatenate sql for query main_hmc total row for pagination
-        query_sql_hmc_trow =sql_operation.get_admin_row("main_HMC")
+        query_sql_hmc_trow =sql_operation.get_admin_row("main_HMC", parsed_json["vStatus"])
         total_row = database.connect(query_sql_hmc_trow, conn_mem,1)
         #concatenate sql for query tulpa
         #query hmc
