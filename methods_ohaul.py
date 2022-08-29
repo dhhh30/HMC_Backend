@@ -106,7 +106,7 @@ class sql_operation():
             sql = ("""SELECT * FROM main_HMC WHERE v_status='{}' LIMIT {}, 4""".format(str(v_status), row_num))
             return sql
         else:
-            sql = ("""SELECT * FROM mainHMC LIMIT {}, 4""".format(row_num))
+            sql = ("""SELECT * FROM main_HMC LIMIT {}, 4""".format(row_num))
 
             return sql
     def token_operation(token, op_code):
