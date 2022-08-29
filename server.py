@@ -6,7 +6,7 @@ import logging
 import methods
 import pathlib
 import ssl
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 from parser_ohaul import parse_all
 #current datetime for logging
 cur_datetime = methods.datetimenow()
