@@ -263,6 +263,7 @@ class general_request(database):
             sql_asset = sql_operation.query_file(str(details[3]), "cover")
             query_asset = database.connect(sql_asset, conn_mem, 1)
             site_dict["cover"] = str(details[0]+"/"+query_asset[0][0])
+            site_dict["description"] = str(details[4])
             list_tulpa = []
             for tulpas in dat_tulpa:
                 list_tulpa.append(tulpas[0])
