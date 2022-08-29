@@ -386,6 +386,7 @@ class admin(database):
             print (token)
             creation_time = token[0][0]
             now_time = datetime.datetime.now(timezone.utc)
+            now_time = now_time.replace(tzinfo=None)
             difference = now_time - creation_time
             if int(difference.total_seconds()) >= 900:
                 database.connect(str(sql_operation.token_operation(token_i, 4)), init.init(), 2)
