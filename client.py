@@ -33,11 +33,12 @@ logging.basicConfig(level=logging.INFO)
 #     "file": "PGgxPuWXqOWXqOWXqDwvaDE+"
 
 # }""")
-json = ("""{"request":"adminAuthentication","userName":"test","password":"test"}""")
-# json = ("""
-# {"request":"adminList",
-# "page": 1
-# }""")
+# json = ("""{"request":"adminAuthentication","userName":"test","password":"test"}""")
+json = ("""
+{"request":"adminList",
+"page": 1,
+"token":"MGY3YzY5YWE5NGJlYTcxNGM1NDQ2OTg5ZWU1ZTcyMGI5Nzc4MDZlZWUyZmZkMDRiZDNlYTQ5ZDY2MzdlYjAxMw=="
+}""")
 
 # print (admin_gen_token())
 async def test():
