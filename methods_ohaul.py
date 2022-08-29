@@ -64,7 +64,7 @@ class sql_operation():
         else:
             pg_num -= 1
             row_num = pg_num*4
-        sql = ("""SELECT path, creation_time, h_name, id FROM main_HMC WHERE v_status = '1' LIMIT {}, 4""".format(row_num))
+        sql = ("""SELECT path, creation_time, h_name, id, description FROM main_HMC WHERE v_status = '1' LIMIT {}, 4""".format(row_num))
         return sql
     #concatenate sql for inserting into tulpa
     def insert_tulpa(i,  t_name, hID):
