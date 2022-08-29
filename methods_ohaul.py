@@ -84,13 +84,16 @@ class sql_operation():
     def query_file(hID, type):
         sql = ("""SELECT assetPath FROM assets WHERE hID='{}' AND type='{}'""".format(hID,type))
         return sql
-    def query_approve_hmc(hID):
-        sql = ("""UPDATE * FROM main_HMC WHERE id='{}'""".format(hID[0]))
+    def query_approve_hmc(hID, path):
+        sql = ("""UPDATE FROM main_HMC SET path = '{}' v_status = '1' WHERE id='{}'""".format(path, hID))
         return (sql)
+    
     def get_host_id(h_name):
         sql =  """SELECT MAX(id) FROM main_HMC WHERE h_name = "{}" """.format(h_name)
         return sql
-    
+    def select_sep_host(h_name):
+        sql = """SELECT * FROM main_HMC where h_name = '{}'""".format(h_name)
+        return sql
     def query_admin_list(pg_num, v_status):
         if pg_num == 1:
             row_num = pg_num-1
@@ -130,6 +133,8 @@ class sql_operation():
     def get_total_row_admin(table):
         sql = ("""SELECT COUNT(*) FROM {}""".format(table))
         return (sql)
+    
+
 class gen_file_name:
     def __init__(self, parsed_json, op_num):
         self.parsed_json = parsed_json
@@ -194,12 +199,14 @@ class file_operation(database):
     def move_host(path_unv):
         for file_name in os.listdir(path+path_unv):
             # construct full file path
-            source = path + file_name
+            source = path + path_unv + file_name
             destination = public_htpath + file_name
             # move only files
             if os.path.isfile(source):
                 shutil.move(source, destination)
                 print('Moved:', file_name)
+
+        return True
         #general public requests objects
     def remove_host(path_unv):
         os.rmdir(path+path_unv)
@@ -389,9 +396,38 @@ class admin(database):
 class admin_request(database):
     def __init__(self):
         super().__init__()
-
+    def adminDeny(parsed_json):
+        verification = admin.admin_token_auth(str(parsed_json['token']))
+        if verification == False:
+            return_json =  """{
+                "request" : "adminDeny",
+                "error" : "token_invalid"
+            }"""
+            return return_json
+        file_operation.remove_host
     def adminApprove(parsed_json):
-        parsed_json['uname']
+        verification = admin.admin_token_auth(str(parsed_json['token']))
+        if verification == False:
+            return_json =  """{
+                "request" : "adminAprove",
+                "error" : "token_invalid"
+            }"""
+            return return_json
+
+        sql = sql_operation.select_sep_host(str(parsed_json['hName']))
+        host = database.connect(sql, init.init(), 1)
+        file_operation.move_host(host[0][6])
+        path_update = str(host[0][6]).replace(special_auth_pass)
+        path_update = "/"+path_update
+        sql = sql_operation.query_approve_hmc(str(host[0][0]), path_update)
+        return_json = {
+            "request" : "adminApprove",
+            "state" : "success",
+            "hName" : parsed_json['hName'],
+            "hID": host[0][0]
+         }
+
+        return json.dumps(return_json)
     def adminList(parsed_json):
         verification = admin.admin_token_auth(str(parsed_json['token']))
         if verification == False:

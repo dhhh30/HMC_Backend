@@ -4,6 +4,8 @@ import signal
 from parser_ohaul import parse_all
 import logging
 import methods
+import pathlib
+import ssl
 logging.basicConfig(level=logging.DEBUG)
 from parser_ohaul import parse_all
 #current datetime for logging
@@ -34,6 +36,9 @@ async def handler(websocket):
         logging.info(str(cur_datetime)+"client at "+str(remote_ip)+"disconnected improperly")
 #main function
 async def main():
+    
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    ssl_context.load_cert_chain("/root/HMC_Backend/common-cat.wiki_bundle.pem")
     async with websockets.serve(handler,"",2186):
         #run forever with asyncio
         await asyncio.Future()
