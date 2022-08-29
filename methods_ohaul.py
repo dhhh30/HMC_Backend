@@ -370,11 +370,8 @@ class admin(database):
             if int(difference.total_seconds()) >= 900:
                 database.connect(str(sql_operation.token_operation(token_i, 4)), init.init(), 2)
                 return False
-            else:
-                pass
             database.connect(str(sql_operation.token_operation(token_i, 5)), init.init, 2)
             return True
-        pass
 
 
 #admin requests objects
@@ -388,8 +385,7 @@ class admin_request(database):
                 "request" : "adminList",
                 "error" : "token_invalid"
             }"""
-        else:
-            pass
+
         conn_mem = init.init()
         #site dictionary
         site_dict = {}
