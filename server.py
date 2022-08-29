@@ -12,8 +12,8 @@ from parser_ohaul import parse_all
 cur_datetime = methods.datetimenow()
 # breakpoint()
 import json
-ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-ssl_context.load_cert_chain("/root/HMC_Backend/common-cat.wiki.key")
+# ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+# ssl_context.load_cert_chain("/root/HMC_Backend/common-cat.wiki.key")
 async def handler(websocket):
     logging.debug("Got request")
     #client's ip address
