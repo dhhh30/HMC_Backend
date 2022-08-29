@@ -2,6 +2,7 @@
 import methods_ohaul as methods
 import json
 from concurrent.futures import ProcessPoolExecutor
+import pdb
 
 import asyncio
 
@@ -14,7 +15,10 @@ async def parse_all(data):
     elif parsed_json['request'] == "uploading":
         return methods.general_request.uploading(parsed_json)
     elif parsed_json['request'] == "adminAuthentaication":
-        return methods.admin_request.adminAuthentication(parsed_json)
+
+        response =methods.admin_request.adminAuthentication(parsed_json)
+        breakpoint()
+        return response
     elif parsed_json['request'] == "adminList":
         return methods.admin_request.adminList(parsed_json)
     # elif parsed_json['request'] == "adminApprove":
