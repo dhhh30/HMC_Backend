@@ -385,12 +385,12 @@ class admin_request(database):
                 "request" : "adminList",
                 "error" : "token_invalid"
             }"""
+            print(return_json)
             return return_json
 
         conn_mem = init.init()
         #site dictionary
         site_dict = {}
-        
         #concatenate sql for query hmc
         query_sql_hmc = sql_operation.query_admin_list(int(parsed_json['page']), parsed_json["vStatus"])
         #concatenate sql for query main_hmc total row for pagination
