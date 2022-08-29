@@ -183,7 +183,7 @@ class file_operation(database):
     def writing_image(host_path, parsed_json, i):
         sema.acquire()
         #decoding image from base64 and write them into perspective files
-        image_file = open(public_htpath+ str(os.path.join(host_path, str(parsed_json["imgs_names"])[i])), 'wb')
+        image_file = open(str(os.path.join(host_path, str(parsed_json["imgs_names"])[i])), 'wb')
         image_file.write(base64.b64decode(str(parsed_json["imgs"][i])))
         image_file.close()
         sema.release()
@@ -191,7 +191,7 @@ class file_operation(database):
     #write cover to disk
     def writing_cover(host_path, parsed_json, cover_name):
         sema.acquire()
-        cover_file = open(public_htpath+str(os.path.join(host_path, cover_name)), 'wb')
+        cover_file = open(str(os.path.join(host_path, cover_name)), 'wb')
         cover_file.write(base64.b64decode(parsed_json["cover"]))
         cover_file.close()
         sema.release()
