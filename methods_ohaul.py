@@ -103,10 +103,6 @@ class sql_operation():
             row_num = pg_num*10
         
         if v_status != "":
-            if v_status == 1:
-                v_status = 1
-            if v_status == 0:
-                v_status = 0
             sql = ("""SELECT * FROM main_HMC WHERE v_status='{}' LIMIT {}, 4""".format(str(v_status), row_num))
             return sql
         else:
