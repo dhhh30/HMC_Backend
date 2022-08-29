@@ -39,7 +39,7 @@ async def handler(websocket):
 #main function
 async def main():
 
-    async with websockets.serve(handler,"",2186, ssl=ssl_context):
+    async with websockets.serve(handler,"",2186):
         #run forever with asyncio
         await asyncio.Future()
 #ping client
