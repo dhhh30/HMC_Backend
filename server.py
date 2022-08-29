@@ -43,13 +43,13 @@ async def main():
     stop = loop.create_future()
     loop.add_signal_handler(signal.SIGTERM, stop.set_result, None)
 
-    async with websockets.unix_serve(
-    handler,
-    path=f"{os.environ['SUPERVISOR_PROCESS_NAME']}.sock",):
-        await stop
-    # async with websockets.serve(handler,"",2186):
-    #     #run forever with asyncio
-    #     await asyncio.Future()
+    # async with websockets.unix_serve(
+    # handler,
+    # path=f"{os.environ['SUPERVISOR_PROCESS_NAME']}.sock",):
+    #     await stop
+    async with websockets.serve(handler,"",2186):
+        #run forever with asyncio
+        await asyncio.Future()
 #ping client
 #run main function
 

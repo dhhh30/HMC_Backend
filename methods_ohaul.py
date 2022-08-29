@@ -422,7 +422,7 @@ class admin_request(database):
             "hName" : parsed_json['hName'],
             "hID" : host[0][0]
         }
-        return json.dumps(return_json)
+        return json.dumps(return_json, indent=4)
     def adminApprove(parsed_json):
         verification = admin.admin_token_auth(str(parsed_json['token']))
         if verification == False:
@@ -445,7 +445,7 @@ class admin_request(database):
             "hID": host[0][0]
          }
 
-        return json.dumps(return_json)
+        return json.dumps(return_json, indent=4)
     def adminList(parsed_json):
         verification = admin.admin_token_auth(str(parsed_json['token']))
         if verification == False:
