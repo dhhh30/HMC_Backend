@@ -36,8 +36,9 @@ logging.basicConfig(level=logging.INFO)
 # json = ("""{"request":"adminAuthentication","userName":"test","password":"test"}""")
 json = ("""
 {"request":"adminList",
-"page": 1,
-"token":"MGY3YzY5YWE5NGJlYTcxNGM1NDQ2OTg5ZWU1ZTcyMGI5Nzc4MDZlZWUyZmZkMDRiZDNlYTQ5ZDY2MzdlYjAxMw=="
+"page": 7,
+"vStatus" : "0",
+"token":"ZjQ4NzVjMWYyNzg3ZmRhMGE0MjFmODI0NjMyNDk1NjZjYTJlNTMyNWM1MmI1ZDM4MzllMTM3NTkwYmY2ZjVmNg=="
 }""")
 
 # print (admin_gen_token())
