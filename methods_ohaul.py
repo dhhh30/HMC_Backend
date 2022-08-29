@@ -352,6 +352,29 @@ class admin(database):
         
         pass
 
+def adminAuthentication(parsed_json):
+    conn_mem = init.init()
+    compare_hash = admin.admin_authentication(parsed_json["password"] , parsed_json["userName"])
+    # print(compare_hash, flush=True)
+    # if compare_hash == True:
+    token =  admin.admin_gen_token()   
+    token_sql = sql_operation.token_operation(token, 1)    
+    database.connect(token_sql, conn_mem, 2)
+    print(token)
+    return_dict = {
+        "request" : "adminAuthentication",
+        "Success" :  "true",
+        "token": str(token)
+    }
+    return_json = json.dumps(return_dict, indent=4)
+    return (return_json)
+    # elif compare_hash == False:
+    #     return_dict= {
+    #         "request" : "adminAuthentication",
+    #         "Success" :  "false"
+    #     }
+    #     return_json = json.dumps(return_dict, indent=4) 
+    #     return (return_json)
 #admin requests objects
 class admin_request(database):
     def __init__(self):
@@ -411,29 +434,7 @@ class admin_request(database):
         #serialize return_dict to json
         data = json.dumps(return_dict, indent=4)
         return (data)
-    def adminAuthentication(parsed_json):
-        conn_mem = init.init()
-        compare_hash = admin.admin_authentication(parsed_json["password"] , parsed_json["userName"])
-        # print(compare_hash, flush=True)
-        # if compare_hash == True:
-        token =  admin.admin_gen_token()   
-        token_sql = sql_operation.token_operation(token, 1)    
-        database.connect(token_sql, conn_mem, 2)
-        print(token)
-        return_dict = {
-            "request" : "adminAuthentication",
-            "Success" :  "true",
-            "token": str(token)
-        }
-        return_json = json.dumps(return_dict, indent=4)
-        return (return_json)
-        # elif compare_hash == False:
-        #     return_dict= {
-        #         "request" : "adminAuthentication",
-        #         "Success" :  "false"
-        #     }
-        #     return_json = json.dumps(return_dict, indent=4) 
-        #     return (return_json)
+
     
     def adminApproval(parsed_json):
         pass

@@ -17,7 +17,7 @@ def parse_all(data):
     elif parsed_json['request'] == "adminAuthentaication":
 
         # breakpoint()
-        return methods.admin_request.adminAuthentication(parsed_json)
+        return methods.adminAuthentication(parsed_json)
     elif parsed_json['request'] == "adminList":
         return methods.admin_request.adminList(parsed_json)
     # elif parsed_json['request'] == "adminApprove":
