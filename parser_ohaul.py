@@ -13,7 +13,7 @@ def parse_all(parsed_json):
     #handle uploading request
     elif parsed_json['request'] == "uploading":
         return methods.general_request.uploading(parsed_json)
-    elif parsed_json['request'] == "adminAuthentaication":
+    elif parsed_json['request'] == "adminAuthentication":
 
         conn_mem = init.init()
         compare_hash = methods.admin.admin_authentication(parsed_json["password"] , parsed_json["userName"])
