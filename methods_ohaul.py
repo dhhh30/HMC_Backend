@@ -228,7 +228,7 @@ class general_request(database):
         query_sql_hmc = sql_operation.query_main_List(int(parsed_json['page']))
         print(query_sql_hmc)
         #concatenate sql for query main_hmc total row for pagination
-        query_sql_hmc_trow = sql_operation.get_total_row("main_HMC", parsed_json['v_status'])
+        query_sql_hmc_trow = sql_operation.get_total_row("main_HMC")
         total_row =database.connect(query_sql_hmc_trow, conn_mem,1)
         #concatenate sql for query tulpa
         #query hmc
