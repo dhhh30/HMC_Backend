@@ -111,12 +111,12 @@ class sql_operation():
         
         if v_status == None:
             sql = ("""SELECT * FROM main_HMC LIMIT {}, 4""".format(row_num))
-            print(sql)
+            # print(sql)
             return sql
 
         else:
             sql = ("""SELECT * FROM main_HMC WHERE v_status='{}' LIMIT {}, 4""".format(str(v_status), row_num))
-            print(sql)
+            # print(sql)
             return sql
     def token_operation(token, op_code):
         #if the operation is to insert token into admin_token
@@ -175,7 +175,7 @@ class file_operation(database):
     def uploading_tulpa( i, parsed_json, query_hmc, conn_mem):
         sema.acquire()
         sql_tulpa = sql_operation.insert_tulpa(i, parsed_json, query_hmc)
-        print(sql_tulpa)
+        # print(sql_tulpa)
         database.connect(sql_tulpa, conn_mem, 2) 
         sema.release()
         return
@@ -227,7 +227,7 @@ class general_request(database):
         site_dict = {}
         #concatenate sql for query hmc
         query_sql_hmc = sql_operation.query_main_List(int(parsed_json['page']))
-        print(query_sql_hmc)
+        # print(query_sql_hmc)
         #concatenate sql for query main_hmc total row for pagination
         query_sql_hmc_trow = sql_operation.get_total_row("main_HMC")
         total_row =database.connect(query_sql_hmc_trow, conn_mem,1)
@@ -239,7 +239,7 @@ class general_request(database):
         page_num = math.ceil(page_num)
         #print (total_row)
         list_of_site = []
-        print(dat_hmc)
+        # print(dat_hmc)
         #if page_num <= parsed_json['page']:
         #    return_json = """{
         #        "error":"Page number out of range"
@@ -250,13 +250,13 @@ class general_request(database):
         #print (dat_hmc)
         #Create Site list by looping through hmc query and tulpas query
         for details in dat_hmc:
-            print (details[3])
+            # print (details[3])
             site_dict["h_name"] = details[2]
             site_dict["createdDate"] = str(details[1])
             sql_asset = sql_operation.query_file(str(details[3]), "webinput")
-            print(sql_asset)
+            # print(sql_asset)
             query_asset = database.connect(sql_asset, conn_mem, 1)
-            print(query_asset)
+            # print(query_asset)
             site_dict["url"] = str(details[0]) +"/"+query_asset[0][0]
             query_tulpa = sql_operation.query_tulpa_main_List(details[3])
             dat_tulpa =database.connect(query_tulpa, conn_mem, 1)
@@ -293,18 +293,18 @@ class general_request(database):
         os.mkdir(public_htpath+host_path)
         #concatenate sql for db operation
         sql_hmc = sql_operation.insert_HMC(parsed_json, host_path)
-        print(sql_hmc)
+        # print(sql_hmc)
         query_hmc = database.connect(sql_hmc, conn_mem, 2)
         #print(type(query_hmc))
         #spawn child process for querying cover
         h_name = str(parsed_json["host_name"])
-        print (h_name)
+        # print (h_name)
         query_hmc_sql = sql_operation.get_host_id(h_name)
-        print (query_hmc_sql)
+        # print (query_hmc_sql)
         query_hmc = database.connect(query_hmc_sql, conn_mem, 1)[0]
         query_hmc_cover = threading.Thread(target=file_operation.cover_database, args=(c_name,query_hmc,conn_mem,))
         query_hmc_cover.start()
-        print(query_hmc)
+        # print(query_hmc)
         #loop through tulpa list from json and perform Database INSERTs, spawning child process to speed up
         threads = []
         # for i in range(len(parsed_json['tulpas_name'])):
@@ -389,12 +389,12 @@ class admin(database):
             
     def admin_token_auth(token_i):
         token = database.connect(str(sql_operation.token_operation(token_i, 3)), init.init(), 1)
-        print(token)
+        # print(token)
         if token[0][0] == 0:
             return False
         else:
             token = database.connect(str(sql_operation.token_operation(token_i, 2)), init.init(), 1)
-            print (token)
+            # print (token)
             creation_time = token[0][0]
             now_time = datetime.datetime.now(timezone.utc)
             creation_time = pytz.utc.localize(creation_time)
@@ -491,7 +491,7 @@ class admin_request(database):
                 v_status = True
             site_dict["v_status"] = v_status
             sql_asset = sql_operation.query_file(str(details[0]), "webinput")
-            print(sql_asset)
+            # print(sql_asset)
             query_asset = database.connect(sql_asset, conn_mem, 1)
             #print(query_asset)
             site_dict["url"] = str(details[7]) +"/"+query_asset[0][0]
