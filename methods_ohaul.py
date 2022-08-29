@@ -93,7 +93,7 @@ class sql_operation():
         sql = ("""SELECT assetPath FROM assets WHERE hID='{}' AND type='{}'""".format(hID,type))
         return sql
     def query_approve_hmc(hID, path):
-        sql = ("""UPDATE FROM main_HMC SET path = '{}', v_status = '1' WHERE id={} """.format(path, hID))
+        sql = ("""UPDATE main_HMC SET path = '{}', v_status = '1' WHERE id={} """.format(path, hID))
         return (sql)
     
     def get_host_id(h_name):
