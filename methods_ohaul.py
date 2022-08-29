@@ -385,7 +385,7 @@ class admin_request(database):
                 "request" : "adminList",
                 "error" : "token_invalid"
             }"""
-            print(return_json)
+            # print(return_json)
             return return_json
 
         conn_mem = init.init()
