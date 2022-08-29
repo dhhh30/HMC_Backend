@@ -5,7 +5,7 @@ import os
 import threading
 import hashlib, secrets
 import init
-from datetime import datetime
+import datetime
 import logging
 import json
 import init
@@ -20,7 +20,7 @@ special_auth_pass = "/home/wwwroot/tulpa/unverified"
 sema = threading.Semaphore(value=16)
 #logging time function
 def datetimenow():
-    now = datetime.now()
+    now = datetime.datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     return str("["+dt_string+"]")
 
