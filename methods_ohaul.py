@@ -219,6 +219,7 @@ class general_request(database):
         site_dict = {}
         #concatenate sql for query hmc
         query_sql_hmc = sql_operation.query_admin_list(int(parsed_json['page']), parsed_json['vStatus'])
+        print(query_sql_hmc)
         #concatenate sql for query main_hmc total row for pagination
         query_sql_hmc_trow = sql_operation.get_admin_row("main_HMC", parsed_json['vStatus'])
         total_row =database.connect(query_sql_hmc_trow, conn_mem,1)
