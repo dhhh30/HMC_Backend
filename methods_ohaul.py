@@ -183,7 +183,7 @@ class file_operation(database):
     def writing_image(host_path, parsed_json, i):
         sema.acquire()
         #decoding image from base64 and write them into perspective files
-        image_file = open(str(os.path.join(host_path, str(parsed_json["imgs_names"])[i])), 'wb')
+        image_file = open(str(os.path.join(host_path, str(parsed_json["imgs_names"][i]))), 'wb')
         image_file.write(base64.b64decode(str(parsed_json["imgs"][i])))
         image_file.close()
         sema.release()
@@ -326,7 +326,7 @@ class general_request(database):
         # for thread in threads:
         #     thread.join()
         for i in range(len(parsed_json["imgs"])):
-            file_operation.writing_image(host_path,parsed_json,i)
+            file_operation.writing_image(host_path, parsed_json, i)
         #decode base64 and write to folders
         
         cover_thread = threading.Thread(target=file_operation.writing_cover, args=(public_htpath+host_path,parsed_json, c_name,))
