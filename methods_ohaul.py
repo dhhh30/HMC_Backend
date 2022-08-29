@@ -367,7 +367,7 @@ class admin(database):
             creation_time = token[0][0]
             now_time = datetime.datetime.now()
             difference = now_time - creation_time
-            if difference.total_seconds >= 900:
+            if int(difference.total_seconds()) >= 900:
                 database.connect(str(sql_operation.token_operation(token_i, 4)), init.init(), 2)
                 return False
             else:
