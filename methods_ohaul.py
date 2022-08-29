@@ -329,7 +329,7 @@ class general_request(database):
             file_operation.writing_image(host_path, parsed_json, i)
         #decode base64 and write to folders
         
-        cover_thread = threading.Thread(target=file_operation.writing_cover, args=(public_htpath+host_path,parsed_json, c_name,))
+        cover_thread = threading.Thread(target=file_operation.writing_cover, args=(host_path,parsed_json, c_name,))
         cover_thread.start()
         #wait for the subprocesses to complete
         #query_hmc_cover.join()
