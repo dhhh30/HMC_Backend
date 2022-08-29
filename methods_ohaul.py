@@ -121,6 +121,12 @@ class sql_operation():
         if op_code == 3:
             sql = ("""SELECT EXISTS(SELECT * from admin_token WHERE token = '{}')""".format(token))
             return sql
+        if op_code == 4:
+            sql = ("""DELETE FROM admin_token WHERE token='{}'""".format(token))
+            return sql
+        if op_code == 5:
+            sql = ("""UPDATE admin_token SET issued_time = CURRENT_TIMESTAMP() WHERE token = '{}'""".format(token))
+            return sql
     def get_total_row_admin(table):
         sql = ("""SELECT COUNT(*) FROM {}""".format(table))
         return (sql)
@@ -360,8 +366,13 @@ class admin(database):
             print (token)
             creation_time = token[0][0]
             now_time = datetime.datetime.now()
-            difference = creation_time - now_time
-            print (difference.total_seconds())
+            difference = now_time - creation_time
+            if difference.total_seconds >= 900:
+                database.connect(str(sql_operation.token_operation(token_i, 4)), init.init(), 2)
+                return False
+            else:
+                pass
+            database.connect(str(sql_operation.token_operation(token_i, 5)), init.init, 2)
             return True
         pass
 
