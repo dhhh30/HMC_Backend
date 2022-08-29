@@ -203,11 +203,11 @@ class file_operation(database):
         sema.release()
         return
     def move_host(path_bef, path_unv):
-        os.mkdir(path_unv)
+        os.mkdir(path+path_unv)
         for file_name in os.listdir(path+path_bef):
             # construct full file path
             source = path + path_bef + file_name
-            destination = path_unv + file_name
+            destination = path+ path_unv + file_name
             # move only files
             if os.path.isfile(source):
                 shutil.move(source, destination)
