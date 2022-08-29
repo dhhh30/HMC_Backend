@@ -78,7 +78,7 @@ class sql_operation():
         return sql
     #get total amount of row from table for pagination
     def get_total_row(table):
-        sql = ("""SELECT COUNT(*) WHERE v_status = '0' FROM {}""".format(table))
+        sql = ("""SELECT COUNT(WHERE v_status = '0')  FROM {}""".format(table))
         return (sql)
     #concatenate sql query for inserting files into database
     def query_file(hID, type):
