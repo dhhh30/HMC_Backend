@@ -283,7 +283,7 @@ class general_request(database):
         h_path = gen_file_name(parsed_json, 2).fname()
         f_name = gen_file_name(parsed_json, 1).fname()
         c_name = gen_file_name(parsed_json, 3).fname()
-        host_path = (special_auth_pass+"/"+ h_path)
+        host_path = str(special_auth_pass+"/"+ h_path)
         #create host path
         os.mkdir(public_htpath+host_path)
         #concatenate sql for db operation
