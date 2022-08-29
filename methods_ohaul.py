@@ -413,7 +413,7 @@ class admin_request(database):
                 "error" : "token_invalid"
             }"""
             return return_json
-        sql = sql_operation.select_sep_host(str(parsed_json['hID']))
+        sql = sql_operation.select_sep_host(str(parsed_json['id']))
         host = database.connect(sql, init.init(), 1)
         file_operation.remove_host(str(host[0][6]))
         return_json = {
@@ -432,7 +432,7 @@ class admin_request(database):
             }"""
             return return_json
 
-        sql = sql_operation.select_sep_host(str(parsed_json['hID']))
+        sql = sql_operation.select_sep_host(str(parsed_json['id']))
         host = database.connect(sql, init.init(), 1)
         file_operation.move_host(host[0][6])
         path_update = str(host[0][6]).replace(special_auth_pass)
