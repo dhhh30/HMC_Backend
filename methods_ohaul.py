@@ -487,7 +487,7 @@ class admin_request(database):
             sql_asset = sql_operation.query_file(str(details[3]), "webinput")
             print(sql_asset)
             query_asset = database.connect(sql_asset, conn_mem, 1)
-            #print(query_asset)
+            print(query_asset)
             site_dict["url"] = str(details[0]) +"/"+query_asset[0][0]
             query_tulpa = sql_operation.query_tulpa_main_List(details[3])
             dat_tulpa =database.connect(query_tulpa, conn_mem, 1)
