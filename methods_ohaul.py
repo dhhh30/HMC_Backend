@@ -351,7 +351,7 @@ class admin(database):
         return str(token)
             
     def admin_token_auth(token_i):
-        token = database.connect(str(sql_operation.token_operation(token_i)), init.init(), 3)
+        token = database.connect(str(sql_operation.token_operation(token_i, 1)), init.init(), 3)
         if token[0] == 0:
             return False
         else:
