@@ -358,6 +358,10 @@ class admin(database):
         else:
             token = database.connect(str(sql_operation.token_operation(token_i, 2)), init.init(), 1)
             print (token)
+            creation_time = token[0][0]
+            now_time = datetime.datetime.now()
+            difference = creation_time - now_time
+            print (difference.total_seconds())
             return True
         pass
 
