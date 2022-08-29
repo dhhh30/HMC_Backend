@@ -230,7 +230,7 @@ class general_request(database):
         page_num = math.ceil(page_num)
         #print (total_row)
         list_of_site = []
-        
+        print(dat_hmc)
         #if page_num <= parsed_json['page']:
         #    return_json = """{
         #        "error":"Page number out of range"
