@@ -202,18 +202,18 @@ class file_operation(database):
         cover_file.close()
         sema.release()
         return
-    def move_host(path_bef, path_unv):
-        os.mkdir(path+path_unv)
-        for file_name in os.listdir(path+path_bef):
-            # construct full file path
-            source = path + path_bef + file_name
-            destination = path+ path_unv + file_name
-            # move only files
-            if os.path.isfile(source):
-                shutil.move(source, destination)
-                print('Moved:', file_name)
+    # def move_host(path_bef, path_unv):
+    #     os.mkdir(path+path_unv)
+    #     for file_name in os.listdir(path+path_bef):
+    #         # construct full file path
+    #         source = path + path_bef + file_name
+    #         destination = path+ path_unv + file_name
+    #         # move only files
+    #         if os.path.isfile(source):
+    #             shutil.move(source, destination)
+    #             print('Moved:', file_name)
 
-        return True
+    #     return True
         #general public requests objects
     def remove_host(path_unv):
         os.rmdir(path+path_unv)
@@ -441,7 +441,7 @@ class admin_request(database):
         sql = sql_operation.select_sep_host(str(parsed_json['id']))
         host = database.connect(sql, init.init(), 1)
         path_update = str(host[0][7]).replace(special_auth_pass, "")
-        file_operation.move_host(host[0][7],path_update)
+        # file_operation.move_host(host[0][7],path_update)
         sql = sql_operation.query_approve_hmc(str(parsed_json['id']), path_update)
         database.connect(sql, init.init(), 2)
         return_json = {
