@@ -419,9 +419,10 @@ class admin_request(database):
         return_json = {
             "requsst": "adminDeny",
             "state" : "success",
-            "hName" : parsed_json['hName'],
+            "hName" : host[0][1],
             "hID" : host[0][0]
         }
+        sql = """UPDATE """
         return json.dumps(return_json, indent=4)
     def adminApprove(parsed_json):
         verification = admin.admin_token_auth(str(parsed_json['token']))
@@ -433,15 +434,15 @@ class admin_request(database):
             return return_json
 
         sql = sql_operation.select_sep_host(str(parsed_json['id']))
-        host = database.connect(sql, init.init(), 1)
+        host = database.connect(sql, init.init(), 2)
         file_operation.move_host(host[0][7])
         path_update = str(host[0][6]).replace(special_auth_pass, "")
         path_update = "/"+path_update
-        sql = sql_operation.query_approve_hmc(str(host[0][0]), path_update)
+        sql = sql_operation.query_approve_hmc(str(parsed_json['id']), path_update)
         return_json = {
             "request" : "adminApprove",
             "state" : "success",
-            "hName" : parsed_json['hName'],
+            "hName" : host[0][1],
             "hID": host[0][0]
          }
 
