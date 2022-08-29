@@ -93,7 +93,7 @@ class sql_operation():
         sql = ("""SELECT assetPath FROM assets WHERE hID='{}' AND type='{}'""".format(hID,type))
         return sql
     def query_approve_hmc(hID, path):
-        sql = ("""UPDATE FROM main_HMC SET path = '{}' v_status = '1' WHERE id='{}'""".format(path, hID))
+        sql = ("""UPDATE FROM main_HMC SET path = '{}' v_status = '1' WHERE id={} """.format(path, hID))
         return (sql)
     
     def get_host_id(h_name):
@@ -437,7 +437,6 @@ class admin_request(database):
         host = database.connect(sql, init.init(), 1)
         file_operation.move_host(host[0][7])
         path_update = str(host[0][7]).replace(special_auth_pass, "")
-        path_update = "/"+path_update
         sql = sql_operation.query_approve_hmc(str(parsed_json['id']), path_update)
         database.connect(sql, init.init(), 2)
         return_json = {
