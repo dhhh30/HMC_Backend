@@ -190,7 +190,7 @@ class file_operation(database):
         return
     #write cover to disk
     def writing_cover(host_path, parsed_json, cover_name):
-        sema.acquire()
+        sema.acquire() 
         cover_file = open(str(os.path.join(host_path, cover_name)), 'wb')
         cover_file.write(base64.b64decode(parsed_json["cover"]))
         cover_file.close()
