@@ -6,8 +6,7 @@ import pdb
 import init
 import asyncio
 # pdb.set_trace()
-def parse_all(data):
-    parsed_json = json.loads(data)
+def parse_all(parsed_json):
     #mainList method
     if parsed_json['request'] == "mainList":
         return methods.general_request.mainList(parsed_json)
