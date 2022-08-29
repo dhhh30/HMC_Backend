@@ -105,12 +105,11 @@ class sql_operation():
             pg_num -= 1
             row_num = pg_num*10
         
-        if v_status != "":
+        if v_status != None:
             sql = ("""SELECT * FROM main_HMC WHERE v_status='{}' LIMIT {}, 4""".format(str(v_status), row_num))
             return sql
         else:
             sql = ("""SELECT * FROM main_HMC LIMIT {}, 4""".format(row_num))
-
             return sql
     def token_operation(token, op_code):
         #if the operation is to insert token into admin_token

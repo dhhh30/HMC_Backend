@@ -37,7 +37,7 @@ logging.basicConfig(level=logging.INFO)
 json = ("""
 {"request":"adminList",
 "page": 8,
-"vStatus" : "0",
+"vStatus" : "",
 "token":"ZjQ4NzVjMWYyNzg3ZmRhMGE0MjFmODI0NjMyNDk1NjZjYTJlNTMyNWM1MmI1ZDM4MzllMTM3NTkwYmY2ZjVmNg=="
 }""")
 
