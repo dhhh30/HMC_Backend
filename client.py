@@ -33,7 +33,7 @@ logging.basicConfig(level=logging.INFO)
 #     "file": "PGgxPuWXqOWXqOWXqDwvaDE+"
 
 # }""")
-json = ("""{"request":"adminAuthentication","userName":"test","password":"test"}""")
+json = ("""{"request":"adminAuthentication","userName":"test","password":"test1"}""")
 # json = ("""
 # {"request":"adminList",
 # "page": 1

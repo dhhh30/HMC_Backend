@@ -63,7 +63,7 @@ class sql_operation():
         else:
             pg_num -= 1
             row_num = pg_num*10
-        sql = ("""SELECT path, creation_time, h_name, id FROM main_HMC LIMIT {}, 4""".format(row_num))
+        sql = ("""SELECT path, creation_time, h_name, id FROM main_HMC WHERE v_status = '1' LIMIT {}, 4""".format(row_num))
         return sql
     #concatenate sql for inserting into tulpa
     def insert_tulpa(i,  t_name, hID):
@@ -78,7 +78,7 @@ class sql_operation():
         return sql
     #get total amount of row from table for pagination
     def get_total_row(table):
-        sql = ("""SELECT COUNT(*) FROM {}""".format(table))
+        sql = ("""SELECT COUNT(*) WHERE v_status = '0' FROM {}""".format(table))
         return (sql)
     #concatenate sql query for inserting files into database
     def query_file(hID, type):
@@ -116,11 +116,14 @@ class sql_operation():
             return sql
         #if the operation is to query token from admin_token
         if op_code == 2:
-            sql = ("""SELECT token FROM admin_token WHERE token = '{}'""".format(token))
+            sql = ("""SELECT issued_time FROM admin_token WHERE token = '{}'""".format(token))
             return sql
         if op_code == 3:
             sql = ("""SELECT EXISTS(SELECT * from admin_token WHERE token = '{}')""".format(token))
             return sql
+    def get_total_row_admin(table):
+        sql = ("""SELECT COUNT(*) FROM {}""".format(table))
+        return (sql)
 class gen_file_name:
     def __init__(self, parsed_json, op_num):
         self.parsed_json = parsed_json
@@ -347,9 +350,14 @@ class admin(database):
 
         return str(token)
             
-    def admin_token_auth(token):
-        token = str(database.connect(str(sql_operation.token_operation(token)), init.init(), 1).connect())
-        
+    def admin_token_auth(token_i):
+        token = database.connect(str(sql_operation.token_operation(token_i)), init.init(), 3)
+        if token[0] == 0:
+            return False
+        else:
+            token = database.connect(str(sql_operation.token_operation(token_i)))
+            print (token[1])
+            return True
         pass
 
 
@@ -358,6 +366,14 @@ class admin_request(database):
     def __init__(self):
         super().__init__()
     def adminList(parsed_json):
+        verification = admin.admin_token_auth(str(parsed_json['token']))
+        if verification == False:
+            return """{
+                "request" : "adminList",
+                "error" : "token_invalid"
+            }"""
+        else:
+            pass
         conn_mem = init.init()
         #site dictionary
         site_dict = {}
