@@ -292,6 +292,7 @@ class general_request(database):
         query_hmc = database.connect(query_hmc_sql, conn_mem, 1)[0]
         query_hmc_cover = threading.Thread(target=file_operation.cover_database, args=(c_name,query_hmc,conn_mem,))
         query_hmc_cover.start()
+        print(query_hmc)
         #loop through tulpa list from json and perform Database INSERTs, spawning child process to speed up
         threads = []
         # for i in range(len(parsed_json['tulpas_name'])):
