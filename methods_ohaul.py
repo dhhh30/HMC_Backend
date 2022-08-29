@@ -89,10 +89,10 @@ class sql_operation():
         return (sql)
     
     def get_host_id(h_name):
-        sql =  """SELECT MAX(id) FROM main_HMC WHERE h_name = "{}" """.format(h_name)
+        sql =  """SELECT MAX(id) FROM main_HMC WHERE id = "{}" """.format(h_name)
         return sql
     def select_sep_host(h_name):
-        sql = """SELECT * FROM main_HMC where h_name = '{}'""".format(h_name)
+        sql = """SELECT * FROM main_HMC where id = '{}'""".format(h_name)
         return sql
     def query_admin_list(pg_num, v_status):
         if pg_num == 1:
@@ -404,7 +404,16 @@ class admin_request(database):
                 "error" : "token_invalid"
             }"""
             return return_json
-        file_operation.remove_host
+        sql = sql_operation.select_sep_host(str(parsed_json['hID']))
+        host = database.connect(sql, init.init(), 1)
+        file_operation.remove_host(str(host[0][6]))
+        return_json = {
+            "requsst": "adminDeny",
+            "state" : "success",
+            "hName" : parsed_json['hName'],
+            "hID" : host[0][0]
+        }
+        return json.dumps(return_json)
     def adminApprove(parsed_json):
         verification = admin.admin_token_auth(str(parsed_json['token']))
         if verification == False:
@@ -414,7 +423,7 @@ class admin_request(database):
             }"""
             return return_json
 
-        sql = sql_operation.select_sep_host(str(parsed_json['hName']))
+        sql = sql_operation.select_sep_host(str(parsed_json['hID']))
         host = database.connect(sql, init.init(), 1)
         file_operation.move_host(host[0][6])
         path_update = str(host[0][6]).replace(special_auth_pass)
