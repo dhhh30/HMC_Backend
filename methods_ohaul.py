@@ -323,12 +323,13 @@ class general_request(database):
         webinput_file.write(parsed_json['webInput'])
         #write image to file
         #if the image is more than 10MB then return error
-        for ind_img in parsed_json["imgs"]:
-            if len(ind_img) >= 10000000:
-                return ("""{
-                    "request" : "uploading",
-                    "error" : "Image File too large"
-                }""")
+        if  parsed_json["imgs"][0] != None:
+            for ind_img in parsed_json["imgs"]:
+                if len(ind_img) >= 10000000:
+                    return ("""{
+                        "request" : "uploading",
+                        "error" : "Image File too large"
+                    }""")
         
         #loop through images for writing
         threads = []
